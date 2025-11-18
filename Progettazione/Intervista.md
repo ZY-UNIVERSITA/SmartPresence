@@ -48,3 +48,13 @@ La prima fase della progettazione parte sempre, se possibile, dall'intervista ag
 1) Inserimento permessi
 2) Inserimento ferie (uguale ai permessi, ma senza fasce orarie e con calcolo minimo dei giorni lavorativi, escludendo sabato e domenica)
 3) Inserimento smartworking (con configurazione part-time/full-time e gestione orari contrattuali)
+
+## Calendario
+**Domanda**: Nella gestione della pianificazione può essere necessario visualizzare un periodo di tempo più lungo?
+
+**Risposta**: Solitamente nelle aziende la pianificazione riguarda un periodo di tempo più lungo, per esempio 2 settimane o 1 mese. Ad esempio, durante il periodo natalizio e quello di Ferragosto,c'è la necessità di dover pianificare il periodo prima e quello successivo per poter pianificare i turni in modo tale da poter avere copertura totale. Quindi mi aspetto che il calendario permetta di visualizzare un periodo di tempo più lungo.
+
+## Visualizzazione dei giorni festivi
+**Domanda**: Bisogna far vedere i giorni festivi?
+
+**Risposta**: E' molto utile anche far visualizzare nel calendario in qualche modo le giornate festive di chiusura dell'azienda.
