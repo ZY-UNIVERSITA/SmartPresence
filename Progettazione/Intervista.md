@@ -58,3 +58,8 @@ La prima fase della progettazione parte sempre, se possibile, dall'intervista ag
 **Domanda**: Bisogna far vedere i giorni festivi?
 
 **Risposta**: E' molto utile anche far visualizzare nel calendario in qualche modo le giornate festive di chiusura dell'azienda.
+
+## Saldo negativo
+**Domanda**: Bisogna visualizzare un'errore nel caso in cui l'utente pianifichi ferie e permessi senza averli maturati?
+
+**Risposta**: Solitamente le aziende permettono di inserire ferie e permessi anche se non sono stati maturati, per esempio un neoassunto che dopo 3 giorni richiede delle ferie. Questo perchè la rendicontazione viene fatto a fine anno e le aziende spingono i dipendenti a fare le ferie durante l'arco dell'anno per evitare di arrivare a Capodanno con un numero cospicuo di ferie non usate che porterebbero a multe salate.
