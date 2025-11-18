@@ -2,9 +2,9 @@
 {
     public partial class SharedService
     {
-        TemplateDbContext _dbContext;
+        SmartPresenceDbContext _dbContext;
 
-        public SharedService(TemplateDbContext dbContext)
+        public SharedService(SmartPresenceDbContext dbContext)
         {
             _dbContext = dbContext;
         }

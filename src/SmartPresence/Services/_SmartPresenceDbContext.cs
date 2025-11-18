@@ -4,13 +4,13 @@ using SmartPresence.Services.Shared;
 
 namespace SmartPresence.Services
 {
-    public class TemplateDbContext : DbContext
+    public class SmartPresenceDbContext : DbContext
     {
-        public TemplateDbContext()
+        public SmartPresenceDbContext()
         {
         }
 
-        public TemplateDbContext(DbContextOptions<TemplateDbContext> options) : base(options)
+        public SmartPresenceDbContext(DbContextOptions<SmartPresenceDbContext> options) : base(options)
         {
             DataGenerator.InitializeUsers(this);
         }

@@ -7,7 +7,7 @@ namespace SmartPresence.Infrastructure
 {
     public class DataGenerator
     {
-        public static void InitializeUsers(TemplateDbContext context)
+        public static void InitializeUsers(SmartPresenceDbContext context)
         {
             if (context.Users.Any())
             {

@@ -32,7 +32,7 @@ namespace SmartPresence.Web
         {
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
-            services.AddDbContext<TemplateDbContext>(options =>
+            services.AddDbContext<SmartPresenceDbContext>(options =>
             {
                 options.UseInMemoryDatabase(databaseName: "Template");
             });
