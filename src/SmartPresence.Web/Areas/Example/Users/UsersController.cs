@@ -2,12 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Threading.Tasks;
-using Template.Services.Shared;
-using Template.Web.Infrastructure;
-using Template.Web.SignalR;
-using Template.Web.SignalR.Hubs.Events;
+using SmartPresencec.Services.Shared;
+using SmartPresencec.Web.Infrastructure;
+using SmartPresencec.Web.SignalR;
+using SmartPresencec.Web.SignalR.Hubs.Events;
 
-namespace Template.Web.Areas.Example.Users
+namespace SmartPresencec.Web.Areas.Example.Users
 {
     [Area("Example")]
     public partial class UsersController : AuthenticatedBaseController

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Template.Web.Infrastructure
+namespace SmartPresencec.Web.Infrastructure
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum)]
     public sealed class TypeScriptModuleAttribute : Attribute

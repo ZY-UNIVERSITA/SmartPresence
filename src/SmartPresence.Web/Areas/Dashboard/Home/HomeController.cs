@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Template.Web.Features.Home;
+using SmartPresencec.Web.Features.Home;
 
 namespace SmartPresence.Web.Areas.Dashboard.Home
 {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
-namespace Template.Web.Features.Home
+namespace SmartPresencec.Web.Features.Home
 {
     //public partial class HomeController : Controller
     //{

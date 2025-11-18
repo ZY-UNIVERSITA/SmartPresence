@@ -1,9 +1,9 @@
-﻿using Template.Services.Shared;
+﻿using SmartPresencec.Services.Shared;
 using System;
 using System.Linq;
-using Template.Services;
+using SmartPresencec.Services;
 
-namespace Template.Infrastructure
+namespace SmartPresencec.Infrastructure
 {
     public class DataGenerator
     {

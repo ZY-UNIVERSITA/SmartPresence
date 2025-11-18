@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 
-namespace Template.Web.Infrastructure
+namespace SmartPresencec.Web.Infrastructure
 {
     public static class HtmlInputExtension
     {

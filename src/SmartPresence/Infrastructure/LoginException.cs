@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Template.Infrastructure
+namespace SmartPresencec.Infrastructure
 {
     public class LoginException : Exception
     {

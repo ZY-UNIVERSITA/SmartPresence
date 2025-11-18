@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Template.Web.Features.Login
+namespace SmartPresencec.Web.Features.Login
 {
     public class LoginViewModel
     {

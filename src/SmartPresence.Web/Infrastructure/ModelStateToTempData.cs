@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 using Newtonsoft.Json;
 
-namespace Template.Web.Infrastructure
+namespace SmartPresencec.Web.Infrastructure
 {
     public class ModelStateToTempDataAttribute : ActionFilterAttribute
     {

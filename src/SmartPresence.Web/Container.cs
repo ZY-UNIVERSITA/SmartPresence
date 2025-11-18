@@ -1,8 +1,8 @@
-﻿using Template.Services.Shared;
+﻿using SmartPresencec.Services.Shared;
 using Microsoft.Extensions.DependencyInjection;
-using Template.Web.SignalR;
+using SmartPresencec.Web.SignalR;
 
-namespace Template.Web
+namespace SmartPresencec.Web
 {
     public class Container
     {

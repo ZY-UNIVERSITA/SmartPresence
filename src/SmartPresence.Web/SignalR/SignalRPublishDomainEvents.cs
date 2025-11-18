@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Threading.Tasks;
-using Template.Web.SignalR.Hubs;
-using Template.Web.SignalR.Hubs.Events;
+using SmartPresencec.Web.SignalR.Hubs;
+using SmartPresencec.Web.SignalR.Hubs.Events;
 
-namespace Template.Web.SignalR
+namespace SmartPresencec.Web.SignalR
 {
     public class SignalrPublishDomainEvents : IPublishDomainEvents
     {

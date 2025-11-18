@@ -1,4 +1,4 @@
-﻿namespace Template.Web
+﻿namespace SmartPresencec.Web
 {
     public class SharedResource
     {

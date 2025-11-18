@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Linq.Dynamic.Core;
 
-namespace Template.Infrastructure
+namespace SmartPresencec.Infrastructure
 {
     public class Paging
     {

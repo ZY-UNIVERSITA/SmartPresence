@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Template.Web.Infrastructure
+namespace SmartPresencec.Web.Infrastructure
 {
     public class SimplePropertyModelUnbinder : IModelUnbinder
     {

@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Linq;
 using System.Security.Claims;
-using Template.Web.Infrastructure;
+using SmartPresencec.Web.Infrastructure;
 
-namespace Template.Web.Areas
+namespace SmartPresencec.Web.Areas
 {
     [Authorize]
     [Alerts]

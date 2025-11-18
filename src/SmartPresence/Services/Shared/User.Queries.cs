@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Template.Infrastructure;
+using SmartPresencec.Infrastructure;
 
-namespace Template.Services.Shared
+namespace SmartPresencec.Services.Shared
 {
     public class UsersSelectQuery
     {

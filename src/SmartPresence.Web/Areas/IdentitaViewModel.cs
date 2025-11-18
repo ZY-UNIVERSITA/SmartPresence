@@ -1,6 +1,6 @@
-﻿using Template.Web.Infrastructure;
+﻿using SmartPresencec.Web.Infrastructure;
 
-namespace Template.Web.Areas
+namespace SmartPresencec.Web.Areas
 {
     public class IdentitaViewModel
     {
