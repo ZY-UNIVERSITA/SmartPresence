@@ -1,4 +1,4 @@
-using SmartPresencec.Web.Infrastructure;
+using SmartPresence.Web.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -6,11 +6,11 @@ using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using SmartPresencec.Services.Shared;
+using SmartPresence.Services.Shared;
 using System.Threading.Tasks;
-using SmartPresencec.Infrastructure;
+using SmartPresence.Infrastructure;
 
-namespace SmartPresencec.Web.Features.Login
+namespace SmartPresence.Web.Features.Login
 {
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     [Alerts]

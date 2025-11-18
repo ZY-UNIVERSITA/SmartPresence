@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SmartPresencec.Services.Shared
+namespace SmartPresence.Services.Shared
 {
     public class User
     {

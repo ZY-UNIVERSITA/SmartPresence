@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace SmartPresencec.Web.Infrastructure
+namespace SmartPresence.Web.Infrastructure
 {
     public static class MvcExtensions
     {

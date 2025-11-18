@@ -1,6 +1,6 @@
-﻿using SmartPresencec.Web.Infrastructure;
+﻿using SmartPresence.Web.Infrastructure;
 
-namespace SmartPresencec.Web.Areas
+namespace SmartPresence.Web.Areas
 {
     public class IdentitaViewModel
     {

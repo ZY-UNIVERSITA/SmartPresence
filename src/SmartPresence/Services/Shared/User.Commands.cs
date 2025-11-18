@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SmartPresencec.Services.Shared
+namespace SmartPresence.Services.Shared
 {
     public class AddOrUpdateUserCommand
     {

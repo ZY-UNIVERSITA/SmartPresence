@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace SmartPresencec.Web.Infrastructure
+namespace SmartPresence.Web.Infrastructure
 {
     public static class ToGravatarUrlExtension
     {

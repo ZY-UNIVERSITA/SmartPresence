@@ -1,10 +1,10 @@
-﻿@inject IHtmlLocalizer<Template.Web.SharedResource> SharedLocalizer
+﻿@inject IHtmlLocalizer<SmartPresence.Web.SharedResource> SharedLocalizer
 @inject Microsoft.Extensions.Options.IOptions<AppSettings> appSettings
 @{
     Layout = "_LayoutHtml";
     var version = System.Reflection.Assembly.GetAssembly(typeof(Startup)).GetName().Version;
 
-    var identitaCorrente = (Template.Web.Areas.IdentitaViewModel)ViewData[Template.Web.Areas.IdentitaViewModel.VIEWDATA_IDENTITACORRENTE_KEY];
+    var identitaCorrente = (SmartPresence.Web.Areas.IdentitaViewModel)ViewData[SmartPresence.Web.Areas.IdentitaViewModel.VIEWDATA_IDENTITACORRENTE_KEY];
 }
 @section metas{
     @RenderSection("metas", false)

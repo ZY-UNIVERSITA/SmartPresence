@@ -10,11 +10,11 @@ using Microsoft.Extensions.Hosting;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using SmartPresencec.Services;
-using SmartPresencec.Web.Infrastructure;
-using SmartPresencec.Web.SignalR.Hubs;
+using SmartPresence.Services;
+using SmartPresence.Web.Infrastructure;
+using SmartPresence.Web.SignalR.Hubs;
 
-namespace SmartPresencec.Web
+namespace SmartPresence.Web
 {
     public class Startup
     {

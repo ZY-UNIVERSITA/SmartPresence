@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System;
 
-namespace SmartPresencec.Web.SignalR.Hubs
+namespace SmartPresence.Web.SignalR.Hubs
 {
     public interface ITemplateClientEvent
     {

@@ -6,7 +6,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Composite;
 using Microsoft.Extensions.Primitives;
 
-namespace SmartPresencec.Web.Infrastructure
+namespace SmartPresence.Web.Infrastructure
 {
     public class CustomCompositeFileProvider : IFileProvider
     {

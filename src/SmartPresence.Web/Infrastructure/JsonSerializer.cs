@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SmartPresencec.Web.Infrastructure
+namespace SmartPresence.Web.Infrastructure
 {
     public static class JsonSerializer
     {

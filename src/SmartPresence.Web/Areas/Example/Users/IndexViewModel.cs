@@ -1,13 +1,13 @@
-﻿using SmartPresencec.Web.Infrastructure;
+﻿using SmartPresence.Web.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using SmartPresencec.Services.Shared;
+using SmartPresence.Services.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SmartPresencec.Web.Areas.Example.Users
+namespace SmartPresence.Web.Areas.Example.Users
 {
     public class IndexViewModel : PagingViewModel
     {
@@ -34,7 +34,7 @@ namespace SmartPresencec.Web.Areas.Example.Users
             return new UsersIndexQuery
             {
                 Filter = Filter,
-                Paging = new SmartPresencec.Infrastructure.Paging
+                Paging = new SmartPresence.Infrastructure.Paging
                 {
                     OrderBy = OrderBy,
                     OrderByDescending = OrderByDescending,

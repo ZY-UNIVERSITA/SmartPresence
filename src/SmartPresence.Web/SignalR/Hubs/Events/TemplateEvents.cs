@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SmartPresencec.Web.SignalR.Hubs.Events
+namespace SmartPresence.Web.SignalR.Hubs.Events
 {
     public class NewMessageEvent
     {

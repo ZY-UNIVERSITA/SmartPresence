@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace SmartPresencec.Web.SignalR
+namespace SmartPresence.Web.SignalR
 {
     public interface IPublishDomainEvents
     {

@@ -1,8 +1,8 @@
-﻿using SmartPresencec.Infrastructure;
+﻿using SmartPresence.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using SmartPresencec.Services.Shared;
+using SmartPresence.Services.Shared;
 
-namespace SmartPresencec.Services
+namespace SmartPresence.Services
 {
     public class TemplateDbContext : DbContext
     {

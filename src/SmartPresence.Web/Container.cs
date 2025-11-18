@@ -1,8 +1,8 @@
-﻿using SmartPresencec.Services.Shared;
+﻿using SmartPresence.Services.Shared;
 using Microsoft.Extensions.DependencyInjection;
-using SmartPresencec.Web.SignalR;
+using SmartPresence.Web.SignalR;
 
-namespace SmartPresencec.Web
+namespace SmartPresence.Web
 {
     public class Container
     {

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace SmartPresencec.Web
+namespace SmartPresence.Web
 {
     public class Program
     {

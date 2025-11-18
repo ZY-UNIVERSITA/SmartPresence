@@ -1,4 +1,4 @@
-﻿namespace SmartPresencec.Services.Shared
+﻿namespace SmartPresence.Services.Shared
 {
     public partial class SharedService
     {

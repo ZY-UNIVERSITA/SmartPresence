@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using SmartPresencec.Services.Shared;
-using SmartPresencec.Web.Infrastructure;
+using SmartPresence.Services.Shared;
+using SmartPresence.Web.Infrastructure;
 
-namespace SmartPresencec.Web.Areas.Example.Users
+namespace SmartPresence.Web.Areas.Example.Users
 {
     [TypeScriptModule("Example.Users.Server")]
     public class EditViewModel
