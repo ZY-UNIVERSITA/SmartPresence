@@ -52,7 +52,8 @@ La prima fase della progettazione parte sempre, se possibile, dall'intervista ag
 ## Calendario
 **Domanda**: Nella gestione della pianificazione può essere necessario visualizzare un periodo di tempo più lungo?
 
-**Risposta**: Solitamente nelle aziende la pianificazione riguarda un periodo di tempo più lungo, per esempio 2 settimane o 1 mese. Ad esempio, durante il periodo natalizio e quello di Ferragosto,c'è la necessità di dover pianificare il periodo prima e quello successivo per poter pianificare i turni in modo tale da poter avere copertura totale. Quindi mi aspetto che il calendario permetta di visualizzare un periodo di tempo più lungo.
+**Risposta**: Solitamente nelle aziende la pianificazione riguarda un periodo di tempo più lungo, per esempio 2 settimane o 1 mese. Ad esempio, durante il periodo natalizio e quello di Ferragosto,c'è la necessità di dover pianificare il periodo prima e quello successivo per poter pianificare i turni in modo tale da poter avere copertura totale. Quindi mi aspetto che il calendario permetta di visualizzare un periodo di tempo più lungo. Nelle aziende in cui non ci sono periodi di chiusura, il manager vuole avere una visione più ampia in quanto deve garantire che ci sia almeno 1 persona in grado di garantire la continuità aziendale.
+
 
 ## Visualizzazione dei giorni festivi
 **Domanda**: Bisogna far vedere i giorni festivi?
