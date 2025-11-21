@@ -1,10 +1,8 @@
-﻿using SmartPresence.Services.Employees;
-using SmartPresence.Services.Shared;
-using System;
+﻿using SmartPresence.Services.Areas;
+using SmartPresence.Services.Employees;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace SmartPresence.Services.Teams
 {
@@ -20,7 +18,7 @@ namespace SmartPresence.Services.Teams
         [ForeignKey(nameof(IdArea))]
         [InverseProperty("Teams")]
         public Area Area { get; set; }
-    
-        public IEnumerable<Employee> Employees { get; set; }   
+
+        public IEnumerable<Employee> Employees { get; set; }
     }
 }
