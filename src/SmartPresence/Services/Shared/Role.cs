@@ -1,8 +1,6 @@
 ﻿using SmartPresence.Services.Employees;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace SmartPresence.Services.Shared
 {
@@ -17,9 +15,16 @@ namespace SmartPresence.Services.Shared
 
     public enum RoleName
     {
+        [Display(Name = "Employee")]
         EMPLOYEE,
+
+        [Display(Name = "Team Manager")]
         TEAM_MANAGER,
+
+        [Display(Name = "Area Manager")]
         AREA_MANAGER,
+
+        [Display(Name = "Executive Director")]
         EXECUTIVE_DIRECTOR
     }
 }
