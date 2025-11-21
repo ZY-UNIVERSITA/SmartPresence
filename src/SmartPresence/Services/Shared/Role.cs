@@ -10,8 +10,16 @@ namespace SmartPresence.Services.Shared
     {
         [Key]
         public int Id { get; set; }
-        public string Name { get; set; }
+        public RoleName Name { get; set; }
 
         public IEnumerable<Employee> Employees { get; set; }
+    }
+
+    public enum RoleName
+    {
+        EMPLOYEE,
+        TEAM_MANAGER,
+        AREA_MANAGER,
+        EXECUTIVE_DIRECTOR
     }
 }
