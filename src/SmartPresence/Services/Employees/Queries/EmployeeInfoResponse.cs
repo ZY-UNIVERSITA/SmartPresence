@@ -1,12 +1,10 @@
 ﻿using SmartPresence.Services.Shared;
 using SmartPresence.Services.Teams;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SmartPresence.Services.Employees.Queries
 {
-    public class GetEmployeesInfoResponse
+    public class EmployeeInfoResponse
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -17,7 +15,7 @@ namespace SmartPresence.Services.Employees.Queries
         public Role Role { get; set; }
         public Team Team { get; set; }
 
-        public GetEmployeesInfoResponse(Employee employee)
+        public EmployeeInfoResponse(Employee employee)
         {
             Id = employee.Id;
             Name = employee.Name;
