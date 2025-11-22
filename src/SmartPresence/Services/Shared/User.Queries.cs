@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SmartPresence.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SmartPresence.Infrastructure;
 
 namespace SmartPresence.Services.Shared
 {
     public class UsersSelectQuery
     {
-        public Guid IdCurrentUser { get; set; }
+        public int IdCurrentUser { get; set; }
         public string Filter { get; set; }
     }
 
@@ -20,14 +20,14 @@ namespace SmartPresence.Services.Shared
 
         public class User
         {
-            public Guid Id { get; set; }
+            public int Id { get; set; }
             public string Email { get; set; }
         }
     }
 
     public class UsersIndexQuery
     {
-        public Guid IdCurrentUser { get; set; }
+        public int IdCurrentUser { get; set; }
         public string Filter { get; set; }
 
         public Paging Paging { get; set; }
@@ -40,7 +40,7 @@ namespace SmartPresence.Services.Shared
 
         public class User
         {
-            public Guid Id { get; set; }
+            public int Id { get; set; }
             public string Email { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
@@ -49,12 +49,12 @@ namespace SmartPresence.Services.Shared
 
     public class UserDetailQuery
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
     }
 
     public class UserDetailDTO
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

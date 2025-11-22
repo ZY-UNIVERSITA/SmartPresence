@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Threading.Tasks;
 using SmartPresence.Web.SignalR.Hubs;
 using SmartPresence.Web.SignalR.Hubs.Events;
+using System.Threading.Tasks;
 
 namespace SmartPresence.Web.SignalR
 {
@@ -15,7 +14,7 @@ namespace SmartPresence.Web.SignalR
             _templateHub = templateHub;
         }
 
-        private ITemplateClientEvent GetTemplateGroup(Guid id)
+        private ITemplateClientEvent GetTemplateGroup(int id)
         {
             return _templateHub.Clients.Group(id.ToString());
         }

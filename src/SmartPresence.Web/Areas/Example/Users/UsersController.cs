@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using System;
-using System.Threading.Tasks;
 using SmartPresence.Services.Shared;
 using SmartPresence.Web.Infrastructure;
 using SmartPresence.Web.SignalR;
 using SmartPresence.Web.SignalR.Hubs.Events;
+using System;
+using System.Threading.Tasks;
 
 namespace SmartPresence.Web.Areas.Example.Users
 {
@@ -41,7 +41,7 @@ namespace SmartPresence.Web.Areas.Example.Users
         }
 
         [HttpGet]
-        public virtual async Task<IActionResult> Edit(Guid? id)
+        public virtual async Task<IActionResult> Edit(int? id)
         {
             var model = new EditViewModel();
 
@@ -74,7 +74,7 @@ namespace SmartPresence.Web.Areas.Example.Users
                     {
                         IdGroup = model.Id.Value,
                         IdUser = model.Id.Value,
-                        IdMessage = Guid.NewGuid()
+                        IdMessage = new Random().Next()
                     });
                 }
                 catch (Exception e)

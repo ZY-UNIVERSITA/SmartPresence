@@ -1,11 +1,11 @@
-﻿using SmartPresence.Web.Infrastructure;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using SmartPresence.Services.Shared;
+using SmartPresence.Web.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using SmartPresence.Services.Shared;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace SmartPresence.Web.Areas.Example.Users
 {
@@ -66,7 +66,7 @@ namespace SmartPresence.Web.Areas.Example.Users
             this.LastName = userIndexDTO.LastName;
         }
 
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

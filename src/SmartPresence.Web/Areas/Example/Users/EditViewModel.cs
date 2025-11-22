@@ -1,7 +1,6 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using SmartPresence.Services.Shared;
+﻿using SmartPresence.Services.Shared;
 using SmartPresence.Web.Infrastructure;
+using System.ComponentModel.DataAnnotations;
 
 namespace SmartPresence.Web.Areas.Example.Users
 {
@@ -12,7 +11,7 @@ namespace SmartPresence.Web.Areas.Example.Users
         {
         }
 
-        public Guid? Id { get; set; }
+        public int? Id { get; set; }
         public string Email { get; set; }
 
         [Display(Name = "Nome")]
