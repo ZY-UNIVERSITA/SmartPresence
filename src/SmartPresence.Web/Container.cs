@@ -1,5 +1,9 @@
-﻿using SmartPresence.Services.Shared;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SmartPresence.Services.Areas;
+using SmartPresence.Services.Employees;
+using SmartPresence.Services.Shared;
+using SmartPresence.Services.Teams;
+using SmartPresence.Services.Users;
 using SmartPresence.Web.SignalR;
 
 namespace SmartPresence.Web
@@ -13,6 +17,13 @@ namespace SmartPresence.Web
 
             // Registration of SignalR events
             container.AddScoped<IPublishDomainEvents, SignalrPublishDomainEvents>();
+
+            // Register custom service
+            container.AddScoped<IEmployeeService, EmployeeService>();
+            container.AddScoped<IUserService, UserService>();
+            container.AddScoped<ITeamService, TeamService>();
+            container.AddScoped<IAreaService, AreaService>();
+
         }
     }
 }
