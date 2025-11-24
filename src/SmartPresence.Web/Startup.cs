@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Globalization;
-using System.IO;
-using System.Linq;
 using SmartPresence.Services;
 using SmartPresence.Web.Infrastructure;
 using SmartPresence.Web.SignalR.Hubs;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 
 namespace SmartPresence.Web
 {
@@ -34,7 +34,7 @@ namespace SmartPresence.Web
 
             services.AddDbContext<SmartPresenceDbContext>(options =>
             {
-                options.UseInMemoryDatabase(databaseName: "Template");
+                options.UseInMemoryDatabase(databaseName: "SmartPresence");
             });
 
             // SERVICES FOR AUTHENTICATION
