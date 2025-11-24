@@ -28,7 +28,7 @@
   {
     "outputFileName": "wwwroot/js/bundle-vue.js",
     "inputFiles": [
-      "node_modules/vue/dist/vue.js"
+      "node_modules/vue/dist/vue.global.js"
     ],
     "minify": {
       "enabled": true
