@@ -5,6 +5,7 @@ using SmartPresence.Services.Employees;
 using SmartPresence.Services.Teams;
 using SmartPresence.Services.Users;
 using SmartPresence.Services.Areas;
+using SmartPresence.Services.WorkEvents;
 
 namespace SmartPresence.Services
 {
@@ -28,6 +29,7 @@ namespace SmartPresence.Services
         public DbSet<ContractType> ContractTypes { get; set; }
 
         public DbSet<WorkEvent> WorkEvents { get; set; }
-        public DbSet<WorkEventType> WorkEventType { get; set; }
+        public DbSet<WorkEventType> WorkEventTypes { get; set; }
+        public DbSet<WorkEventStatus> WorkEventTypeStatus { get; set; } 
     }
 }

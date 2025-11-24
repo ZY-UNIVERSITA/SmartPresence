@@ -3,6 +3,7 @@ using SmartPresence.Services.Areas;
 using SmartPresence.Services.Employees;
 using SmartPresence.Services.Shared;
 using SmartPresence.Services.Teams;
+using SmartPresence.Services.WorkEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,9 @@ namespace SmartPresence.Infrastructure
             AddIdRoles(context);
             AddIdTeams(context);
             AddEmployees(context);
+            AddEventsStatus(context);
+            AddWorkEvents(context);
+            AddWorkEventType(context);
 
             AddUsers(context);
         }
@@ -382,6 +386,115 @@ namespace SmartPresence.Infrastructure
                     }
                 );
             }
+
+            context.SaveChanges();
+        }
+
+        private static void AddEventsStatus(SmartPresenceDbContext context)
+        {
+            context.WorkEventTypeStatus.AddRange(
+                new WorkEventStatus
+                {
+                    Id = 1,
+                    Name = WorkEventStatusName.APPROVED
+                },
+                new WorkEventStatus
+                {
+                    Id = 2,
+                    Name = WorkEventStatusName.REFUSED
+                },
+                new WorkEventStatus
+                {
+                    Id = 3,
+                    Name = WorkEventStatusName.PENDING
+                }
+            );
+
+            context.SaveChanges();
+        }
+
+        private static void AddWorkEventType(SmartPresenceDbContext context)
+        {
+            context.WorkEventTypes.AddRange(
+                new WorkEventType
+                {
+                    Id = 1,
+                    Name = WorkEventTypeEnum.LEAVE
+                },
+                new WorkEventType
+                {
+                    Id = 2,
+                    Name = WorkEventTypeEnum.HOLIDAY
+                },
+                new WorkEventType
+                {
+                    Id = 3,
+                    Name = WorkEventTypeEnum.REMOTE
+                }
+            );
+
+            context.SaveChanges();
+        }
+
+        private static void AddWorkEvents(SmartPresenceDbContext context)
+        {
+            context.WorkEvents.AddRange(
+                new WorkEvent
+                {
+                    Id = 1,
+                    StartDate = DateTime.Now.AddDays(-1),
+                    EndDate = DateTime.Now.AddDays(4).AddMinutes(1),
+                    IdStatus = 1,
+                    IdWorkEventType = 1,
+                    IdEmployee = 6,
+                },
+                new WorkEvent
+                {
+                    Id = 2,
+                    StartDate = DateTime.Now.AddDays(1),
+                    EndDate = DateTime.Now.AddDays(2).AddMinutes(1),
+                    IdStatus = 3,
+                    IdWorkEventType = 3,
+                    IdEmployee = 7,
+                },
+                new WorkEvent
+                {
+                    Id = 3,
+                    StartDate = DateTime.Now.AddDays(0),
+                    EndDate = DateTime.Now.AddDays(2).AddMinutes(1),
+                    IdStatus = 3,
+                    IdWorkEventType = 3,
+                    IdEmployee = 10,
+                },
+                new WorkEvent
+                {
+                    Id = 4,
+                    StartDate = DateTime.Now.AddDays(2),
+                    EndDate = DateTime.Now.AddDays(4).AddMinutes(1),
+                    IdStatus = 2,
+                    IdWorkEventType = 2,
+                    IdEmployee = 12,
+                },
+                new WorkEvent
+                {
+                    Id = 5,
+                    StartDate = DateTime.Now.AddDays(2),
+                    EndDate = DateTime.Now.AddDays(4).AddMinutes(1),
+                    IdStatus = 1,
+                    IdWorkEventType = 1,
+                    IdEmployee = 15,
+                },
+                new WorkEvent
+                {
+                    Id = 6,
+                    StartDate = DateTime.Now.AddDays(2),
+                    EndDate = DateTime.Now.AddDays(4).AddMinutes(1),
+                    IdStatus = 1,
+                    IdWorkEventType = 3,
+                    IdEmployee = 18,
+                }
+
+            );
 
             context.SaveChanges();
         }

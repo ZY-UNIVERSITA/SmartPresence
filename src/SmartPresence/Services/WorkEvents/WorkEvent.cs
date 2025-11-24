@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace SmartPresence.Services.Shared
+namespace SmartPresence.Services.WorkEvents
 {
     public class WorkEvent
     {
@@ -13,6 +13,12 @@ namespace SmartPresence.Services.Shared
         public int Id { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+
+        public int IdStatus { get; set; }
+
+        [ForeignKey(nameof(IdWorkEventType))]
+        [InverseProperty("WorkEvents")]
+        public WorkEventStatus WorkEventStatus { get; set; }
 
         public int IdWorkEventType { get; set; }
 
