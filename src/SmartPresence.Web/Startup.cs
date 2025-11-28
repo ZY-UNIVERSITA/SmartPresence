@@ -113,7 +113,7 @@ namespace SmartPresence.Web
                 endpoints.MapHub<TemplateHub>("/templateHub");
 
                 endpoints.MapAreaControllerRoute("Example", "Example", "Example/{controller=Users}/{action=Index}/{id?}");
-                endpoints.MapAreaControllerRoute("Dashboard", "Dashboard", "Dashboard/{controller=Home}/{action=Index}");
+                endpoints.MapAreaControllerRoute("Calendar", "Calendar", "Calendar/{controller=Home}/{action=Index}");
                 endpoints.MapControllerRoute("default", "{controller=Login}/{action=Login}");
             });
         }
