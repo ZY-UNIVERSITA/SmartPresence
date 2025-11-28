@@ -1,5 +1,5 @@
-﻿using SmartPresence.Services.Shared;
-using SmartPresence.Services.Teams;
+﻿using SmartPresence.Services.Employees.Model;
+using SmartPresence.Services.Shared;
 using System;
 
 namespace SmartPresence.Services.Employees.Queries
