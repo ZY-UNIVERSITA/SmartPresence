@@ -30,5 +30,5 @@ namespace SmartPresence.Services.Shared
             return new DateTime(date.Year, date.Month, 1);
         }
     }
-    }
+    
 }
