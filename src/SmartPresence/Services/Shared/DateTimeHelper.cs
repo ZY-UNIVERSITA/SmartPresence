@@ -33,14 +33,14 @@ namespace SmartPresence.Services.Shared
             return Enum.GetValues<DayOfWeek>().Length;
         }
 
-        public static int GetDaysBetweenTwoDates(CalendarViewName calendarView, DateTime beginDate, DateTime endDate)
+        public static int GetDaysBetweenTwoDates(DateTime beginDate, DateTime endDate, CalendarViewName? calendarView = null)
         {
             return calendarView switch
             {
                 CalendarViewName.WEEK => DateTimeHelper.GetNumbersOfDaysInWeek(),
                 CalendarViewName.MONTH => DateTime.DaysInMonth(beginDate.Year, beginDate.Month),
                 CalendarViewName.CUSTOM => (endDate.Date - beginDate.Date).Days + 1,
-                _ => 0
+                _ => (endDate.Date - beginDate.Date).Days + 1
             };
         }
 
@@ -55,7 +55,7 @@ namespace SmartPresence.Services.Shared
             };
         }
 
-        public static DateTime GetLastDateByCalendarView(DateTime beginDate, int days)
+        public static DateTime GetLastDate(DateTime beginDate, int days)
         {
             return beginDate.AddDays(days);
         }
