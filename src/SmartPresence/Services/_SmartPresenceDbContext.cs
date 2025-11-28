@@ -5,7 +5,7 @@ using SmartPresence.Services.Employees;
 using SmartPresence.Services.Teams;
 using SmartPresence.Services.Users;
 using SmartPresence.Services.Areas;
-using SmartPresence.Services.WorkEvents;
+using SmartPresence.Services.WorkEvents.Model;
 
 namespace SmartPresence.Services
 {
