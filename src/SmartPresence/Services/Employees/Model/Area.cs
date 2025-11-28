@@ -1,5 +1,4 @@
-﻿using SmartPresence.Services.Teams;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace SmartPresence.Services.Employees.Model
