@@ -175,34 +175,34 @@ namespace SmartPresence.Web.Areas.Calendar.Home
 
             return everyDaysEvents;
         }
-    }
 
-    public class CalendarDay
-    {
-        public string DayOfWeek { get; set; }
-        public string NumberOfDay { get; set; }
-        public string Date { get; set; }
-    }
+        public class CalendarDay
+        {
+            public string DayOfWeek { get; set; }
+            public string NumberOfDay { get; set; }
+            public string Date { get; set; }
+        }
 
-    public class EmployeeIdNameAndEvents
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string Team { get; set; }
-        public List<SingleDayEvents> Events { get; set; }
-    }
+        public class EmployeeIdNameAndEvents
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string Surname { get; set; }
+            public string Team { get; set; }
+            public List<SingleDayEvents> Events { get; set; }
+        }
 
-    public class SingleDayEvents
-    {
-        public DateTime Date { get; set; }
-        public int Days { get; set; }
-        public List<EventTypeAndStatus> ListEvents { get; set; }
-    }
+        public class SingleDayEvents
+        {
+            public DateTime Date { get; set; }
+            public int Days { get; set; }
+            public List<EventTypeAndStatus> ListEvents { get; set; }
+        }
 
-    public class EventTypeAndStatus
-    {
-        public string Type { get; set; }
-        public string Status { get; set; }
+        public class EventTypeAndStatus
+        {
+            public string Type { get; set; }
+            public string Status { get; set; }
+        }
     }
 }
