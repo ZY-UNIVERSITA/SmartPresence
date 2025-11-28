@@ -1,14 +1,14 @@
-using SmartPresence.Web.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using SmartPresence.Infrastructure;
+using SmartPresence.Services.Shared;
+using SmartPresence.Web.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using SmartPresence.Services.Shared;
 using System.Threading.Tasks;
-using SmartPresence.Infrastructure;
 
 namespace SmartPresence.Web.Features.Login
 {
@@ -46,7 +46,7 @@ namespace SmartPresence.Web.Features.Login
             if (string.IsNullOrWhiteSpace(returnUrl) == false)
                 return Redirect(returnUrl);
 
-            return RedirectToAction(MVC.Example.Users.Index());
+            return RedirectToAction(MVC.Calendar.Home.Index());
         }
 
         [HttpGet]
@@ -57,7 +57,7 @@ namespace SmartPresence.Web.Features.Login
                 if (string.IsNullOrWhiteSpace(returnUrl) == false)
                     return Redirect(returnUrl);
 
-                return RedirectToAction(MVC.Example.Users.Index());
+                return RedirectToAction(MVC.Calendar.Home.Index());
             }
 
             var model = new LoginViewModel
