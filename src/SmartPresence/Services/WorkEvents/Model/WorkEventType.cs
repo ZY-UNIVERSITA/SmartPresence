@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace SmartPresence.Services.WorkEvents
+namespace SmartPresence.Services.WorkEvents.Model
 {
     public class WorkEventType
     {

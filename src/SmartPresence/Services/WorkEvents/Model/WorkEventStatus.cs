@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace SmartPresence.Services.WorkEvents
+namespace SmartPresence.Services.WorkEvents.Model
 {
     public class WorkEventStatus
     {
