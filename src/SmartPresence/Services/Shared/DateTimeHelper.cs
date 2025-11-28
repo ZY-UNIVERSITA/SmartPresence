@@ -27,6 +27,22 @@ namespace SmartPresence.Services.Shared
         {
             return new DateTime(date.Year, date.Month, 1);
         }
+
+        public static int GetDaysInWeek()
+        {
+            return Enum.GetValues<DayOfWeek>().Length;
+        }
+
+        public static int GetDaysBetweenTwoDates(CalendarViewName calendarView, DateTime beginDate, DateTime endDate)
+        {
+            return calendarView switch
+            {
+                CalendarViewName.WEEK => DateTimeHelper.GetDaysInWeek(),
+                CalendarViewName.MONTH => DateTime.DaysInMonth(beginDate.Year, beginDate.Month),
+                CalendarViewName.CUSTOM => (endDate.Date - beginDate.Date).Days + 1,
+                _ => 0
+            };
+        }
     }
 
 }
