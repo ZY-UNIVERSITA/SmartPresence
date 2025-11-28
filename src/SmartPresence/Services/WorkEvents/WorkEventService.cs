@@ -40,7 +40,7 @@ namespace SmartPresence.Services.WorkEvents
 
             var newWorkEvent = new WorkEvent()
             {
-                IdEmployee = workEvent.Id,
+                IdEmployee = workEvent.IdEmployee,
                 StartDate = workEvent.BeginDate,
                 EndDate = workEvent.EndDate,
                 IdWorkEventStatus = idWorkEventStatusPending,

@@ -10,7 +10,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
 {
     public class HomeIndexViewModel
     {
-        public int Id { get; set; }
+        public int IdEmployee { get; set; }
         public List<EmployeeIdNameAndEvents> Employees { get; set; }
         public List<string> TeamList { get; set; }
         public List<string> EventTypeList { get; set; }
