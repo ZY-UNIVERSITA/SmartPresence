@@ -23,12 +23,12 @@ namespace SmartPresence.Services.Shared
             return mondayDate;
         }
 
-        public static DateTime GetFirstOfTheMonth(DateTime date)
+        public static DateTime GetFirstDayOfTheMonth(DateTime date)
         {
             return new DateTime(date.Year, date.Month, 1);
         }
 
-        public static int GetDaysInWeek()
+        public static int GetNumbersOfDaysInWeek()
         {
             return Enum.GetValues<DayOfWeek>().Length;
         }
@@ -37,11 +37,27 @@ namespace SmartPresence.Services.Shared
         {
             return calendarView switch
             {
-                CalendarViewName.WEEK => DateTimeHelper.GetDaysInWeek(),
+                CalendarViewName.WEEK => DateTimeHelper.GetNumbersOfDaysInWeek(),
                 CalendarViewName.MONTH => DateTime.DaysInMonth(beginDate.Year, beginDate.Month),
                 CalendarViewName.CUSTOM => (endDate.Date - beginDate.Date).Days + 1,
                 _ => 0
             };
+        }
+
+        public static DateTime GetFirstDateByCalendarView(CalendarViewName calendarView, DateTime date)
+        {
+            return calendarView switch
+            {
+                CalendarViewName.WEEK => DateTimeHelper.GetMonday(date),
+                CalendarViewName.MONTH => DateTimeHelper.GetFirstDayOfTheMonth(date),
+                CalendarViewName.CUSTOM => date,
+                _ => date
+            };
+        }
+
+        public static DateTime GetLastDateByCalendarView(DateTime beginDate, int days)
+        {
+            return beginDate.AddDays(days);
         }
     }
 
