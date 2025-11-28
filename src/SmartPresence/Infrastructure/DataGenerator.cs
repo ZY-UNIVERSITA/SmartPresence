@@ -25,7 +25,7 @@ namespace SmartPresence.Infrastructure
             AddIdRoles(context);
             AddIdTeams(context);
             AddEmployees(context);
-            AddEventsStatus(context);
+            AddWorkEventsStatus(context);
             AddWorkEvents(context);
             AddWorkEventType(context);
 
@@ -390,7 +390,7 @@ namespace SmartPresence.Infrastructure
             context.SaveChanges();
         }
 
-        private static void AddEventsStatus(SmartPresenceDbContext context)
+        private static void AddWorkEventsStatus(SmartPresenceDbContext context)
         {
             context.WorkEventTypeStatus.AddRange(
                 new WorkEventStatus
@@ -419,17 +419,17 @@ namespace SmartPresence.Infrastructure
                 new WorkEventType
                 {
                     Id = 1,
-                    Name = WorkEventTypeEnum.HOLIDAY
+                    Name = WorkEventTypeName.HOLIDAY
                 },
                 new WorkEventType
                 {
                     Id = 2,
-                    Name = WorkEventTypeEnum.LEAVE
+                    Name = WorkEventTypeName.LEAVE
                 },
                 new WorkEventType
                 {
                     Id = 3,
-                    Name = WorkEventTypeEnum.REMOTE
+                    Name = WorkEventTypeName.REMOTE
                 }
             );
 
