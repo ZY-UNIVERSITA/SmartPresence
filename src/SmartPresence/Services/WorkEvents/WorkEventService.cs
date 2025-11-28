@@ -23,7 +23,7 @@ namespace SmartPresence.Services.WorkEvents
                 .FirstOrDefaultAsync();
         }
 
-        private async Task<int> GetWorkEventTypeByName(WorkEventTypeEnum name)
+        private async Task<int> GetWorkEventTypeByName(WorkEventTypeName name)
         {
             return await _context.WorkEventTypes
                 .Where(x => x.Name.Equals(name))
@@ -33,7 +33,7 @@ namespace SmartPresence.Services.WorkEvents
 
         public async Task CreateNewWorkEvent(CreateNewWorkRequestCommand workEvent)
         {
-            var workEventStatusPending = workEvent.WorkEventType is WorkEventTypeEnum.REMOTE ? WorkEventStatusName.APPROVED : WorkEventStatusName.PENDING;
+            var workEventStatusPending = workEvent.WorkEventType is WorkEventTypeName.REMOTE ? WorkEventStatusName.APPROVED : WorkEventStatusName.PENDING;
             var idWorkEventStatusPending = await this.GetWorkEventStatusByName(workEventStatusPending);
 
             var idWorkEventType = await this.GetWorkEventTypeByName(workEvent.WorkEventType);

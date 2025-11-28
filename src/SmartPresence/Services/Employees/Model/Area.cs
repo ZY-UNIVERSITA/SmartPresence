@@ -1,10 +1,8 @@
 ﻿using SmartPresence.Services.Teams;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
-namespace SmartPresence.Services.Areas
+namespace SmartPresence.Services.Employees.Model
 {
     public class Area
     {

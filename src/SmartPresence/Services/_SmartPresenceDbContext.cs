@@ -1,10 +1,9 @@
-﻿using SmartPresence.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using SmartPresence.Services.Shared;
+﻿using Microsoft.EntityFrameworkCore;
+using SmartPresence.Infrastructure;
 using SmartPresence.Services.Employees;
+using SmartPresence.Services.Employees.Model;
+using SmartPresence.Services.Shared;
 using SmartPresence.Services.Teams;
-using SmartPresence.Services.Users;
-using SmartPresence.Services.Areas;
 using SmartPresence.Services.WorkEvents.Model;
 
 namespace SmartPresence.Services
@@ -30,6 +29,6 @@ namespace SmartPresence.Services
 
         public DbSet<WorkEvent> WorkEvents { get; set; }
         public DbSet<WorkEventType> WorkEventTypes { get; set; }
-        public DbSet<WorkEventStatus> WorkEventTypeStatus { get; set; } 
+        public DbSet<WorkEventStatus> WorkEventTypeStatus { get; set; }
     }
 }

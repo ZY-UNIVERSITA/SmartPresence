@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SmartPresence.Services.Shared
+﻿namespace SmartPresence.Services.Shared
 {
     public enum OrganizationLevelFilter
     {

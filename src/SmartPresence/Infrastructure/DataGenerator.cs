@@ -1,6 +1,6 @@
 ﻿using SmartPresence.Services;
-using SmartPresence.Services.Areas;
 using SmartPresence.Services.Employees;
+using SmartPresence.Services.Employees.Model;
 using SmartPresence.Services.Shared;
 using SmartPresence.Services.Teams;
 using SmartPresence.Services.WorkEvents.Model;

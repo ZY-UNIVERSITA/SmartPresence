@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SmartPresence.Services.Shared
 {
@@ -30,5 +28,5 @@ namespace SmartPresence.Services.Shared
             return new DateTime(date.Year, date.Month, 1);
         }
     }
-    
+
 }

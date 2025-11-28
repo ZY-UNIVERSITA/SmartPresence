@@ -1,8 +1,5 @@
 ﻿using SmartPresence.Services.Users.Queries;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SmartPresence.Services.Users
 {
@@ -12,7 +9,7 @@ namespace SmartPresence.Services.Users
 
         public UserService(SmartPresenceDbContext context)
         {
-            _context = context; 
+            _context = context;
         }
 
         public int GetId(UserIdentificationRequest user)

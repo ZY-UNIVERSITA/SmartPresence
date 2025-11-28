@@ -1,11 +1,10 @@
 ﻿using SmartPresence.Services.Shared;
 using SmartPresence.Services.Teams;
-using SmartPresence.Services.WorkEvents;
+using SmartPresence.Services.WorkEvents.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace SmartPresence.Services.Employees
 {
