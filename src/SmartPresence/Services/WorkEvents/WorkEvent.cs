@@ -14,9 +14,9 @@ namespace SmartPresence.Services.WorkEvents
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public int IdStatus { get; set; }
+        public int IdWorkEventStatus { get; set; }
 
-        [ForeignKey(nameof(IdWorkEventType))]
+        [ForeignKey(nameof(IdWorkEventStatus))]
         [InverseProperty("WorkEvents")]
         public WorkEventStatus WorkEventStatus { get; set; }
 

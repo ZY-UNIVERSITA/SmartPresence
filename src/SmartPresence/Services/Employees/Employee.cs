@@ -1,5 +1,6 @@
 ﻿using SmartPresence.Services.Shared;
 using SmartPresence.Services.Teams;
+using SmartPresence.Services.WorkEvents;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
