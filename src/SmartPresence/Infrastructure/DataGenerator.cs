@@ -3,7 +3,7 @@ using SmartPresence.Services.Areas;
 using SmartPresence.Services.Employees;
 using SmartPresence.Services.Shared;
 using SmartPresence.Services.Teams;
-using SmartPresence.Services.WorkEvents;
+using SmartPresence.Services.WorkEvents.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -419,12 +419,12 @@ namespace SmartPresence.Infrastructure
                 new WorkEventType
                 {
                     Id = 1,
-                    Name = WorkEventTypeEnum.LEAVE
+                    Name = WorkEventTypeEnum.HOLIDAY
                 },
                 new WorkEventType
                 {
                     Id = 2,
-                    Name = WorkEventTypeEnum.HOLIDAY
+                    Name = WorkEventTypeEnum.LEAVE
                 },
                 new WorkEventType
                 {
@@ -442,9 +442,9 @@ namespace SmartPresence.Infrastructure
                 new WorkEvent
                 {
                     Id = 1,
-                    StartDate = DateTime.Now.AddDays(-1),
+                    StartDate = DateTime.Now.AddDays(3),
                     EndDate = DateTime.Now.AddDays(4).AddMinutes(1),
-                    IdStatus = 1,
+                    IdWorkEventStatus = 1,
                     IdWorkEventType = 1,
                     IdEmployee = 6,
                 },
@@ -453,7 +453,7 @@ namespace SmartPresence.Infrastructure
                     Id = 2,
                     StartDate = DateTime.Now.AddDays(1),
                     EndDate = DateTime.Now.AddDays(2).AddMinutes(1),
-                    IdStatus = 3,
+                    IdWorkEventStatus = 3,
                     IdWorkEventType = 3,
                     IdEmployee = 7,
                 },
@@ -462,7 +462,7 @@ namespace SmartPresence.Infrastructure
                     Id = 3,
                     StartDate = DateTime.Now.AddDays(0),
                     EndDate = DateTime.Now.AddDays(2).AddMinutes(1),
-                    IdStatus = 3,
+                    IdWorkEventStatus = 3,
                     IdWorkEventType = 3,
                     IdEmployee = 10,
                 },
@@ -471,28 +471,65 @@ namespace SmartPresence.Infrastructure
                     Id = 4,
                     StartDate = DateTime.Now.AddDays(2),
                     EndDate = DateTime.Now.AddDays(4).AddMinutes(1),
-                    IdStatus = 2,
+                    IdWorkEventStatus = 2,
                     IdWorkEventType = 2,
                     IdEmployee = 12,
                 },
                 new WorkEvent
                 {
                     Id = 5,
-                    StartDate = DateTime.Now.AddDays(2),
+                    StartDate = DateTime.Now.AddDays(-4),
                     EndDate = DateTime.Now.AddDays(4).AddMinutes(1),
-                    IdStatus = 1,
+                    IdWorkEventStatus = 1,
                     IdWorkEventType = 1,
                     IdEmployee = 15,
                 },
                 new WorkEvent
                 {
                     Id = 6,
-                    StartDate = DateTime.Now.AddDays(2),
+                    StartDate = DateTime.Now.AddDays(1),
                     EndDate = DateTime.Now.AddDays(4).AddMinutes(1),
-                    IdStatus = 1,
-                    IdWorkEventType = 3,
+                    IdWorkEventStatus = 1,
+                    IdWorkEventType = 2,
                     IdEmployee = 18,
+                },
+                new WorkEvent
+                {
+                    Id = 7,
+                    StartDate = DateTime.Now.AddDays(1),
+                    EndDate = DateTime.Now.AddDays(4).AddMinutes(1),
+                    IdWorkEventStatus = 1,
+                    IdWorkEventType = 3,
+                    IdEmployee = 17,
+                },
+                new WorkEvent
+                {
+                    Id = 8,
+                    StartDate = DateTime.Now.AddDays(1),
+                    EndDate = DateTime.Now.AddDays(1).AddMinutes(1),
+                    IdWorkEventStatus = 3,
+                    IdWorkEventType = 2,
+                    IdEmployee = 17,
+                },
+                new WorkEvent
+                {
+                    Id = 9,
+                    StartDate = DateTime.Now.AddDays(0),
+                    EndDate = DateTime.Now.AddDays(2).AddMinutes(1),
+                    IdWorkEventStatus = 1,
+                    IdWorkEventType = 2,
+                    IdEmployee = 6,
+                },
+                new WorkEvent
+                {
+                    Id = 10,
+                    StartDate = DateTime.Now.AddDays(0),
+                    EndDate = DateTime.Now.AddDays(2).AddMinutes(1),
+                    IdWorkEventStatus = 3,
+                    IdWorkEventType = 1,
+                    IdEmployee = 16,
                 }
+
 
             );
 
