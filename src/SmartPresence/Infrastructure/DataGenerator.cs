@@ -27,6 +27,7 @@ namespace SmartPresence.Infrastructure
             AddWorkEventsStatus(context);
             AddWorkEvents(context);
             AddWorkEventType(context);
+            AddEmployeeTimeOff(context);
 
             AddUsers(context);
         }
@@ -530,6 +531,25 @@ namespace SmartPresence.Infrastructure
                 }
 
 
+            );
+
+            context.SaveChanges();
+        }
+
+        private static void AddEmployeeTimeOff(SmartPresenceDbContext context)
+        {
+            context.EmployeeTimeOffs.Add(
+                new EmployeeTimeOff
+                {
+                    Id = 6,
+                    Year = DateTime.Now.Year,
+                    HolidayAccrued = 0,
+                    HolidayUsed = 2,
+                    HolidayTotal = 50,
+                    LeaveAccrued = 10,
+                    LeaveUsed = 1,
+                    LeaveTotal = 120
+                }
             );
 
             context.SaveChanges();

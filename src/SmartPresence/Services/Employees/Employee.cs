@@ -36,5 +36,7 @@ namespace SmartPresence.Services.Employees
         public Team Team { get; set; }
 
         public IEnumerable<WorkEvent> WorkEvents { get; set; }
+
+        public IEnumerable<EmployeeTimeOff> EmployeeTimeOffs { get; set; }
     }
 }
