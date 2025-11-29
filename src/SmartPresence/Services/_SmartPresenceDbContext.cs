@@ -18,6 +18,12 @@ namespace SmartPresence.Services
             DataGenerator.InitializeUsers(this);
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<EmployeeTimeOff>()
+                .HasKey(x => new { x.Id, x.Year });
+        }
+
         public DbSet<User> Users { get; set; }
 
         public DbSet<Employee> Employees { get; set; }
@@ -29,5 +35,7 @@ namespace SmartPresence.Services
         public DbSet<WorkEvent> WorkEvents { get; set; }
         public DbSet<WorkEventType> WorkEventTypes { get; set; }
         public DbSet<WorkEventStatus> WorkEventTypeStatus { get; set; }
+
+        public DbSet<EmployeeTimeOff> EmployeeTimeOffs { get; set; }
     }
 }
