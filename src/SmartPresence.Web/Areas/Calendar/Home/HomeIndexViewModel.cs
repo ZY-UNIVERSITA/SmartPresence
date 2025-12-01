@@ -160,8 +160,11 @@ namespace SmartPresence.Web.Areas.Calendar.Home
                 // Aggiunge il nuovo evento alla lista degli eventi per il determinato giorno
                 newSingleEvent.ListEvents.Add(new EventTypeAndStatus()
                 {
+                    Id = i,
                     Type = singleEvent.WorkEventType.Name.ToString(),
-                    Status = singleEvent.WorkEventStatus.Name.ToString()
+                    Status = singleEvent.WorkEventStatus.Name.ToString(),
+                    DateRange = singleEvent.WorkEventType.Name.Equals(WorkEventTypeName.LEAVE)
+                        ? $"{singleEvent.StartDate.ToString("HH\\:mm")} - {singleEvent.EndDate.ToString("HH\\:mm")}" : string.Empty
                 });
 
                 // Se il giorno è nuovo perchè non ha mai avuti eventi, allora bisogna pusharlo nella lista dei giorni
@@ -214,8 +217,10 @@ namespace SmartPresence.Web.Areas.Calendar.Home
 
         public class EventTypeAndStatus
         {
+            public int Id { get; set; }
             public string Type { get; set; }
             public string Status { get; set; }
+            public string DateRange { get; set; }
         }
 
         public class EmployeeTimeOff()
