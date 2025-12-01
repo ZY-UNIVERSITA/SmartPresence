@@ -528,9 +528,16 @@ namespace SmartPresence.Infrastructure
                     IdWorkEventStatus = 3,
                     IdWorkEventType = 1,
                     IdEmployee = 16,
+                },
+                new WorkEvent
+                {
+                    Id = 11,
+                    StartDate = DateTime.Now.AddHours(1),
+                    EndDate = DateTime.Now.AddHours(2),
+                    IdWorkEventStatus = 1,
+                    IdWorkEventType = 2,
+                    IdEmployee = 11,
                 }
-
-
             );
 
             context.SaveChanges();
