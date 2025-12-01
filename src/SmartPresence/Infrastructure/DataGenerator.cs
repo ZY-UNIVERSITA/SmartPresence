@@ -469,8 +469,8 @@ namespace SmartPresence.Infrastructure
                 new WorkEvent
                 {
                     Id = 4,
-                    StartDate = DateTime.Now.AddDays(2),
-                    EndDate = DateTime.Now.AddDays(4).AddMinutes(1),
+                    StartDate = DateTime.Now.AddDays(2).AddMinutes(-50),
+                    EndDate = DateTime.Now.AddDays(4).AddMinutes(17),
                     IdWorkEventStatus = 2,
                     IdWorkEventType = 2,
                     IdEmployee = 12,
@@ -487,8 +487,8 @@ namespace SmartPresence.Infrastructure
                 new WorkEvent
                 {
                     Id = 6,
-                    StartDate = DateTime.Now.AddDays(1),
-                    EndDate = DateTime.Now.AddDays(4).AddMinutes(1),
+                    StartDate = DateTime.Now.AddDays(1).AddHours(-2),
+                    EndDate = DateTime.Now.AddDays(4).AddMinutes(15),
                     IdWorkEventStatus = 1,
                     IdWorkEventType = 2,
                     IdEmployee = 18,
@@ -506,7 +506,7 @@ namespace SmartPresence.Infrastructure
                 {
                     Id = 8,
                     StartDate = DateTime.Now.AddDays(1),
-                    EndDate = DateTime.Now.AddDays(1).AddMinutes(1),
+                    EndDate = DateTime.Now.AddDays(1).AddMinutes(75),
                     IdWorkEventStatus = 3,
                     IdWorkEventType = 2,
                     IdEmployee = 17,
@@ -514,8 +514,8 @@ namespace SmartPresence.Infrastructure
                 new WorkEvent
                 {
                     Id = 9,
-                    StartDate = DateTime.Now.AddDays(0),
-                    EndDate = DateTime.Now.AddDays(2).AddMinutes(1),
+                    StartDate = DateTime.Now.AddDays(0).AddHours(-4),
+                    EndDate = DateTime.Now.AddDays(2).AddMinutes(88),
                     IdWorkEventStatus = 1,
                     IdWorkEventType = 2,
                     IdEmployee = 6,
