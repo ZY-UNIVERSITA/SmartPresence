@@ -24,6 +24,29 @@
         .btn-outline-primary {
             color: #0249dd;
         }
+
+        .mainTable {
+            min-width: 1000px;
+            table-layout: fixed;
+            border-collapse: collapse;
+        }
+
+            .mainTable tbody::before {
+                content: '';
+                display: block;
+                height: 20px;
+            }
+
+
+            .mainTable th:first-child,
+            .mainTable td:first-child {
+                position: sticky;
+                left: 0;
+                background: #fff;
+                z-index: 12;
+                width: 25%;
+                min-width: 100px;
+            }
     </style>
 }
 
@@ -240,4 +263,149 @@
         </table>
     </section>
 
+
+    <!-- Off canvas di Bootstrap per nuova richiesta
+        https://getbootstrap.com/docs/5.0/components/offcanvas/
+    -->
+    <aside class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel" ref="offcanvas">
+        <header class="offcanvas-header">
+            <h2 class="offcanvas-title" id="offcanvasScrollingLabel">New request</h2>
+            <input type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" />
+        </header>
+
+        <!-- Dispone gli elementi in singola colonna quindi ogni elemento sarà su singola riga -->
+        <section class="offcanvas-body d-flex flex-column">
+
+            <header>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <input class="nav-link active" id="HolidayTab" data-bs-toggle="tab" data-bs-target="#HolidayTabContent" type="button" role="tab" aria-controls="HolidayTab" aria-selected="true" value="Holiday/Leave" />
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <input class="nav-link" id="RemoteTab" data-bs-toggle="tab" data-bs-target="#RemoteTabContent" type="button" role="tab" aria-controls="RemoteTab" aria-selected="false" value="Remote" />
+                    </li>
+                </ul>
+            </header>
+
+            <!-- Flex-grow-1: occupa tutto lo spazio disponibile -->
+            <section class="tab-content flex-grow-1" id="myTabContent">
+
+                <!-- h-100 per occupare tutto lo spazio della seciton -->
+                <section class="tab-pane fade show active h-100" id="HolidayTabContent" role="tabpanel">
+
+                    <!-- Wrapper necessario per usare Flexbox dentro il tab-pane senza rompere l'animazione -->
+                    <!-- h-100 assicura che occupi tutta l'altezza. Se il contenuto sfora, c'è scrolling verticale scrolla. -->
+                    <div class="d-flex flex-column h-100">
+
+                        <!-- Richiesta form -->
+                        <!-- mb-auto spinge in fondo il contenuto della tabella che viene dopo -->
+                        <section class="mb-auto">
+                            <form asp-controller="Home" asp-action="CreateNewRequest" method="post">
+                                <fieldset>
+                                    <header class="my-2">
+                                        <legend>Create a new request</legend>
+                                    </header>
+
+                                    <article class="mb-2">
+                                        <label for="type-request-select" class="form-label">Request type</label>
+                                        <select name="EventType" class="form-select" id="type-request-select" v-model="newRequestOption">
+                                            <option value="@WorkEventTypeName.HOLIDAY" selected>Holiday</option>
+                                            <option value="@WorkEventTypeName.LEAVE">Leave</option>
+                                        </select>
+                                    </article>
+
+                                    <template v-if="newRequestOption === 'HOLIDAY'">
+                                        <article class="mb-2">
+                                            <label for="BeginDateRequestHoliday" class="form-label">Begin date</label>
+                                            <input type="date" id="BeginDateRequestHoliday" name="BeginDateRequest" class="form-control" :value="selectedDate" min="@Model.Today.ToString("yyyy-MM-dd")">
+                                        </article>
+                                        <article class="mb-2">
+                                            <label for="EndDateRequestHoliday" class="form-label">End date</label>
+                                            <input type="date" id="EndDateRequestHoliday" name="EndDateRequest" class="form-control" :value="selectedDate" min="@Model.Today.ToString("yyyy-MM-dd")">
+                                        </article>
+                                    </template>
+                                    <template v-else>
+                                        <article class="mb-2">
+                                            <label for="BeginDateRequestLeave" class="form-label">Begin date</label>
+                                            <input type="datetime-local" id="BeginDateRequestLeave" name="BeginDateRequest" class="form-control"
+                                                   min="@Model.Today.ToString("yyyy-MM-ddT09:00")" v-model="selectedDatetime">
+                                        </article>
+                                        <article class="mb-2">
+                                            <label for="EndDateRequestLeave" class="form-label">End date*</label>
+                                            <input type="datetime-local" id="EndDateRequestLeave" name="EndDateRequest" class="form-control" :value="selectedDatetime"
+                                                   min="@Model.Today.ToString("yyyy-MM-ddT09:00")" :max="maxDateLeave">
+                                        </article>
+                                    </template>
+
+                                    <article class="mb-2">
+                                        <label for="requestNotes" class="form-label">Notes</label>
+                                        <textarea id="requestNotes" name="NotesRequest" class="form-control" rows="3" maxlength="100" placeholder="Add a note (optional)"></textarea>
+                                    </article>
+
+                                    @Html.HiddenFor(x => x.CalendarViewFilter)
+                                    @Html.HiddenFor(x => x.BeginDate)
+                                    @Html.HiddenFor(x => x.EndDate)
+                                    @Html.HiddenFor(x => x.IdEmployee)
+
+                                    <footer class="mb-2">
+                                        <input type="submit" value="Send" class="btn btn-primary" />
+                                    </footer>
+                                </fieldset>
+                            </form>
+                        </section>
+
+                        <!-- Con mb-auto di prima, la tabella viene spinta in basso alla pagina -->
+                        <section class="table-responsive mt-3" id="voglioLuiInFondo" aria-label="Yearly balances detail">
+                            <table class="table table-striped table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col"></th>
+                                        <th scope="col">Used</th>
+                                        <th scope="col">Accrued</th>
+                                        <th scope="col">Available</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-end">
+                                    <tr>
+                                        <th scope="row" class="text-start">Vacation</th>
+                                        <td>@Model.EmployeeTimeOffs.HolidayUsed</td>
+                                        <td>@Model.EmployeeTimeOffs.HolidayAccrued</td>
+                                        <td>@(Model.EmployeeTimeOffs.HolidayTotal - Model.EmployeeTimeOffs.HolidayUsed)</td>
+                                        <td>@Model.EmployeeTimeOffs.HolidayTotal</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row" class="text-start">Leave</td>
+                                        <td>@Model.EmployeeTimeOffs.LeaveUsed</td>
+                                        <td>@Model.EmployeeTimeOffs.LeaveAccrued</td>
+                                        <td>@(Model.EmployeeTimeOffs.LeaveTotal - Model.EmployeeTimeOffs.LeaveUsed)</td>
+                                        <td>@Model.EmployeeTimeOffs.LeaveTotal</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </section>
+
+                    </div>
+
+                </section>
+
+                <!-- Remote tab  -->
+                <div class="tab-pane fade" id="RemoteTabContent" role="tabpanel">
+                </div>
+
+            </section>
+        </section>
+    </aside>
 </main>
+
+
+@section scripts {
+    <script src="~/js/bundle-vue.js" asp-append-version="true"></script>
+    <script>
+        const serverModel = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model))
+
+        console.log(serverModel);
+    </script>
+
+    <script src="~/js/index.js" asp-append-version="true"></script>
+}
