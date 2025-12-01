@@ -20,6 +20,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
         public DateTime EndDate { get; set; }
         private int DaysBetweenBeginAndEndDate { get; set; }
         public DateTime Today { get; set; } = DateTime.Now;
+        public EmployeeTimeOff EmployeeTimeOffs { get; set; }
 
         // Prepara l'header della tabella
         public void PrepareCalendarHeader()
@@ -46,7 +47,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
         }
 
         // Prepara la lista di dati da visualizzare
-        public void PrepareViewData(List<EmployeeWorkEventsResponse> response)
+        public void PrepareViewData(List<EmployeeWorkEventsResponse> response, EmployeeTimeOffByIdAndYearResponse responseTimeOff)
         {
             // Prepara la lista dei dati dei dipendenti
             Employees = response
@@ -71,6 +72,17 @@ namespace SmartPresence.Web.Areas.Calendar.Home
                 .Select(y => y.WorkEventType.Name.ToString()))
                 .Distinct()
                 .ToList();
+
+            EmployeeTimeOffs = new EmployeeTimeOff()
+            {
+                Year = responseTimeOff.Year,
+                HolidayAccrued = responseTimeOff.HolidayAccrued,
+                HolidayUsed = responseTimeOff.HolidayUsed,
+                HolidayTotal = responseTimeOff.HolidayTotal,
+                LeaveAccrued = responseTimeOff.LeaveAccrued,
+                LeaveUsed = responseTimeOff.LeaveUsed,
+                LeaveTotal = responseTimeOff.LeaveTotal,
+            };
         }
 
         // Crea la lista degli eventi per ogni singolo dipendente
@@ -203,6 +215,17 @@ namespace SmartPresence.Web.Areas.Calendar.Home
         {
             public string Type { get; set; }
             public string Status { get; set; }
+        }
+        
+        public class EmployeeTimeOff()
+        {
+            public int Year { get; set; }
+            public int HolidayAccrued { get; set; }
+            public int HolidayUsed { get; set; }
+            public int HolidayTotal { get; set; }
+            public int LeaveAccrued { get; set; }
+            public int LeaveUsed { get; set; }
+            public int LeaveTotal { get; set; }
         }
     }
 }
