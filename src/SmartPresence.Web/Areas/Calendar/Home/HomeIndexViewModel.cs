@@ -119,11 +119,11 @@ namespace SmartPresence.Web.Areas.Calendar.Home
                     {
                         Date = BeginDate.AddDays(dayUsed).Date,
                         Days = 1,
+                        CanAddRequest = BeginDate.AddDays(dayUsed).Date >= Today.Date ? true : false
                     });
 
                     dayUsed++;
                 }
-
 
                 // Crea una variabile che contiene la lista di eventi per un certo giorno
                 SingleDayEvents newSingleEvent = null;
@@ -143,6 +143,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
                     {
                         newSingleEvent = searchSingleDayEvents;
                         sameDayEvent = !sameDayEvent;
+                        newSingleEvent.CanAddRequest = false;
                     }
                 }
 
@@ -153,7 +154,8 @@ namespace SmartPresence.Web.Areas.Calendar.Home
                     {
                         Date = minDate,
                         Days = dayBetweenMinAndMaxDate,
-                        ListEvents = new List<EventTypeAndStatus>()
+                        ListEvents = new List<EventTypeAndStatus>(),
+                        CanAddRequest = false
                     };
                 }
 
@@ -161,7 +163,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
                 newSingleEvent.ListEvents.Add(new EventTypeAndStatus()
                 {
                     Id = i,
-                    Type = singleEvent.WorkEventType.Name.ToString(),
+                    Type = DaysBetweenBeginAndEndDate <= 7 ? singleEvent.WorkEventType.Name.ToString() : singleEvent.WorkEventType.Name.ToString().Substring(0, 1),
                     Status = singleEvent.WorkEventStatus.Name.ToString(),
                     DateRange = singleEvent.WorkEventType.Name.Equals(WorkEventTypeName.LEAVE)
                         ? $"{singleEvent.StartDate.ToString("HH\\:mm")} - {singleEvent.EndDate.ToString("HH\\:mm")}" : string.Empty
@@ -183,7 +185,8 @@ namespace SmartPresence.Web.Areas.Calendar.Home
                 everyDaysEvents.Add(new SingleDayEvents()
                 {
                     Date = BeginDate.AddDays(dayUsed).Date,
-                    Days = 1
+                    Days = 1,
+                    CanAddRequest = BeginDate.AddDays(dayUsed).Date >= Today.Date ? true : false
                 });
 
                 dayUsed++;
@@ -213,6 +216,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
             public DateTime Date { get; set; }
             public int Days { get; set; }
             public List<EventTypeAndStatus> ListEvents { get; set; }
+            public bool CanAddRequest { get; set; } = false;
         }
 
         public class EventTypeAndStatus
