@@ -105,6 +105,7 @@ namespace SmartPresence.Services.Employees
             return queryResult;
         }
 
+        // Retrieve employee time off information given employee id and year of search
         public async Task<EmployeeTimeOffByIdAndYearResponse> GetEmployeeTimeOff(EmployeeTimeOffByIdAndYearRequest request)
         {
             var queryResult = await _context.EmployeeTimeOffs
