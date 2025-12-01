@@ -9,6 +9,9 @@
 
 @{
 }
+
+
+
 <main id="app" class="container bg-light">
     <!-- g3: spaziatura tra colonne -->
     <section class="row g-3 m-4" role="toolbar" aria-labelledby="calendar-toolbar">
@@ -17,7 +20,7 @@
         </header>
 
         <!-- Filtro per team -->
-        <!--
+        <!-- 
             col-12: occupa 12 colonne ovvero tutta la riga da mobile
             col-md-2: occupa 2 colonne da tablet in su
         -->
@@ -55,7 +58,7 @@
         </section>
 
         <!-- Filtro per resettare tutti i filtri -->
-        <!--
+        <!-- 
             col-1: singola colonna da mobile
             d-flex: permette di usare display flex e le seguenti opzioni
                 align-items-md-end: in versione tablet e superiore, permette di mettere gli elementi allineati verticalmente in basso
@@ -68,5 +71,78 @@
             </form>
         </section>
 
+        <!-- Selettore vista calendario con apertura di una modale di Bootstrap-->
+        <!--
+            col-11: occupa 11 colonne su mobile
+            col-md-7: ne occupa 7 su table o superiore
+            d-flex: permette di usare flex con:
+                align-items-md-end: allinea gli elementi in basso su table o superiore
+                justify-content-end: allinea sempre gli elementi a destra
+        -->
+        <section class="col-11 col-md-7 d-flex align-items-md-end justify-content-end mb-3">
+            <form asp-controller="Home" asp-action="Index" method="get">
+                <fieldset id="seleziona-vista-calendario">
+                    <legend class="visually-hidden">Select calendar View</legend>
+                    <div class="btn-group" role="radiogroup">
+                        <input type="radio" class="btn-check" name="calendarView" id="week" value="WEEK" autocomplete="off"
+                               @(Model.CalendarViewFilter.Equals(CalendarViewName.WEEK) ? "checked" : "") onchange="this.form.submit()">
+                        <label class="btn btn-outline-primary align-items-center justify-content-center" for="week">Week</label>
+
+                        <input type="radio" class="btn-check" name="calendarView" id="month" value="MONTH" autocomplete="off"
+                               @(Model.CalendarViewFilter.Equals(CalendarViewName.MONTH) ? "checked" : "") onchange="this.form.submit()">
+                        <label class="btn btn-outline-primary align-items-center justify-content-center" for="month">Month</label>
+
+                        <input type="radio" class="btn-check" name="calendarView" id="custom" value="CUSTOM" autocomplete="off"
+                               @(Model.CalendarViewFilter.Equals(CalendarViewName.CUSTOM) ? "checked" : "")>
+                        <label class="btn btn-outline-primary align-items-center justify-content-center" for="custom" data-bs-toggle="modal" data-bs-target="#date_form">
+                            @if (Model.CalendarViewFilter.Equals(CalendarViewName.CUSTOM))
+                            {
+                                <span>{{ formatDate(employeeInfo.BeginDate) }} - {{ formatDate(employeeInfo.EndDate) }}</span>
+                            }
+                            else
+                            {
+                                <span>Period</span>
+                            }
+                        </label>
+                    </div>
+                </fieldset>
+            </form>
+
+            <!-- Modale di Bootstrap per la scelta del periodo
+                https://getbootstrap.com/docs/5.0/components/modal/
+            -->
+            <section class="modal fade" id="date_form" tabindex="-1" aria-labelledby="dateModalLabel" aria-hidden="true">
+                <section class="modal-dialog">
+                    <section class="modal-content">
+                        <form asp-controller="Home" asp-action="Index" method="get" aria-label="Select period between two dates">
+                            <header class="modal-header">
+                                <p class="form-label">Date range</p>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close modal"></button>
+                            </header>
+                            <section class="modal-body">
+                                <fieldset>
+                                    <legend class="visually-hidden">Date range</legend>
+                                    <p>
+                                        <label for="start" class="form-label">Start date</label>
+                                        <input type="date" id="start" name="BeginDateString" class="form-control">
+                                    </p>
+                                    <p>
+                                        <label for="end" class="form-label">End date</label>
+                                        <input type="date" id="end" name="EndDateString" class="form-control">
+                                    </p>
+
+                                    <input type="hidden" name="calendarView" value="CUSTOM">
+                                </fieldset>
+                            </section>
+                            <footer class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </footer>
+                        </form>
+                    </section>
+                </section>
+            </section>
+        </section>
     </section>
+
 </main>
