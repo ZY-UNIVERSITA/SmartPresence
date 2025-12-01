@@ -5,6 +5,7 @@ using SmartPresence.Services.Users;
 using SmartPresence.Services.WorkEvents;
 using SmartPresence.Web.Infrastructure;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartPresence.Web.Areas.Calendar.Home
@@ -36,7 +37,14 @@ namespace SmartPresence.Web.Areas.Calendar.Home
             // Valida il search model
             if (!ModelState.IsValid)
             {
-                Alerts.AddError(this, "End date cannot be happening before the begin date.");
+                //Alerts.AddError(this, "End date cannot be happening before the begin date.");
+                var errors = ModelState.Values.SelectMany(x => x.Errors).Select(y => y.ErrorMessage).Distinct().ToList();
+
+                foreach (var item in errors)
+                {
+                    Alerts.AddError(this, item);
+                }
+
                 // Se è invalido, usa quello di default
                 searchModel = new SearchModel();
             }
