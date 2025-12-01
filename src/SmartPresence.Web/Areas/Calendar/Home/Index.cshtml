@@ -9,3 +9,64 @@
 
 @{
 }
+<main id="app" class="container bg-light">
+    <!-- g3: spaziatura tra colonne -->
+    <section class="row g-3 m-4" role="toolbar" aria-labelledby="calendar-toolbar">
+        <header>
+            <h2 id="calendar-toolbar" class="visually-hidden">Calendar toolbar</h2>
+        </header>
+
+        <!-- Filtro per team -->
+        <!--
+            col-12: occupa 12 colonne ovvero tutta la riga da mobile
+            col-md-2: occupa 2 colonne da tablet in su
+        -->
+        <section class="col-12 col-md-2 mb-3">
+            <form>
+                <label for="team-select" class="form-label">Team filter</label>
+                <select name="teams" class="form-select" id="team-select" v-model="filterTeam">
+                    @if (Model is not null)
+                    {
+                        <option value="None">None</option>
+                        @foreach (var team in Model.TeamList)
+                        {
+                            <option value="@team">@team</option>
+                        }
+                    }
+                </select>
+            </form>
+        </section>
+
+        <!-- Filtro per tipo di evento -->
+        <section class="col-12 col-md-2 mb-3">
+            <form>
+                <label for="event-type-select" class="form-label">Event filter</label>
+                <select name="eventsType" class="form-select" id="event-type-select" v-model="filterEventType">
+                    @if (Model is not null)
+                    {
+                        <option value="None">None</option>
+                        @foreach (var eventType in Model.EventTypeList)
+                        {
+                            <option value="@eventType">@eventType</option>
+                        }
+                    }
+                </select>
+            </form>
+        </section>
+
+        <!-- Filtro per resettare tutti i filtri -->
+        <!--
+            col-1: singola colonna da mobile
+            d-flex: permette di usare display flex e le seguenti opzioni
+                align-items-md-end: in versione tablet e superiore, permette di mettere gli elementi allineati verticalmente in basso
+        -->
+        <section class="col-1 d-flex align-items-md-end mb-3">
+            <form>
+                <button type="button" class="btn btn-secondary" v-on:click="resetFilters" aria-label="Reset all filters">
+                    Reset
+                </button>
+            </form>
+        </section>
+
+    </section>
+</main>
