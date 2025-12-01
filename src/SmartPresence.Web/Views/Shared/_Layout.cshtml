@@ -11,13 +11,19 @@
 }
 @section styles{
     @RenderSection("styles", false)
+    <style>
+        .user-profile-picture {
+            width: 50px;
+        }
+    </style>
 }
 <div id="pageId" class="onit-page">
     <div class="onit-page-sticky-top" id="onit-page-sticky-top">
-        <nav class="navbar navbar-expand-lg navbar-dark onit-page-menu">
+        <nav class="navbar navbar-expand-lg navbar-dark onit-page-menu ">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/">
+                <a class="navbar-brand d-flex align-items-center" href="/">
                     <img class="onit-suites-logo" src="~/images/app-logo.png" />
+                    <h1 class="m-0 ps-2 text-black">Smart Presence</h1>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fa-solid fa-bars"></i>
@@ -27,7 +33,7 @@
                         @if (identitaCorrente != null)
                         {
                             <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a href="#" class="nav-link dropdown-toggle text-black" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img class="user-profile-picture" src="@identitaCorrente.GravatarUrl" />&nbsp;@identitaCorrente.EmailUtenteCorrente
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" role="menu">
