@@ -68,5 +68,16 @@
     },
     "includeInProject": true,
     "sourceMap": true
+  },
+  {
+    "outputFileName": "wwwroot/js/index.js",
+    "inputFiles": [
+      "Areas/Calendar/Home/index.js"
+    ],
+    "minify": {
+      "enabled": true
+    },
+    "includeInProject": true,
+    "sourceMap": true
   }
 ]
