@@ -19,7 +19,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
         public DateTime BeginDate { get; set; }
         public DateTime EndDate { get; set; }
         private int DaysBetweenBeginAndEndDate { get; set; }
-        public DateTime Today { get; set; } = DateTime.Now;
+        public DateTime Today { get; private set; } = DateTime.Now;
         public EmployeeTimeOff EmployeeTimeOffs { get; set; }
 
         // Prepara l'header della tabella
@@ -73,6 +73,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
                 .Distinct()
                 .ToList();
 
+            // Prepara la lista dei dati riguardanti le ferie/permessi usati e rimasti dei dipendenti
             EmployeeTimeOffs = new EmployeeTimeOff()
             {
                 Year = responseTimeOff.Year,
@@ -216,7 +217,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
             public string Type { get; set; }
             public string Status { get; set; }
         }
-        
+
         public class EmployeeTimeOff()
         {
             public int Year { get; set; }
