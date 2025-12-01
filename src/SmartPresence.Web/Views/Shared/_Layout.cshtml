@@ -22,7 +22,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark onit-page-menu ">
             <div class="container-fluid">
                 <a class="navbar-brand d-flex align-items-center" href="/">
-                    <img class="onit-suites-logo" src="~/images/app-logo.png" />
+                    <img class="onit-suites-logo" src="~/images/app-logo.png" alt="Application logo"/>
                     <h1 class="m-0 ps-2 text-black">Smart Presence</h1>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle text-black" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img class="user-profile-picture" src="@identitaCorrente.GravatarUrl" />&nbsp;@identitaCorrente.EmailUtenteCorrente
+                                    <img class="user-profile-picture" src="@identitaCorrente.GravatarUrl" alt="User profile picture"/>&nbsp;@identitaCorrente.EmailUtenteCorrente
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" role="menu">
                                     <a class="dropdown-item" href="javascript:void(0)" onclick="javascript: document.getElementById('POST_LogOut').submit()" title="@SharedLocalizer["Chiudi sessione di lavoro"]">
