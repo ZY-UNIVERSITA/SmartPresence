@@ -1,5 +1,4 @@
 ﻿using SmartPresence.Services.Employees.Model;
-using SmartPresence.Services.Shared;
 
 namespace SmartPresence.Services.Employees.Queries
 {

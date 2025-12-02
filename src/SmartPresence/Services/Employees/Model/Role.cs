@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace SmartPresence.Services.Shared
+namespace SmartPresence.Services.Employees.Model
 {
     public class Role
     {
