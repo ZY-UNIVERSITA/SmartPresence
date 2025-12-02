@@ -91,6 +91,9 @@ namespace SmartPresence.Web
                 app.UseHttpsRedirection();
             }
 
+            // Error 404
+            app.UseStatusCodePagesWithReExecute("/Error/PageNotFound");
+
             // Localization support if you want to
             app.UseRequestLocalization(SupportedCultures.CultureNames);
 
@@ -114,6 +117,7 @@ namespace SmartPresence.Web
 
                 endpoints.MapAreaControllerRoute("Example", "Example", "Example/{controller=Users}/{action=Index}/{id?}");
                 endpoints.MapAreaControllerRoute("Calendar", "Calendar", "Calendar/{controller=Home}/{action=Index}");
+                endpoints.MapAreaControllerRoute("Profile", "Profile", "Profile/{controller=Details}/{action=Index}");
                 endpoints.MapControllerRoute("default", "{controller=Login}/{action=Login}");
             });
         }
