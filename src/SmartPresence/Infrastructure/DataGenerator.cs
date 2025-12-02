@@ -548,7 +548,7 @@ namespace SmartPresence.Infrastructure
             context.EmployeeTimeOffs.Add(
                 new EmployeeTimeOff
                 {
-                    Id = 6,
+                    Id = 1,
                     Year = DateTime.Now.Year,
                     HolidayAccrued = 0,
                     HolidayUsed = 2,
