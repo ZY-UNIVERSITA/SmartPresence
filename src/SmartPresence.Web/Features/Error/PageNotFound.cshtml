@@ -6,15 +6,58 @@
 
 @section styles {
     <style>
-        main {
-            background-color: red;
+
+        .error-title {
+            font-size: 2rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .error-subtitle {
+            font-size: 1.75rem;
+            font-weight: 500;
+        }
+
+        .home-button {
+            background-color: #6C757D;
+            color: white;
+            font-weight: bold;
+            padding: 12px 40px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .home-button:hover {
+            background-color: #455a64;
+        }
+
+        .cat-image {
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
     </style>
 }
 
-<main>
-    <p>Page not found</p>
-</main>
+<div class="container py-5">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+            <h1 class="error-title mb-4">
+                This page is currently sunbathing and ignoring responsibilities.
+            </h1>
+            <p class="error-subtitle mb-4">
+                Try the homepage instead!
+            </p>
+            <a asp-controller="Home" asp-action="Index" class="btn home-button rounded-pill">
+                HOME
+            </a>
+        </div>
+        <div class="col-lg-6">
+            <img src="~/images/cat.jpg" alt="Cat relaxing in pool" class="cat-image img-fluid">
+        </div>
+    </div>
+</div>
 
 @section scripts {
     <script></script>
