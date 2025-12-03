@@ -89,7 +89,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
                 var command = model.ToCommand();
 
                 // Aggiungi il nuovo work event
-                await _workEventService.CreateNewWorkEvent(command);
+                await _workEventService.HandleNewWorkEvent(command);
             }
             else
             {
