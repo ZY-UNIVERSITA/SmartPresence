@@ -72,7 +72,7 @@
   {
     "outputFileName": "wwwroot/js/index.js",
     "inputFiles": [
-      "Areas/Calendar/Home/index.js"
+      "Areas/Calendar/Home/Views/index.js"
     ],
     "minify": {
       "enabled": true
