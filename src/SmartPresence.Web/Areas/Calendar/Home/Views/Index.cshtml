@@ -237,7 +237,7 @@
 
                         <!-- Ogni evento, viene identificato da una data di inizio, se per quello specifico giorno ci sono eventi da visualizzare allora li visualizza -->
                         <template v-if="Array.isArray(dayEvents.ListEvents) && dayEvents.ListEvents.length > 0">
-                            <td :id="employeeInfo.Id === employee.Id ? employee.Id + '-' + accumulateDays[index] : null" :colspan="dayEvents.Days"
+                            <td :id="employeeInfo.Id === employee.Id ? accumulateDays[index] : null" :colspan="dayEvents.Days"
                                 :class="[ 'text-center', 'align-middle', getBackgroundColor(dayEvents.ListEvents) ]">
 
                                 <!-- Ogni evento quindi ogni giorno, potrebbe avere più eventi che accadono per quel giorno, es. leave e remote insieme -->
@@ -270,7 +270,7 @@
 
                         <!-- Se non ci sono eventi da visualizzare, crea una cella e passa alla prossima -->
                         <template v-else>
-                            <td :id="employeeInfo.IdEmployee === employee.Id ? employee.Id + '-' + accumulateDays[index] : null"
+                            <td :id="employeeInfo.IdEmployee === employee.Id ? accumulateDays[index] : null"
                                 v-on:click="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? openOffCanvas($event) : null">
                             </td>
                         </template>
