@@ -4,6 +4,7 @@ using SmartPresence.Services.WorkEvents.Model;
 using SmartPresence.Services.WorkEvents.Queries;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace SmartPresence.Web.Areas.Calendar.Home
@@ -15,6 +16,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
         public List<string> TeamList { get; set; }
         public List<string> EventTypeList { get; set; }
         public CalendarViewName CalendarViewFilter { get; set; }
+        public string CalendarViewFilterName { get; set; }
         public List<CalendarDay> Calendar { get; set; }
         public DateTime BeginDate { get; set; }
         public DateTime EndDate { get; set; }
@@ -35,8 +37,8 @@ namespace SmartPresence.Web.Areas.Calendar.Home
                     // Giorno della settimana: nome completo del giorno se il numero di giorni da visualizare è 7 o inferiore
                     // altrimenti visualizza solo la prima lettera
                     DayOfWeek = DaysBetweenBeginAndEndDate <= DateTimeHelper.GetNumbersOfDaysInWeek()
-                        ? BeginDate.AddDays(x).ToString("ddd").ToUpper()
-                        : BeginDate.AddDays(x).ToString("ddd").Substring(0, 1).ToUpper(),
+                        ? BeginDate.AddDays(x).ToString("ddd", CultureInfo.InvariantCulture).ToUpper()
+                        : BeginDate.AddDays(x).ToString("ddd", CultureInfo.InvariantCulture).Substring(0, 1).ToUpper(),
 
                     // Numero del mese 
                     NumberOfDay = BeginDate.AddDays(x).Day.ToString(),
@@ -49,6 +51,8 @@ namespace SmartPresence.Web.Areas.Calendar.Home
         // Prepara la lista di dati da visualizzare
         public void PrepareViewData(List<EmployeeWorkEventsResponse> response, EmployeeTimeOffByIdAndYearResponse responseTimeOff)
         {
+            CalendarViewFilterName = this.CreateSubheader();
+
             // Prepara la lista dei dati dei dipendenti
             Employees = response
                 .Select(x => new EmployeeIdNameAndEvents()
@@ -86,6 +90,17 @@ namespace SmartPresence.Web.Areas.Calendar.Home
             };
         }
 
+        private string CreateSubheader()
+        {
+            return CalendarViewFilter switch
+            {
+                CalendarViewName.WEEK => $"{BeginDate:dd/MM/yyyy} - {EndDate:dd/MM/yyyy}",
+                CalendarViewName.MONTH => BeginDate.ToString("MMMM yyyy", CultureInfo.InvariantCulture),
+                CalendarViewName.CUSTOM => $"{BeginDate:dd/MM/yyyy} - {EndDate:dd/MM/yyyy}",
+                _ => string.Empty
+            };
+        }
+
         // Crea la lista degli eventi per ogni singolo dipendente
         private List<SingleDayEvents> CreateEmployeeSingleDayEvents(List<WorkEventResponse> response, EmployeeWorkEventsResponse x)
         {
@@ -119,7 +134,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
                     {
                         Date = BeginDate.AddDays(dayUsed).Date,
                         Days = 1,
-                        CanAddRequest = BeginDate.AddDays(dayUsed).Date >= Today.Date ? true : false
+                        CanAddRequest = BeginDate.AddDays(dayUsed).Date >= Today.Date
                     });
 
                     dayUsed++;
@@ -186,7 +201,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
                 {
                     Date = BeginDate.AddDays(dayUsed).Date,
                     Days = 1,
-                    CanAddRequest = BeginDate.AddDays(dayUsed).Date >= Today.Date ? true : false
+                    CanAddRequest = BeginDate.AddDays(dayUsed).Date >= Today.Date
                 });
 
                 dayUsed++;
