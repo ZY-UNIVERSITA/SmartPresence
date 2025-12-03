@@ -47,10 +47,11 @@
                         @if (identitaCorrente != null)
                         {
                             <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle text-black" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle text-black" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img class="user-profile-picture" src="@identitaCorrente.GravatarUrl" alt="User profile picture"/>&nbsp;@identitaCorrente.EmailUtenteCorrente
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" role="menu">
+                                    <a class="dropdown-item" asp-area="Profile" asp-controller="Details" asp-action="Index">Profile</a>
                                     <a class="dropdown-item" href="javascript:void(0)" onclick="javascript: document.getElementById('POST_LogOut').submit()" title="@SharedLocalizer["Chiudi sessione di lavoro"]">
                                         <i class="fa-solid fa-right-from-bracket"></i>&nbsp;@SharedLocalizer["Esci"]
                                     </a>
