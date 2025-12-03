@@ -537,6 +537,42 @@ namespace SmartPresence.Infrastructure
                     IdWorkEventStatus = 1,
                     IdWorkEventType = 2,
                     IdEmployee = 11,
+                },
+                new WorkEvent
+                {
+                    Id = 12,
+                    StartDate = DateTime.Now.AddHours(2),
+                    EndDate = DateTime.Now.AddHours(3),
+                    IdWorkEventStatus = 1,
+                    IdWorkEventType = 2,
+                    IdEmployee = 1,
+                },
+                new WorkEvent
+                {
+                    Id = 13,
+                    StartDate = DateTime.Now.AddHours(5),
+                    EndDate = DateTime.Now.AddHours(8),
+                    IdWorkEventStatus = 2,
+                    IdWorkEventType = 1,
+                    IdEmployee = 1,
+                },
+                new WorkEvent
+                {
+                    Id = 14,
+                    StartDate = DateTime.Now.AddDays(-1),
+                    EndDate = DateTime.Now.AddDays(2).AddHours(4),
+                    IdWorkEventStatus = 3,
+                    IdWorkEventType = 3,
+                    IdEmployee = 1,
+                },
+                new WorkEvent
+                {
+                    Id = 15,
+                    StartDate = DateTime.Now.AddDays(2),
+                    EndDate = DateTime.Now.AddDays(4),
+                    IdWorkEventStatus = 2,
+                    IdWorkEventType = 1,
+                    IdEmployee = 1,
                 }
             );
 
