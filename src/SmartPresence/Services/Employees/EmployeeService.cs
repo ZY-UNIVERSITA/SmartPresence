@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SmartPresence.Services.Employees.Model;
 using SmartPresence.Services.Employees.Queries;
 using SmartPresence.Services.Shared;
-using SmartPresence.Services.Users;
+using SmartPresence.Services.WorkEvents.Model;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,11 +14,9 @@ namespace SmartPresence.Services.Employees
     {
         private readonly SmartPresenceDbContext _context;
 
-        private readonly IUserService _userService;
-        public EmployeeService(SmartPresenceDbContext context, IUserService userService)
+        public EmployeeService(SmartPresenceDbContext context)
         {
             _context = context;
-            _userService = userService;
         }
 
         /// Retrieves the organizational information of an employee, including their unique identifier, role, team, and team area within the company.
@@ -32,6 +31,18 @@ namespace SmartPresence.Services.Employees
                 .FirstOrDefaultAsync();
 
             return queryResult;
+        }
+
+        public OrganizationLevelFilter GetEmployeeOrganizationLevelFilter(RoleName role)
+        {
+            return role switch
+            {
+                RoleName.EMPLOYEE => OrganizationLevelFilter.TEAM,
+                RoleName.TEAM_MANAGER => OrganizationLevelFilter.TEAM,
+                RoleName.AREA_MANAGER => OrganizationLevelFilter.AREA,
+                RoleName.EXECUTIVE_DIRECTOR => OrganizationLevelFilter.ALL,
+                _ => OrganizationLevelFilter.PERSONAL,
+            };
         }
 
         // Get all employee work events data which match:
@@ -50,16 +61,19 @@ namespace SmartPresence.Services.Employees
             // Create base query
             var baseQuery = _context.Employees.AsQueryable();
 
+            // Get employee organization depth level
+            var organizationLevelFilter = GetEmployeeOrganizationLevelFilter(userOrganizationInfo.Role.Name);
+
             // Add to the query the organizational depth:
             // team level for employees and managers,
             // area level for area managers,
             // full organization for executives,
             // or just the individual on personal profile.
-            switch (request.WorkEventEmployeeOrganizationFilter)
+            switch (organizationLevelFilter)
             {
-                case OrganizationLevelFilter.PERSONAL:
-                    baseQuery = baseQuery.Where(x => x.Id.Equals(idEmployee));
-                    break;
+                //case OrganizationLevelFilter.PERSONAL:
+                //    baseQuery = baseQuery.Where(x => x.Id.Equals(idEmployee));
+                //    break;
 
                 case OrganizationLevelFilter.TEAM:
                     baseQuery = baseQuery.Where(x => x.IdTeam.Equals(userOrganizationInfo.Team.Id));
@@ -101,6 +115,44 @@ namespace SmartPresence.Services.Employees
 
             // Create a list of employee with their work events as response dto classd
             var queryResult = await baseQuery.Select(x => new EmployeeWorkEventsResponse(x)).ToListAsync();
+
+            return queryResult;
+        }
+
+        // Restituisce le informazioni visualizzabili nel PROFILO UTENTE
+        public async Task<EmployeePersonalWorkEventResponse> GetEmployeePersonalWorkEvent(EmployeePersonalWorkEventRequest request)
+        {
+            // Get employee id
+            var idEmployee = request.IdEmployee;
+
+            // Create base query
+            var baseQuery = _context.Employees.AsQueryable();
+
+            // Fitro
+            // 1) Mostra solo i dati relativi a quel detemrinato dipendente
+            // 2) Include il team
+            // 3) Include il ruolo
+            // 4) Include gli eventi insieme allo status e al tipo di evento, escludendo per gli eventi remote working
+            // 5) Include il contratto del dipendente 
+            // 6) Include i dati relativi alle ferie e permessi usati, disponibili, totali per l'anno corrente
+            baseQuery = baseQuery
+                .Where(x => x.Id.Equals(idEmployee))
+                .Include(y => y.Team)
+                    .ThenInclude(z => z.Area)
+                .Include(a => a.Role)
+                .Include(b => b.WorkEvents
+                    .Where(c => !c.WorkEventType.Name.Equals(WorkEventTypeName.REMOTE)))
+                    .ThenInclude(c => c.WorkEventStatus)
+                .Include(b => b.WorkEvents
+                    .Where(c => !c.WorkEventType.Name.Equals(WorkEventTypeName.REMOTE)))
+                    .ThenInclude(c => c.WorkEventType)
+                .Include(d => d.ContractType)
+                .Include(e => e.EmployeeTimeOffs
+                    .Where(f => f.Year == request.Year));
+
+            // Ottieni i risultati e ordina la lista in ordine decrescente per data di inizio
+            var queryResult = await baseQuery.Select(x => new EmployeePersonalWorkEventResponse(x)).FirstOrDefaultAsync();
+            queryResult.WorkEvents = queryResult.WorkEvents.OrderByDescending(x => x.StartDate).ToList();
 
             return queryResult;
         }
