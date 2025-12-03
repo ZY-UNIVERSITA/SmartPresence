@@ -438,141 +438,71 @@ namespace SmartPresence.Infrastructure
 
         private static void AddWorkEvents(SmartPresenceDbContext context)
         {
+            var now = DateTime.UtcNow;
+
             context.WorkEvents.AddRange(
                 new WorkEvent
                 {
                     Id = 1,
-                    StartDate = DateTime.Now.AddDays(3),
-                    EndDate = DateTime.Now.AddDays(4).AddMinutes(1),
+                    StartDate = new DateTime(now.Year, now.Month, now.Day, 9, 0, 0),
+                    EndDate = new DateTime(now.Year, now.Month, now.Day, 18, 0, 0).AddDays(5),
                     IdWorkEventStatus = 1,
                     IdWorkEventType = 1,
-                    IdEmployee = 6,
-                },
-                new WorkEvent
-                {
-                    Id = 2,
-                    StartDate = DateTime.Now.AddDays(1),
-                    EndDate = DateTime.Now.AddDays(2).AddMinutes(1),
-                    IdWorkEventStatus = 3,
-                    IdWorkEventType = 3,
-                    IdEmployee = 7,
-                },
-                new WorkEvent
-                {
-                    Id = 3,
-                    StartDate = DateTime.Now.AddDays(0),
-                    EndDate = DateTime.Now.AddDays(2).AddMinutes(1),
-                    IdWorkEventStatus = 3,
-                    IdWorkEventType = 3,
-                    IdEmployee = 10,
-                },
-                new WorkEvent
-                {
-                    Id = 4,
-                    StartDate = DateTime.Now.AddDays(2).AddMinutes(-50),
-                    EndDate = DateTime.Now.AddDays(4).AddMinutes(17),
-                    IdWorkEventStatus = 2,
-                    IdWorkEventType = 2,
-                    IdEmployee = 12,
-                },
-                new WorkEvent
-                {
-                    Id = 5,
-                    StartDate = DateTime.Now.AddDays(-4),
-                    EndDate = DateTime.Now.AddDays(4).AddMinutes(1),
-                    IdWorkEventStatus = 1,
-                    IdWorkEventType = 1,
-                    IdEmployee = 15,
-                },
-                new WorkEvent
-                {
-                    Id = 6,
-                    StartDate = DateTime.Now.AddDays(1).AddHours(-2),
-                    EndDate = DateTime.Now.AddDays(4).AddMinutes(15),
-                    IdWorkEventStatus = 1,
-                    IdWorkEventType = 2,
-                    IdEmployee = 18,
-                },
-                new WorkEvent
-                {
-                    Id = 7,
-                    StartDate = DateTime.Now.AddDays(1),
-                    EndDate = DateTime.Now.AddDays(4).AddMinutes(1),
-                    IdWorkEventStatus = 1,
-                    IdWorkEventType = 3,
-                    IdEmployee = 17,
-                },
-                new WorkEvent
-                {
-                    Id = 8,
-                    StartDate = DateTime.Now.AddDays(1),
-                    EndDate = DateTime.Now.AddDays(1).AddMinutes(75),
-                    IdWorkEventStatus = 3,
-                    IdWorkEventType = 2,
-                    IdEmployee = 17,
-                },
-                new WorkEvent
-                {
-                    Id = 9,
-                    StartDate = DateTime.Now.AddDays(0).AddHours(-4),
-                    EndDate = DateTime.Now.AddDays(2).AddMinutes(88),
-                    IdWorkEventStatus = 1,
-                    IdWorkEventType = 2,
-                    IdEmployee = 6,
-                },
-                new WorkEvent
-                {
-                    Id = 10,
-                    StartDate = DateTime.Now.AddDays(0),
-                    EndDate = DateTime.Now.AddDays(2).AddMinutes(1),
-                    IdWorkEventStatus = 3,
-                    IdWorkEventType = 1,
-                    IdEmployee = 16,
-                },
-                new WorkEvent
-                {
-                    Id = 11,
-                    StartDate = DateTime.Now.AddHours(1),
-                    EndDate = DateTime.Now.AddHours(2),
-                    IdWorkEventStatus = 1,
-                    IdWorkEventType = 2,
                     IdEmployee = 11,
                 },
                 new WorkEvent
                 {
-                    Id = 12,
-                    StartDate = DateTime.Now.AddHours(2),
-                    EndDate = DateTime.Now.AddHours(3),
+                    Id = 2,
+                    StartDate = new DateTime(now.Year, now.Month, now.Day, 9, 0, 0),
+                    EndDate = new DateTime(now.Year, now.Month, now.Day, 18, 0, 0),
+                    IdWorkEventStatus = 1,
+                    IdWorkEventType = 3,
+                    IdEmployee = 12,
+                },
+                new WorkEvent
+                {
+                    Id = 3,
+                    StartDate = new DateTime(now.Year, now.Month, now.Day, 9, 0, 0).AddDays(-2),
+                    EndDate = new DateTime(now.Year, now.Month, now.Day, 9, 0, 0).AddDays(-2),
+                    IdWorkEventStatus = 1,
+                    IdWorkEventType = 3,
+                    IdEmployee = 12,
+                },
+                new WorkEvent
+                {
+                    Id = 4,
+                    StartDate = new DateTime(now.Year, now.Month, now.Day, 9, 15, 0),
+                    EndDate = new DateTime(now.Year, now.Month, now.Day, 9, 30, 0),
                     IdWorkEventStatus = 1,
                     IdWorkEventType = 2,
-                    IdEmployee = 1,
+                    IdEmployee = 7,
                 },
                 new WorkEvent
                 {
-                    Id = 13,
-                    StartDate = DateTime.Now.AddHours(5),
-                    EndDate = DateTime.Now.AddHours(8),
-                    IdWorkEventStatus = 2,
-                    IdWorkEventType = 1,
-                    IdEmployee = 1,
+                    Id = 5,
+                    StartDate = new DateTime(now.Year, now.Month, now.Day, 15, 15, 0),
+                    EndDate = new DateTime(now.Year, now.Month, now.Day, 16, 18, 0),
+                    IdWorkEventStatus = 1,
+                    IdWorkEventType = 2,
+                    IdEmployee = 7,
                 },
                 new WorkEvent
                 {
-                    Id = 14,
-                    StartDate = DateTime.Now.AddDays(-1),
-                    EndDate = DateTime.Now.AddDays(2).AddHours(4),
-                    IdWorkEventStatus = 3,
+                    Id = 6,
+                    StartDate = new DateTime(now.Year, now.Month, now.Day, 9, 0, 0),
+                    EndDate = new DateTime(now.Year, now.Month, now.Day, 18, 0, 0),
+                    IdWorkEventStatus = 1,
                     IdWorkEventType = 3,
-                    IdEmployee = 1,
+                    IdEmployee = 9,
                 },
                 new WorkEvent
                 {
-                    Id = 15,
-                    StartDate = DateTime.Now.AddDays(2),
-                    EndDate = DateTime.Now.AddDays(4),
-                    IdWorkEventStatus = 2,
-                    IdWorkEventType = 1,
-                    IdEmployee = 1,
+                    Id = 7,
+                    StartDate = new DateTime(now.Year, now.Month, now.Day, 9, 15, 0),
+                    EndDate = new DateTime(now.Year, now.Month, now.Day, 9, 55, 0),
+                    IdWorkEventStatus = 1,
+                    IdWorkEventType = 2,
+                    IdEmployee = 9,
                 }
             );
 
