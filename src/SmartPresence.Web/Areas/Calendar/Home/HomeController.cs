@@ -3,6 +3,7 @@ using SmartPresence.Services.Employees;
 using SmartPresence.Services.Employees.Queries;
 using SmartPresence.Services.Users;
 using SmartPresence.Services.WorkEvents;
+using SmartPresence.Web.Areas.Calendar.Home.ViewModel;
 using SmartPresence.Web.Infrastructure;
 using System;
 using System.Linq;
