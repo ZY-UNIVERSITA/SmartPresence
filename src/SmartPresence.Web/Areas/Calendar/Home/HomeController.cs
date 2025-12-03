@@ -81,12 +81,30 @@ namespace SmartPresence.Web.Areas.Calendar.Home
         {
             // Crea un search model che rifletta la view dell'utente in quel momento
             var searchModel = model.ToSearchmodel();
+            var validationResponse = await model.AsyncValidation(_workEventService);
 
-            // Crea il comando per inserire una nuova data
-            var command = model.ToCommand();
+            if (ModelState.IsValid && validationResponse.Count.Equals(0))
+            {
+                // Crea il comando per inserire una nuova data
+                var command = model.ToCommand();
 
-            // Aggiungi il nuovo work event
-            await _workEventService.CreateNewWorkEvent(command);
+                // Aggiungi il nuovo work event
+                await _workEventService.CreateNewWorkEvent(command);
+            }
+            else
+            {
+                var errors = ModelState.Values.SelectMany(x => x.Errors).Select(y => y.ErrorMessage).Distinct().ToList();
+
+                foreach (var item in errors)
+                {
+                    Alerts.AddError(this, item);
+                }
+
+                foreach (var item in validationResponse)
+                {
+                    Alerts.AddError(this, item);
+                }
+            }
 
             // Restituisci la stessa pagina in cui l'utente si trova
             return RedirectToAction("Index", searchModel);
