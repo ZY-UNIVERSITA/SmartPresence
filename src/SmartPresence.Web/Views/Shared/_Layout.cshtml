@@ -19,12 +19,16 @@
         .onit-suites-logo {
             width: 50px;
         }
+
+        .onit-page {
+            background-color: #F2F2F2;
+        }
     </style>
 }
 
 <div id="pageId" class="onit-page">
     <div class="onit-page-sticky-top" id="onit-page-sticky-top">
-        <nav class="navbar navbar-expand-lg navbar-dark onit-page-menu ">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white onit-page-menu ">
             <div class="container-fluid">
                 <a class="navbar-brand d-flex align-items-center" href="/">
                     <img class="onit-suites-logo" src="~/images/app-logo.png" alt="Application logo"/>
@@ -50,7 +54,7 @@
                                 <a class="nav-link dropdown-toggle text-black" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img class="user-profile-picture" src="@identitaCorrente.GravatarUrl" alt="User profile picture"/>&nbsp;@identitaCorrente.EmailUtenteCorrente
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" role="menu">
+                                <div class="dropdown-menu dropdown-menu-end" role="menu">
                                     <a class="dropdown-item" asp-area="Profile" asp-controller="Details" asp-action="Index">Profile</a>
                                     <a class="dropdown-item" href="javascript:void(0)" onclick="javascript: document.getElementById('POST_LogOut').submit()" title="@SharedLocalizer["Chiudi sessione di lavoro"]">
                                         <i class="fa-solid fa-right-from-bracket"></i>&nbsp;@SharedLocalizer["Esci"]
