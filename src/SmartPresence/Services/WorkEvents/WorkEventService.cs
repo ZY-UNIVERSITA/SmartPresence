@@ -39,7 +39,7 @@ namespace SmartPresence.Services.WorkEvents
         }
 
         // Crea un nuovo evento
-        public async Task CreateNewWorkEvent(CreateNewWorkRequestCommand workEvent)
+        public async Task HandleNewWorkEvent(CreateNewWorkRequestCommand workEvent)
         {
             // Se l'evento è di tipo REMOTE allora approvalo in automatico altrimenti va in approvazione
             var workEventStatusPending = workEvent.WorkEventType is WorkEventTypeName.REMOTE ? WorkEventStatusName.APPROVED : WorkEventStatusName.PENDING;
@@ -65,7 +65,7 @@ namespace SmartPresence.Services.WorkEvents
         {
             var baseQuery = _context.WorkEvents.AsQueryable();
 
-            baseQuery = baseQuery.Where(x => x.IdEmployee.Equals(workEvent.IdEmployee));
+            baseQuery = baseQuery.Where(x => x.IdEmployee.Equals(workEvent.IdEmployee) && !x.WorkEventStatus.Name.Equals(WorkEventStatusName.REFUSED));
 
             // La query deve controllare 
             // La richiesta non deve iniziare prima della fine di un altro evento
@@ -79,8 +79,8 @@ namespace SmartPresence.Services.WorkEvents
             //    (workEvent.BeginDate >= y.StartDate && workEvent.EndDate <= y.EndDate));
 
             baseQuery = baseQuery.Where(y =>
-                workEvent.BeginDate <= y.EndDate &&
-                workEvent.EndDate >= y.StartDate);
+                workEvent.BeginDate < y.EndDate &&
+                workEvent.EndDate > y.StartDate);
 
             return await baseQuery.AnyAsync();
         }
@@ -148,5 +148,18 @@ namespace SmartPresence.Services.WorkEvents
             return response;
         }
 
+        // Metodo per accettare/rifiutare le richieste
+        public async Task HandleWorkEventDecision(HandleWorkEventDecisionCommand command)
+        {
+            var workEvent = await _context.WorkEvents.Where(x => x.Id.Equals(command.Id)).FirstOrDefaultAsync();
+            var workEventStatus = await _context.WorkEventTypeStatus.Where(x => x.Name.Equals(command.Status)).FirstOrDefaultAsync();
+
+            if (workEvent is not null && workEventStatus is not null)
+            {
+                workEvent.IdWorkEventStatus = workEventStatus.Id;
+
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }
