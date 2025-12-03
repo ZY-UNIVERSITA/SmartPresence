@@ -1,0 +1,33 @@
+﻿@using SmartPresence.Services.Shared
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model SmartPresence.Web.Areas.Calendar.Home.ViewModel.HomeIndexViewModel
+
+@{
+}
+
+<header class="d-flex justify-content-center align-items-center">
+    <form asp-controller="Home" asp-action="Index" method="get">
+        <input type="hidden" name="BeginDateString" value="@Model.BeginDate.AddDays(-DateTimeHelper.GetDaysBetweenTwoDates(Model.BeginDate, Model.EndDate)).ToString("yyyy-MM-dd")" />
+        <input type="hidden" name="EndDateString" value="@Model.BeginDate.AddDays(-1).ToString("yyyy-MM-dd")" />
+        <input type="hidden" name="CalendarView" value="@Model.CalendarViewFilter" />
+
+        <button type="submit" class="btn">
+            <img src="~/images/arrow_before.svg" class="arrow" alt="Previous period button" />
+        </button>
+    </form>
+
+    <h2 class="text-center">@Model.CalendarViewFilterName</h2>
+
+    <form asp-controller="Home" asp-action="Index" method="get">
+        <input type="hidden" name="BeginDateString" value="@Model.EndDate.AddDays(1).ToString("yyyy-MM-dd")" />
+        <input type="hidden" name="EndDateString" value="@Model.EndDate.AddDays(DateTimeHelper.GetDaysBetweenTwoDates(Model.BeginDate, Model.EndDate)).ToString("yyyy-MM-dd")" />
+        <input type="hidden" name="CalendarView" value="@Model.CalendarViewFilter" />
+
+        <button type="submit" class="btn">
+            <img src="~/images/arrow_after.svg" class="arrow" alt="Next period button" />
+        </button>
+    </form>
+</header>
