@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace SmartPresence.Web.Areas.Calendar.Home
+namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
 {
     public class HomeIndexViewModel
     {

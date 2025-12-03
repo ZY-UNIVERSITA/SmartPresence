@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 #nullable enable
-namespace SmartPresence.Web.Areas.Calendar.Home
+namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
 {
     public class SearchModel : IValidatableObject
     {

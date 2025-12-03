@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace SmartPresence.Web.Areas.Calendar.Home
+namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
 {
     public class NewRequestModel : IValidatableObject
     {
