@@ -5,11 +5,24 @@ namespace SmartPresence.Web.Features.Error
 {
     public partial class ErrorController : Controller
     {
-        public virtual IActionResult PageNotFound()
+        // Action principale per errori generici
+        public IActionResult Index()
         {
-            Console.WriteLine("Prova");
+            return View("PageNotFound");
+        }
 
-            return View();
+        [Route("Error/PageNotFound")]
+        public IActionResult PageNotFound()
+        {
+            Response.StatusCode = 404;
+            return View("PageNotFound");
+        }
+
+        [Route("Error/AccessDenied")]
+        public IActionResult AccessDenied()
+        {
+            Response.StatusCode = 403;
+            return View("PageNotFound");
         }
     }
 }
