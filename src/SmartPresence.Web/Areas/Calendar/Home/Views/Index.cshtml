@@ -66,6 +66,10 @@
         .holiday {
             background-color: lightgrey !important;
         }
+
+        .selected-remote-day {
+            background-color: gainsboro !important;
+        }
     </style>
 }
 
@@ -411,7 +415,7 @@
                 </section>
 
                 <!-- Remote tab  -->
-                <section class="tab-pane fade p-3" id="RemoteTabContent" role="tabpanel">
+                <section class="tab-pane fade p-3 table-responsive" id="RemoteTabContent" role="tabpanel">
                     <partial name="_PartialRemoteTab" model="Model" />
                 </section>
 
@@ -442,8 +446,6 @@
                 if (isNaN(dateStr)) {
                     dateStr = new Date(th.classList[0])
                 }
-
-                console.log(dateStr);
 
                 if (dateStr.getDay() === 0 || dateStr.getDay() === 6) {
                     th.classList.add("holiday");

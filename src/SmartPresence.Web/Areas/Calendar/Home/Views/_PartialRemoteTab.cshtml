@@ -8,7 +8,7 @@
 @{
 }
 
-<table class="table table-bordered text-center align-middle remote-tab-table">
+<table class="table table-bordered text-center align-middle w-100 remote-tab-table">
     <thead class="table-dark">
         <tr>
             @foreach (var item in Enumerable.Range(0, 7).Select(x => DateTimeHelper.GetMonday(Model.Today).AddDays(x)))
@@ -22,13 +22,12 @@
 
     <tbody>
         <tr>
-            <td class="fw-bold">L</td>
-            <td></td>
-            <td class="fw-bold">H</td>
-            <td class="fw-bold">R</td>
-            <td class="fw-bold">R</td>
-            <td></td>
-            <td></td>
+            @foreach (var item in Enumerable.Range(0, 7).Select(x => DateTimeHelper.GetMonday(Model.Today).AddDays(x)))
+            {
+                <td scope="col" id="@($"remote_{item.ToString("yyyy-MM-dd")}")" v-on:click="selectRemoteDay($event)" class="fw-bold">
+                    <p></p>
+                </td>
+            }
         </tr>
     </tbody>
 </table>

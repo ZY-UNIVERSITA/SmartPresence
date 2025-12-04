@@ -12,6 +12,7 @@ function initVue(modelData) {
                 selectedDate: null,
                 selectedDatetime: null,
                 newRequestOption: "HOLIDAY",
+                remoteDaysSelection: []
             }
         },
         computed: {
@@ -210,19 +211,26 @@ function initVue(modelData) {
                 const offcanvas = new bootstrap.Offcanvas(offcanvasEl);
                 offcanvas.show();
             },
-            //compareData(date1, date2) {
-            //    date1 = new Date(date1);
-            //    date2 = new Date(date2);
-            //    var newDate1 = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
-            //    var newDate2 = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
-
-            //    return newDate1 >= newDate2;
-            //},
             // Metodo usato per resettare tutti i filtri
             resetFilters() {
                 this.filterTeam = "None";
                 this.filterEventType = "None";
                 this.accumulateDays = this.getEmptyDays(modelData.Employees, this.employeeInfo.IdEmployee)
+            },
+            // Metodo usato per selezionare
+            selectRemoteDay(event) {
+                const day = event.target.id.split("_")[1];
+                const index = this.remoteDaysSelection.findIndex(x => x === day);
+
+                if (index !== -1) {
+                    this.remoteDaysSelection.splice(index, 1);
+                } else {
+                    this.remoteDaysSelection.push(day)
+                }
+
+                event.target.classList.toggle("selected-remote-day");
+
+                console.log(this.remoteDaysSelection);
             }
         },
         // Metodo di bootstrap per caricare i tooltip
