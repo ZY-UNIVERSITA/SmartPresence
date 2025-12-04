@@ -62,6 +62,10 @@
         .arrow {
             width: 50px;
         }
+
+        .holiday {
+            background-color: lightgrey !important;
+        }
     </style>
 }
 
@@ -408,7 +412,7 @@
 
                 <!-- Remote tab  -->
                 <section class="tab-pane fade p-3" id="RemoteTabContent" role="tabpanel">
-                    <partial name="_RemoteTabPartial" model="Model" />
+                    <partial name="_PartialRemoteTab" model="Model" />
                 </section>
 
             </section>
@@ -427,7 +431,6 @@
 
     <script src="~/js/index.js" asp-append-version="true"></script>
 
-
     <script>
         function holidayBackground(tableClass) {
             const table = document.querySelector(tableClass);
@@ -436,11 +439,11 @@
             headers.forEach((th, colIndex) => {
                 let dateStr = new Date(th.id);
 
-                console.log(dateStr)
-
                 if (isNaN(dateStr)) {
                     dateStr = new Date(th.classList[0])
                 }
+
+                console.log(dateStr);
 
                 if (dateStr.getDay() === 0 || dateStr.getDay() === 6) {
                     th.classList.add("holiday");

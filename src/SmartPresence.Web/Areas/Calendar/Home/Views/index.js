@@ -198,6 +198,10 @@
             },
             // Metodo per aprire l'offcanvas con le date corrette
             openOffCanvas(event) {
+                if (event.target.classList.contains("holiday")) {
+                    return;
+                }
+
                 let splitDate = event.target.id.split("/");
                 this.selectedDate = `${splitDate[2]}-${splitDate[1]}-${splitDate[0]}`;
                 this.selectedDatetime = `${splitDate[2]}-${splitDate[1]}-${splitDate[0]}T09:00`;
