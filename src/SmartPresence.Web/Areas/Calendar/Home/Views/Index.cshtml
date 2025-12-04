@@ -68,7 +68,7 @@
 <main id="app" class="container-fluid p-3 bg-light">
 
     <!-- Camio del periodo -->
-    <partial name="Partial" model="Model"></partial>
+    <partial name="_PartialPeriod" model="Model"></partial>
 
     <!-- Sezione dei filtri -->
     <!-- g3: spaziatura tra colonne -->
@@ -407,8 +407,9 @@
                 </section>
 
                 <!-- Remote tab  -->
-                <div class="tab-pane fade" id="RemoteTabContent" role="tabpanel">
-                </div>
+                <section class="tab-pane fade p-3" id="RemoteTabContent" role="tabpanel">
+                    <partial name="_RemoteTabPartial" model="Model" />
+                </section>
 
             </section>
         </section>
@@ -425,4 +426,36 @@
     </script>
 
     <script src="~/js/index.js" asp-append-version="true"></script>
+
+
+    <script>
+        function holidayBackground(tableClass) {
+            const table = document.querySelector(tableClass);
+            const headers = table.querySelectorAll(`thead th`);
+
+            headers.forEach((th, colIndex) => {
+                let dateStr = new Date(th.id);
+
+                console.log(dateStr)
+
+                if (isNaN(dateStr)) {
+                    dateStr = new Date(th.classList[0])
+                }
+
+                if (dateStr.getDay() === 0 || dateStr.getDay() === 6) {
+                    th.classList.add("holiday");
+
+                    table.querySelectorAll(`tbody tr`).forEach(row => {
+                        const cell = row.children[colIndex];
+                        if (cell) {
+                            cell.classList.add("holiday");
+                        }
+                    })
+                }
+            })
+        }
+
+        holidayBackground(".mainTable")
+        holidayBackground(".remote-tab-table")
+    </script>
 }
