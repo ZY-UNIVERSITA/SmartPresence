@@ -368,8 +368,8 @@
                                     </article>
 
                                     @Html.HiddenFor(x => x.CalendarViewFilter)
-                                    @Html.HiddenFor(x => x.BeginDate)
-                                    @Html.HiddenFor(x => x.EndDate)
+                                    @Html.Hidden("BeginDateSearch", Model.BeginDate)
+                                    @Html.Hidden("EndDateSearch", Model.EndDate)
                                     @Html.HiddenFor(x => x.IdEmployee)
 
                                     <footer class="mb-2">

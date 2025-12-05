@@ -88,7 +88,7 @@ namespace SmartPresence.Services.Shared
         }
 
         // Funzione che serve per calcolare i giorni in cui sono presenti sabato, domenica e festività
-        public static List<CalendarDay> GetDaysWithHolidays(DateTime beginDate, DateTime endDate)
+        public static List<CalendarDay> GetDaysWithHolidaysBetweenDates(DateTime beginDate, DateTime endDate)
         {
             // Ottieni le festività dell'anno corrente ed eventualmente dell'anno successivo se l'enddate è in un altro anno
             var holidaysBeginDate = Holidays.GetAllHolidaysByYear(beginDate.Year);
@@ -126,6 +126,30 @@ namespace SmartPresence.Services.Shared
             }
 
             return list;
+        }
+
+        public static List<DateTime> FindHolidaysBetweenDates(DateTime beginDate, DateTime endDate)
+        {
+            var holidaysBeginDate = Holidays.GetAllHolidaysByYear(beginDate.Year);
+            var holidaysEndDate = endDate.Year.Equals(beginDate.Year) ? holidaysBeginDate : Holidays.GetAllHolidaysByYear(endDate.Year);
+
+            var days = DateTimeHelper.GetDaysBetweenTwoDates(beginDate, endDate);
+
+            var listDates = new List<DateTime>();
+
+            for (int i = 0; i < days; i++)
+            {
+                var currentDay = beginDate.AddDays(i);
+
+                if (holidaysBeginDate.Contains(currentDay) || holidaysEndDate.Contains(currentDay)
+                    || currentDay.DayOfWeek.Equals(DayOfWeek.Sunday) || currentDay.DayOfWeek.Equals(DayOfWeek.Saturday))
+                {
+                    listDates.Add(currentDay);
+                }
+
+            }
+
+            return listDates;
         }
     }
 

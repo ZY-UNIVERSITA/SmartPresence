@@ -31,7 +31,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
             DaysBetweenBeginAndEndDate = DateTimeHelper.GetDaysBetweenTwoDates(BeginDate, EndDate, CalendarViewFilter);
 
             // Crea una lista che contenga i giorni con la rispettiva settimana da visualizzare
-            Calendar = DateTimeHelper.GetDaysWithHolidays(BeginDate, EndDate);
+            Calendar = DateTimeHelper.GetDaysWithHolidaysBetweenDates(BeginDate, EndDate);
         }
 
         // Prepara la lista di dati da visualizzare

@@ -217,7 +217,7 @@ function initVue(modelData) {
                 this.filterEventType = "None";
                 this.accumulateDays = this.getEmptyDays(modelData.Employees, this.employeeInfo.IdEmployee)
             },
-            // Metodo usato per selezionare
+            // Metodo usato per selezionare i giorni da remotoo
             selectRemoteDay(event) {
                 const day = event.target.id.split("_")[1];
                 const index = this.remoteDaysSelection.findIndex(x => x === day);

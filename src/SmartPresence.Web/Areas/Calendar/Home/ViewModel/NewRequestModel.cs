@@ -6,6 +6,7 @@ using SmartPresence.Services.WorkEvents.Queries;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
@@ -17,8 +18,8 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
 
         [Required]
         public CalendarViewName CalendarViewFilter { get; set; }
-        public DateTime BeginDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime BeginDateSearch { get; set; }
+        public DateTime EndDateSearch { get; set; }
         public DateTime BeginDateRequest { get; set; }
         public DateTime EndDateRequest { get; set; }
         public WorkEventTypeName EventType { get; set; }
@@ -31,6 +32,18 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
             {
                 yield return new ValidationResult(
                     "End date cannot be earlier than the begin date.",
+                    new[] { nameof(EndDateRequest), nameof(BeginDateRequest) }
+                );
+            }
+
+            var holidaysBetweenDates = DateTimeHelper.FindHolidaysBetweenDates(BeginDateRequest, EndDateRequest);
+
+            Console.WriteLine($"{holidaysBetweenDates.Count}");
+
+            if (holidaysBetweenDates.Any())
+            {
+                yield return new ValidationResult(
+                    $"Selected dates contains holidays. You cannot include them, for example: {holidaysBetweenDates[0].ToString("yyyy-MM-dd")}.",
                     new[] { nameof(EndDateRequest), nameof(BeginDateRequest) }
                 );
             }
@@ -78,8 +91,8 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
             var searchModel = new SearchModel()
             {
                 CalendarView = CalendarViewFilter,
-                BeginDateString = BeginDate.Date.ToString("yyyy-MM-dd"),
-                EndDateString = EndDate.Date.ToString("yyyy-MM-dd"),
+                BeginDateString = BeginDateSearch.Date.ToString("yyyy-MM-dd"),
+                EndDateString = EndDateSearch.Date.ToString("yyyy-MM-dd"),
             };
 
             return searchModel;
