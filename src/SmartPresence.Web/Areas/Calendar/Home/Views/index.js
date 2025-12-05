@@ -163,9 +163,9 @@
                      // In caso di leave, viene creato un badge con background rosso 
                     } else if (event.Type.startsWith("L")) {
                         if (event.Status.includes("PENDING")) {
-                            return `badge text-dark pendingRequest fs-6`
+                            return `badge text-dark pendingRequest`
                         }
-                        return 'badge text-bg-danger fs-6'
+                        return 'badge text-bg-danger'
                     }
                 }
 

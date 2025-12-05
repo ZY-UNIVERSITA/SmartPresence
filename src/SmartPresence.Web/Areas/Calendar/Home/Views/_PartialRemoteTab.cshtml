@@ -24,7 +24,7 @@
         <tr>
             @foreach (var item in Enumerable.Range(0, 7).Select(x => DateTimeHelper.GetMonday(Model.Today).AddDays(x)))
             {
-                <td scope="col" id="@($"remote_{item.ToString("yyyy-MM-dd")}")" v-on:click="selectRemoteDay($event)" class="fw-bold">
+                <td scope="col" id="@($"remote_{item.ToString("yyyy-MM-dd")}")" v-on:click="selectRemoteDay($event)" class="fw-bold @item.ToString("yyyy-MM-dd")">
                     <p></p>
                 </td>
             }

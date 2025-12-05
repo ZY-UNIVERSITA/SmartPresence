@@ -222,7 +222,7 @@
                     </th>
                     @foreach (var day in Model.Calendar)
                     {
-                        <th id="@day.Date" scope="col">
+                        <th id="@day.Date" scope="col" class="@day.Holiday.ToString().ToLower()">
                             <p class="m-0 fw-normal">@day.DayOfWeek</p>
                             <p class="m-0">@day.NumberOfDay</p>
                         </th>
@@ -437,23 +437,39 @@
 
     <script>
         function holidayBackground(tableClass) {
+            // Si ottiene una lista degli headers
             const table = document.querySelector(tableClass);
             const headers = table.querySelectorAll(`thead th`);
 
+            // Per ogni th del theader, si ottiene il suo id che rappresenta la data associata alla colonna
             headers.forEach((th, colIndex) => {
-                let dateStr = new Date(th.id);
 
-                if (isNaN(dateStr)) {
-                    dateStr = new Date(th.classList[0])
-                }
-
-                if (dateStr.getDay() === 0 || dateStr.getDay() === 6) {
-                    th.classList.add("holiday");
-
+                // Controlla che la cella sia di holiday
+                if (th.classList.contains("holiday")) {
+                    // A questo punto, per ogni th, fa una ricerca di tutto il tbody riga per riga
                     table.querySelectorAll(`tbody tr`).forEach(row => {
-                        const cell = row.children[colIndex];
-                        if (cell) {
-                            cell.classList.add("holiday");
+                        // Inizia dalla prima cella
+                        let currentIndex = 0;
+
+                        // Per ogni riga, cerca cella per cella
+                        for (const cell of row.querySelectorAll("td, th")) {
+                            // per ogni cella, trova il suo colspan
+                            const colspan = cell.getAttribute("colspan"); 
+
+                            // Se il colspan esiste allora non può essere sabato e domenica in quanto hanno sempre colspan uguale a 1
+                            if (colspan !== null) {
+                                // Trasforma la stringa in intero e aggiungilo all'indice, creando la posizione della prossima cella
+                                currentIndex += parseInt(colspan);
+                                continue;
+                            }
+
+                            // Se l'indice della cella corrisponde all'indice dell'intestazione allora quella cella è un giorno di festa
+                            if (currentIndex === colIndex) {
+                                cell.classList.add("holiday");
+                                break;
+                            }
+
+                            currentIndex += 1;
                         }
                     })
                 }

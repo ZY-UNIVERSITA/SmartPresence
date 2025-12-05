@@ -31,21 +31,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
             DaysBetweenBeginAndEndDate = DateTimeHelper.GetDaysBetweenTwoDates(BeginDate, EndDate, CalendarViewFilter);
 
             // Crea una lista che contenga i giorni con la rispettiva settimana da visualizzare
-            Calendar = Enumerable.Range(0, DaysBetweenBeginAndEndDate)
-                .Select(x => new CalendarDay()
-                {
-                    // Giorno della settimana: nome completo del giorno se il numero di giorni da visualizare è 7 o inferiore
-                    // altrimenti visualizza solo la prima lettera
-                    DayOfWeek = DaysBetweenBeginAndEndDate <= DateTimeHelper.GetNumbersOfDaysInWeek()
-                        ? BeginDate.AddDays(x).ToString("ddd", CultureInfo.InvariantCulture).ToUpper()
-                        : BeginDate.AddDays(x).ToString("ddd", CultureInfo.InvariantCulture).Substring(0, 1).ToUpper(),
-
-                    // Numero del mese 
-                    NumberOfDay = BeginDate.AddDays(x).Day.ToString(),
-
-                    // Data completa in formato anno-mese-giorno
-                    Date = BeginDate.AddDays(x).Date.ToString("yyyy-MM-dd")
-                }).ToList();
+            Calendar = DateTimeHelper.GetDaysWithHolidays(BeginDate, EndDate);
         }
 
         // Prepara la lista di dati da visualizzare
@@ -210,12 +196,12 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
             return everyDaysEvents;
         }
 
-        public class CalendarDay
-        {
-            public string DayOfWeek { get; set; }
-            public string NumberOfDay { get; set; }
-            public string Date { get; set; }
-        }
+        //public class CalendarDay
+        //{
+        //    public string DayOfWeek { get; set; }
+        //    public string NumberOfDay { get; set; }
+        //    public string Date { get; set; }
+        //}
 
         public class EmployeeIdNameAndEvents
         {
