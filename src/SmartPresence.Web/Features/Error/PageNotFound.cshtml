@@ -21,6 +21,7 @@
         .home-button {
             background-color: #6C757D;
             color: white;
+            border-radius: 15px;
             font-weight: bold;
             padding: 12px 40px;
             font-size: 1.1rem;
@@ -31,6 +32,7 @@
 
         .home-button:hover {
             background-color: #455a64;
+            color: white;
         }
 
         .cat-image {
@@ -49,7 +51,7 @@
             <p class="error-subtitle mb-4">
                 Try the homepage instead!
             </p>
-            <a asp-controller="Home" asp-action="Index" class="btn home-button rounded-pill">
+            <a href="@Url.Action(MVC.Calendar.Home.Index())" class="btn home-button rounded-pill">
                 HOME
             </a>
         </div>
