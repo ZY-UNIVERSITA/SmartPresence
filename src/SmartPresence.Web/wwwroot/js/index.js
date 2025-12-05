@@ -217,7 +217,7 @@ function initVue(modelData) {
                 this.filterEventType = "None";
                 this.accumulateDays = this.getEmptyDays(modelData.Employees, this.employeeInfo.IdEmployee)
             },
-            // Metodo usato per selezionare i giorni da remotoo
+            // Metodo usato per selezionare i giorni da remoto
             selectRemoteDay(event) {
                 const day = event.target.id.split("_")[1];
                 const index = this.remoteDaysSelection.findIndex(x => x === day);
@@ -270,6 +270,10 @@ function initVue(modelData) {
                         })
                     }
                 })
+            },
+            calculateBackground() {
+                this.holidayBackground(".mainTable")
+                this.holidayBackground(".remote-tab-table")
             }
         },
         // Metodo di bootstrap per caricare i tooltip
@@ -278,14 +282,12 @@ function initVue(modelData) {
                 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
                 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
-                this.holidayBackground(".mainTable")
-                this.holidayBackground(".remote-tab-table")
+                this.calculateBackground();
             });
         },
         updated() {
             this.$nextTick(() => {
-                this.holidayBackground(".mainTable")
-                this.holidayBackground(".remote-tab-table")
+                this.calculateBackground();
             });
         }
     })

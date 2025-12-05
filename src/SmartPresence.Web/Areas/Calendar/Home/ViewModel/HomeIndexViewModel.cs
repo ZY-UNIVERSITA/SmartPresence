@@ -23,6 +23,8 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
         private int DaysBetweenBeginAndEndDate { get; set; }
         public DateTime Today { get; private set; } = DateTime.Now;
         public EmployeeTimeOff EmployeeTimeOffs { get; set; }
+        internal PairDate PreviousDate { get; set; }
+        internal PairDate NextDate { get; set; }
 
         // Prepara l'header della tabella
         public void PrepareCalendarHeader()
@@ -74,6 +76,44 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
                 LeaveUsed = responseTimeOff.LeaveUsed,
                 LeaveTotal = responseTimeOff.LeaveTotal,
             };
+
+            PreviousDate = CreatePairDate();
+            NextDate = CreatePairDate(false);
+        }
+
+        // Metodo per creare le date precedente e successive
+        private PairDate CreatePairDate(bool previousDate = true)
+        {
+            DateTime beginDate;
+            DateTime endDate; 
+
+            if (previousDate)
+            {
+                endDate = BeginDate.AddDays(-1);
+
+                if (!CalendarViewFilter.Equals(CalendarViewName.MONTH))
+                {
+                    beginDate = BeginDate.AddDays(-DateTimeHelper.GetDaysBetweenTwoDates(BeginDate, EndDate));
+                } else
+                {
+                    beginDate = new DateTime(endDate.Year, endDate.Month, 1);
+                }
+
+            } else
+            {
+                beginDate = EndDate.AddDays(1);
+
+                if (!CalendarViewFilter.Equals(CalendarViewName.MONTH))
+                {
+                    endDate = beginDate.AddDays(DateTimeHelper.GetDaysBetweenTwoDates(BeginDate, EndDate) - 1);
+                } else
+                {
+                    endDate = new DateTime(beginDate.Year, beginDate.Month, DateTime.DaysInMonth(beginDate.Year, beginDate.Month));
+                }
+            }
+
+            return new PairDate(beginDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"));
+
         }
 
         private string CreateSubheader()
@@ -238,5 +278,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
             public double LeaveUsed { get; set; }
             public double LeaveTotal { get; set; }
         }
+
+        internal record PairDate(string BeginDate, string EndDate);
     }
 }
