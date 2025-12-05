@@ -75,21 +75,21 @@
 
 <main id="app" class="container-fluid p-3 bg-light">
 
-    <!-- Camio del periodo -->
+    @* Camio del periodo *@
     <partial name="_PartialPeriod" model="Model"></partial>
 
-    <!-- Sezione dei filtri -->
-    <!-- g3: spaziatura tra colonne -->
+    @* Sezione dei filtri *@
+    @* g3: spaziatura tra colonne *@
     <section class="row g-3 px-5 main-section-1" role="toolbar" aria-labelledby="calendar-toolbar">
         <header>
             <h2 id="calendar-toolbar" class="visually-hidden">Calendar toolbar</h2>
         </header>
 
-        <!-- Filtro per team -->
-        <!--
+        @* Filtro per team *@
+        @*
             col-12: occupa 12 colonne ovvero tutta la riga da mobile
             col-md-2: occupa 2 colonne da tablet in su
-        -->
+        *@
         <section class="col-12 col-md-2">
             <form>
                 <label for="team-select" class="form-label">Team filter</label>
@@ -106,7 +106,7 @@
             </form>
         </section>
 
-        <!-- Filtro per tipo di evento -->
+        @* Filtro per tipo di evento *@
         <section class="col-12 col-md-2 mb-3">
             <form>
                 <label for="event-type-select" class="form-label">Event filter</label>
@@ -123,12 +123,12 @@
             </form>
         </section>
 
-        <!-- Filtro per resettare tutti i filtri -->
-        <!--
+        @* Filtro per resettare tutti i filtri *@
+        @*
             col-1: singola colonna da mobile
             d-flex: permette di usare display flex e le seguenti opzioni
                 align-items-md-end: in versione tablet e superiore, permette di mettere gli elementi allineati verticalmente in basso
-        -->
+        *@
         <section class="col-1 d-flex align-items-md-end mb-3">
             <form>
                 <button type="button" class="btn btn-secondary" v-on:click="resetFilters" aria-label="Reset all filters">
@@ -137,14 +137,14 @@
             </form>
         </section>
 
-        <!-- Selettore vista calendario con apertura di una modale di Bootstrap-->
-        <!--
+        @* Selettore vista calendario con apertura di una modale di Bootstrap*@
+        @*
             col-11: occupa 11 colonne su mobile
             col-md-7: ne occupa 7 su table o superiore
             d-flex: permette di usare flex con:
                 align-items-md-end: allinea gli elementi in basso su table o superiore
                 justify-content-end: allinea sempre gli elementi a destra
-        -->
+        *@
         <section class="col-11 col-md-7 d-flex align-items-md-end justify-content-end mb-3">
             <form asp-controller="Home" asp-action="Index" method="get">
                 <fieldset id="seleziona-vista-calendario">
@@ -174,9 +174,9 @@
                 </fieldset>
             </form>
 
-            <!-- Modale di Bootstrap per la scelta del periodo
+            @* Modale di Bootstrap per la scelta del periodo
                 https://getbootstrap.com/docs/5.0/components/modal/
-            -->
+            *@
             <section class="modal fade" id="date_form" tabindex="-1" aria-labelledby="dateModalLabel" aria-hidden="true">
                 <section class="modal-dialog">
                     <section class="modal-content">
@@ -211,7 +211,7 @@
         </section>
     </section>
 
-    <!-- Calendario principale -->
+    @* Calendario principale *@
     <section class="px-5 py-3 table-responsive calendar-section main-section-2">
         <table class="mainTable table table-bordered table-hover shadow">
             <thead class="">
@@ -231,7 +231,7 @@
             </thead>
             <tbody>
                 <tr v-for="employee in filteredList" :key="employee.Id">
-                    <!-- Prima colonna dei dipendenti, gestito come thead -->
+                    @* Prima colonna dei dipendenti, gestito come thead *@
                     <th scope="row" :id="employeeInfo.Id === employee.Id ? 'userId-' + employee.Id : null" class="align-middle">
                         <img src="~/images/profile.svg"
                              alt="Profile photo"
@@ -239,26 +239,26 @@
                         <span>{{ `${employee.Surname} ${employee.Name}` }}</span>
                     </th>
 
-                    <!-- Tutte le altre celle rappresentano invece potenziali eventi -->
-                    <!-- Cicla sulla lista degli eventi -->
+                    @* Tutte le altre celle rappresentano invece potenziali eventi *@
+                    @* Cicla sulla lista degli eventi *@
                     <template v-for="(dayEvents, index) in employee.Events" :key="`${employee.Id}-${dayEvents.Date}`">
 
-                        <!-- Ogni evento, viene identificato da una data di inizio, se per quello specifico giorno ci sono eventi da visualizzare allora li visualizza -->
+                        @* Ogni evento, viene identificato da una data di inizio, se per quello specifico giorno ci sono eventi da visualizzare allora li visualizza *@
                         <template v-if="Array.isArray(dayEvents.ListEvents) && dayEvents.ListEvents.length > 0">
                             <td :id="employeeInfo.Id === employee.Id ? accumulateDays[index] : null" :colspan="dayEvents.Days"
                                 :class="[ 'text-center', 'align-middle', getBackgroundColor(dayEvents.ListEvents) ]">
 
-                                <!-- Ogni evento quindi ogni giorno, potrebbe avere più eventi che accadono per quel giorno, es. leave e remote insieme -->
-                                <!-- Cicla sui singoli eventi del giorno -->
+                                @* Ogni evento quindi ogni giorno, potrebbe avere più eventi che accadono per quel giorno, es. leave e remote insieme *@
+                                @* Cicla sui singoli eventi del giorno *@
                                 <template v-for="singleEvent in dayEvents.ListEvents" :key=`${employee.Id}-${dayEvents.Date}-${singleEvent.Id}`>
 
-                                    <!-- Se è un holiday o un remote oppure è un leave da visualizzare come singola lettera, mostra il nome o la sigla dell'evento-->
+                                    @* Se è un holiday o un remote oppure è un leave da visualizzare come singola lettera, mostra il nome o la sigla dell'evento*@
                                     <template v-if="singleEvent.Type !== 'LEAVE' && singleEvent.Type !== 'L'">
                                         <p :class="[ 'm-0', 'fw-bold', getTextColor(singleEvent) ]">{{ singleEvent.Type }}</p>
                                     </template>
 
-                                    <!-- Se è un holiday o un remote oppure è un leave da visualizzare come singola lettera, mostra il nome o la sigla dell'evento-->
-                                    <!-- Viene aggiunto un tooltip per visualizzare l'orario del permesso quando lo spazio in lunghezza non è sufficiente -->
+                                    @* Se è un holiday o un remote oppure è un leave da visualizzare come singola lettera, mostra il nome o la sigla dell'evento*@
+                                    @* Viene aggiunto un tooltip per visualizzare l'orario del permesso quando lo spazio in lunghezza non è sufficiente *@
                                     <template v-else-if="singleEvent.Type.length === 1">
                                         <p :class="[ 'm-0', 'fw-bold', getTextColor(singleEvent) ]"
                                            data-bs-toggle="tooltip"
@@ -268,7 +268,7 @@
                                         </p>
                                     </template>
 
-                                    <!-- Se invece è un leave e non c'è da visualizzare in singola lettera, visualizza l'orario -->
+                                    @* Se invece è un leave e non c'è da visualizzare in singola lettera, visualizza l'orario *@
                                     <template v-else>
                                         <p :class="[ 'm-0', 'fw-bold', getTextColor(singleEvent) ]">{{ singleEvent.DateRange }}</p>
                                     </template>
@@ -276,7 +276,7 @@
                             </td>
                         </template>
 
-                        <!-- Se non ci sono eventi da visualizzare, crea una cella e passa alla prossima -->
+                        @* Se non ci sono eventi da visualizzare, crea una cella e passa alla prossima *@
                         <template v-else>
                             <td :id="employeeInfo.IdEmployee === employee.Id ? accumulateDays[index] : null"
                                 v-on:click="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? openOffCanvas($event) : null">
@@ -289,16 +289,16 @@
     </section>
 
 
-    <!-- Off canvas di Bootstrap per nuova richiesta
+    @* Off canvas di Bootstrap per nuova richiesta
         https://getbootstrap.com/docs/5.0/components/offcanvas/
-    -->
+    *@
     <aside class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel" ref="offcanvas">
         <header class="offcanvas-header">
             <h2 class="offcanvas-title" id="offcanvasScrollingLabel">New request</h2>
             <input type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" />
         </header>
 
-        <!-- Dispone gli elementi in singola colonna quindi ogni elemento sarà su singola riga -->
+        @* Dispone gli elementi in singola colonna quindi ogni elemento sarà su singola riga *@
         <section class="offcanvas-body d-flex flex-column">
 
             <header>
@@ -312,18 +312,18 @@
                 </ul>
             </header>
 
-            <!-- Flex-grow-1: occupa tutto lo spazio disponibile -->
+            @* Flex-grow-1: occupa tutto lo spazio disponibile *@
             <section class="tab-content flex-grow-1" id="myTabContent">
 
-                <!-- h-100 per occupare tutto lo spazio della seciton -->
+                @* h-100 per occupare tutto lo spazio della seciton *@
                 <section class="tab-pane fade show active h-100" id="HolidayTabContent" role="tabpanel">
 
-                    <!-- Wrapper necessario per usare Flexbox dentro il tab-pane senza rompere l'animazione -->
-                    <!-- h-100 assicura che occupi tutta l'altezza. Se il contenuto sfora, c'è scrolling verticale scrolla. -->
+                    @* Wrapper necessario per usare Flexbox dentro il tab-pane senza rompere l'animazione *@
+                    @* h-100 assicura che occupi tutta l'altezza. Se il contenuto sfora, c'è scrolling verticale scrolla. *@
                     <div class="d-flex flex-column h-100">
 
-                        <!-- Richiesta form -->
-                        <!-- mb-auto spinge in fondo il contenuto della tabella che viene dopo -->
+                        @* Richiesta form *@
+                        @* mb-auto spinge in fondo il contenuto della tabella che viene dopo *@
                         <section class="mb-auto">
                             <form asp-controller="Home" asp-action="CreateNewRequest" method="post">
                                 <fieldset>
@@ -379,12 +379,12 @@
                             </form>
                         </section>
 
-                        <!-- Con mb-auto di prima, la tabella viene spinta in basso alla pagina -->
+                        @* Con mb-auto di prima, la tabella viene spinta in basso alla pagina *@
                         <section class="table-responsive mt-3" id="voglioLuiInFondo" aria-label="Yearly balances detail">
                             <table class="table table-striped table-hover align-middle mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                        <th scope="col"></th>
+                                        <th scope="col">Type</th>
                                         <th scope="col">Used</th>
                                         <th scope="col">Accrued</th>
                                         <th scope="col">Available</th>
@@ -393,17 +393,17 @@
                                 </thead>
                                 <tbody class="text-end">
                                     <tr>
-                                        <th scope="row" class="text-start">Vacation</th>
+                                        <th scope="row" class="text-start">Holiday</th>
                                         <td>@Model.EmployeeTimeOffs.HolidayUsed</td>
                                         <td>@Model.EmployeeTimeOffs.HolidayAccrued</td>
                                         <td>@(Model.EmployeeTimeOffs.HolidayTotal - Model.EmployeeTimeOffs.HolidayUsed)</td>
                                         <td>@Model.EmployeeTimeOffs.HolidayTotal</td>
                                     </tr>
                                     <tr>
-                                        <td scope="row" class="text-start">Leave</td>
-                                        <td>@Model.EmployeeTimeOffs.LeaveUsed</td>
+                                        <th scope="row" class="text-start">Leave</th>
+                                        <td>@Model.EmployeeTimeOffs.LeaveUsed.ToString("F1")</td>
                                         <td>@Model.EmployeeTimeOffs.LeaveAccrued</td>
-                                        <td>@(Model.EmployeeTimeOffs.LeaveTotal - Model.EmployeeTimeOffs.LeaveUsed)</td>
+                                        <td>@((Model.EmployeeTimeOffs.LeaveTotal - Model.EmployeeTimeOffs.LeaveUsed).ToString("F1"))</td>
                                         <td>@Model.EmployeeTimeOffs.LeaveTotal</td>
                                     </tr>
                                 </tbody>
@@ -414,7 +414,7 @@
 
                 </section>
 
-                <!-- Remote tab  -->
+                @* Remote tab  *@
                 <section class="tab-pane fade p-3 table-responsive" id="RemoteTabContent" role="tabpanel">
                     <partial name="_PartialRemoteTab" model="Model" />
                 </section>
