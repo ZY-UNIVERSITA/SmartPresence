@@ -14,4 +14,11 @@ namespace SmartPresence.Services.Shared
 
         public IEnumerable<Employee> Employees { get; set; }
     }
+
+    public static class LeaveHolidaysHours
+    {
+        public static int Days { get; private set; } = 26;
+        public static int Hours { get; private set; } = 120;
+        public static int StandardWorkingHours { get; private set; } = 40;
+    }
 }
