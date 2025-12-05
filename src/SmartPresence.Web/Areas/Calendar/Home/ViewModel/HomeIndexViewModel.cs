@@ -234,9 +234,9 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
             public int HolidayAccrued { get; set; }
             public int HolidayUsed { get; set; }
             public int HolidayTotal { get; set; }
-            public int LeaveAccrued { get; set; }
-            public int LeaveUsed { get; set; }
-            public int LeaveTotal { get; set; }
+            public double LeaveAccrued { get; set; }
+            public double LeaveUsed { get; set; }
+            public double LeaveTotal { get; set; }
         }
     }
 }
