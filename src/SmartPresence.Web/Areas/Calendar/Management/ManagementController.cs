@@ -3,6 +3,7 @@ using SmartPresence.Services.Employees.Queries;
 using SmartPresence.Services.Users;
 using SmartPresence.Services.WorkEvents;
 using SmartPresence.Services.WorkEvents.Model;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartPresence.Web.Areas.Calendar.Management
@@ -36,8 +37,7 @@ namespace SmartPresence.Web.Areas.Calendar.Management
         }
 
         [HttpPost]
-
-        public async virtual Task<IActionResult> Post(int id, WorkEventStatusName status)
+        public async virtual Task<IActionResult> AcceptRequest(int id, WorkEventStatusName status)
         {
             await _workEventService.HandleWorkEventDecision(new Services.WorkEvents.Command.HandleWorkEventDecisionCommand()
             {
@@ -48,5 +48,30 @@ namespace SmartPresence.Web.Areas.Calendar.Management
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public async virtual Task<IActionResult> AcceptAllRequests(string listId, WorkEventStatusName status)
+        {
+            // Il client passa una stringa contenente gli id in formato (id1-id2-id3)
+            // La funzione separa la stringa a partire da "-" in singole stringhe e prova fare il parsing della stringa in un che restituisce 2 cose: bool isNumber e il valore int
+            // Seleziona solo lista dei valori validi e da questa lista seleziona solo il numero
+            var listIdNumber = listId
+                .Split("-")
+                .Select(x =>
+                {
+                    bool isNumber = int.TryParse(x, out var number);
+                    return (isNumber, number);
+                }).
+                Where(y => y.isNumber)
+                .Select(z => z.number)
+                .ToList();
+
+            await _workEventService.HandleAllWorkEventsDecisions(new Services.WorkEvents.Command.HandleAllWorkEventsDecisionsCommand()
+            {
+                ListId = listIdNumber,
+                Status = status
+            });
+
+            return RedirectToAction("Index");
+        }
     }
 }

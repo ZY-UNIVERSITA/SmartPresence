@@ -161,5 +161,20 @@ namespace SmartPresence.Services.WorkEvents
                 await _context.SaveChangesAsync();
             }
         }
+
+        // Metodo per accettare/rifiutare tutte le richieste
+        public async Task HandleAllWorkEventsDecisions(HandleAllWorkEventsDecisionsCommand command)
+        {
+            var workEventStatus = await _context.WorkEventTypeStatus.Where(x => x.Name.Equals(command.Status)).FirstOrDefaultAsync();
+
+            var workEvents = await _context.WorkEvents.Where(x => command.ListId.Contains(x.Id)).ToListAsync();
+
+            foreach (var singleEvent in workEvents)
+            {
+                singleEvent.IdWorkEventStatus = workEventStatus.Id;
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }
