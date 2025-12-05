@@ -54,7 +54,8 @@ namespace SmartPresence.Services.WorkEvents
                 StartDate = workEvent.BeginDate,
                 EndDate = workEvent.EndDate,
                 IdWorkEventStatus = idWorkEventStatusPending,
-                IdWorkEventType = idWorkEventType
+                IdWorkEventType = idWorkEventType,
+                Notes = workEvent.Notes
             };
 
             _context.WorkEvents.Add(newWorkEvent);

@@ -23,6 +23,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
         public DateTime BeginDateRequest { get; set; }
         public DateTime EndDateRequest { get; set; }
         public WorkEventTypeName EventType { get; set; }
+        public string NotesRequest { get; set; }
 
         // Esegue la validazione del modello
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -107,6 +108,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
                 WorkEventType = EventType,
                 BeginDate = BeginDateRequest,
                 EndDate = EndDateRequest,
+                Notes = NotesRequest
             };
 
             return command;

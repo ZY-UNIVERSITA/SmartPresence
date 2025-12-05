@@ -270,6 +270,10 @@
                         })
                     }
                 })
+            },
+            calculateBackground() {
+                this.holidayBackground(".mainTable")
+                this.holidayBackground(".remote-tab-table")
             }
         },
         // Metodo di bootstrap per caricare i tooltip
@@ -278,14 +282,12 @@
                 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
                 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
-                this.holidayBackground(".mainTable")
-                this.holidayBackground(".remote-tab-table")
+                this.calculateBackground();
             });
         },
         updated() {
             this.$nextTick(() => {
-                this.holidayBackground(".mainTable")
-                this.holidayBackground(".remote-tab-table")
+                this.calculateBackground();
             });
         }
     })

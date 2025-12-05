@@ -9,5 +9,6 @@ namespace SmartPresence.Services.WorkEvents.Command
         public WorkEventTypeName WorkEventType { get; set; }
         public DateTime BeginDate { get; set; }
         public DateTime EndDate { get; set; }
+        public string Notes { get; set; }
     }
 }
