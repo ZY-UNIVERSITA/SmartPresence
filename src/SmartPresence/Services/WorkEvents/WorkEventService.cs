@@ -6,6 +6,7 @@ using SmartPresence.Services.Shared;
 using SmartPresence.Services.WorkEvents.Command;
 using SmartPresence.Services.WorkEvents.Model;
 using SmartPresence.Services.WorkEvents.Queries;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -148,33 +149,70 @@ namespace SmartPresence.Services.WorkEvents
             return response;
         }
 
-        // Metodo per accettare/rifiutare le richieste
-        public async Task HandleWorkEventDecision(HandleWorkEventDecisionCommand command)
-        {
-            var workEvent = await _context.WorkEvents.Where(x => x.Id.Equals(command.Id)).FirstOrDefaultAsync();
-            var workEventStatus = await _context.WorkEventTypeStatus.Where(x => x.Name.Equals(command.Status)).FirstOrDefaultAsync();
-
-            if (workEvent is not null && workEventStatus is not null)
-            {
-                workEvent.IdWorkEventStatus = workEventStatus.Id;
-
-                await _context.SaveChangesAsync();
-            }
-        }
-
         // Metodo per accettare/rifiutare tutte le richieste
         public async Task HandleAllWorkEventsDecisions(HandleAllWorkEventsDecisionsCommand command)
         {
+            // Trova l'id dello status dell'evento accettato/rifiutato
             var workEventStatus = await _context.WorkEventTypeStatus.Where(x => x.Name.Equals(command.Status)).FirstOrDefaultAsync();
 
-            var workEvents = await _context.WorkEvents.Where(x => command.ListId.Contains(x.Id)).ToListAsync();
+            // Crea una classe helper che raggruppa gli eventi per id dell'employee
+            var employeeEvents = await _context.WorkEvents
+                .Where(x => command.ListId.Contains(x.Id))
+                .Include(x => x.WorkEventType)
+                .Include(x => x.Employee)
+                    .ThenInclude(x => x.EmployeeTimeOffs)
+                .GroupBy(x => x.IdEmployee)
+                .Select(y => new WorkEventDecisionHelper()
+                {
+                    EmployeeId = y.Key,
+                    ContractType = y.First().Employee.ContractType,
+                    WorkEvents = y.ToList(),
+                })
+                .ToListAsync();
 
-            foreach (var singleEvent in workEvents)
+            // Ad ogni employee associa inoltre la lista del timeoff
+            employeeEvents.ForEach(x => x.EmployeeTimeOffs = _context.EmployeeTimeOffs.Where(y => y.Id == x.EmployeeId).ToList());
+
+            // Ora per ogni employee e per ogni suo evento, cambia lo status dell'evento e aggiorna la tabella del timeoff
+            foreach (var employee in employeeEvents)
             {
-                singleEvent.IdWorkEventStatus = workEventStatus.Id;
+                foreach (var singleEvent in employee.WorkEvents)
+                {
+                    singleEvent.IdWorkEventStatus = workEventStatus.Id;
+
+                    var startDate = singleEvent.StartDate;
+                    var endDate = singleEvent.EndDate;
+
+                    var timeOff = employee.EmployeeTimeOffs.Where(x => x.Year.Equals(startDate.Year)).FirstOrDefault();
+
+                    if (timeOff is null)
+                    {
+                        timeOff = new EmployeeTimeOff(employee.ContractType, singleEvent.IdEmployee, startDate.Year);
+                        _context.EmployeeTimeOffs.Add(timeOff);
+                    }
+
+                    if (singleEvent.WorkEventType.Name.Equals(WorkEventTypeName.HOLIDAY))
+                    {
+                        var days = DateTimeHelper.GetDaysBetweenTwoDates(startDate, endDate);
+                        timeOff.HolidayUsed += days;
+                    }
+                    else
+                    {
+                        var hours = (endDate - startDate).TotalHours;
+                        timeOff.LeaveUsed += hours;
+                    }
+                }
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        private class WorkEventDecisionHelper
+        {
+            public int EmployeeId { get; set; }
+            public ContractType ContractType { get; set; }
+            public List<EmployeeTimeOff> EmployeeTimeOffs { get; set; }
+            public List<WorkEvent> WorkEvents { get; set; }
         }
     }
 }

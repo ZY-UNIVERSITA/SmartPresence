@@ -33,14 +33,14 @@
                 @* <p>@item.Status</p> *@
                 <p>@item.Type</p>
             </li>
-            <form asp-controller="Management" asp-action="AcceptRequest" method="post">
+            <form asp-controller="Management" asp-action="AcceptAllRequests" method="post">
                 <select name="status">
                     @foreach(var item1 in Enum.GetValues<WorkEventStatusName>())
                     {
                         <option value="@item1">@item1.ToString()</option>
                     }
                 </select>
-                @Html.Hidden("id", item.IdEvent)
+                @Html.Hidden("listId", item.IdEvent)
                 <button type="submit">Send</button>
             </form>
         }
