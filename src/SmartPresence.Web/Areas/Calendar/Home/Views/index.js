@@ -231,14 +231,63 @@
                 event.target.classList.toggle("selected-remote-day");
 
                 console.log(this.remoteDaysSelection);
+            },
+            holidayBackground(tableId) {
+                // Si ottiene una lista degli headers
+                const table = document.querySelector(tableId);
+                const headers = table.querySelectorAll(`thead th`);
+
+                // Per ogni th del theader, si ottiene il suo id che rappresenta la data associata alla colonna
+                headers.forEach((th, colIndex) => {
+
+                    // Controlla che la cella sia di holiday
+                    if (th.classList.contains("holiday")) {
+                        // A questo punto, per ogni th, fa una ricerca di tutto il tbody riga per riga
+                        table.querySelectorAll(`tbody tr`).forEach(row => {
+                            // Inizia dalla prima cella
+                            let currentIndex = 0;
+
+                            // Per ogni riga, cerca cella per cella
+                            for (const cell of row.querySelectorAll("td, th")) {
+                                // per ogni cella, trova il suo colspan
+                                const colspan = cell.getAttribute("colspan");
+
+                                // Se il colspan esiste allora non può essere sabato e domenica in quanto hanno sempre colspan uguale a 1
+                                if (colspan !== null) {
+                                    // Trasforma la stringa in intero e aggiungilo all'indice, creando la posizione della prossima cella
+                                    currentIndex += parseInt(colspan);
+                                    continue;
+                                }
+
+                                // Se l'indice della cella corrisponde all'indice dell'intestazione allora quella cella è un giorno di festa
+                                if (currentIndex === colIndex) {
+                                    cell.classList.add("holiday");
+                                    break;
+                                }
+
+                                currentIndex += 1;
+                            }
+                        })
+                    }
+                })
             }
         },
         // Metodo di bootstrap per caricare i tooltip
         mounted() {
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-        }
+            this.$nextTick(() => {
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
+                this.holidayBackground(".mainTable")
+                this.holidayBackground(".remote-tab-table")
+            });
+        },
+        updated() {
+            this.$nextTick(() => {
+                this.holidayBackground(".mainTable")
+                this.holidayBackground(".remote-tab-table")
+            });
+        }
     })
 
     app.mount('#app')
