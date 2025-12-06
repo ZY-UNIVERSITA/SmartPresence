@@ -35,6 +35,8 @@ namespace SmartPresence.Services.Employees
         [InverseProperty("Employees")]
         public Team Team { get; set; }
 
+        public RemoteDay RemoteDay { get; set; }
+
         public IEnumerable<WorkEvent> WorkEvents { get; set; }
 
         public IEnumerable<EmployeeTimeOff> EmployeeTimeOffs { get; set; }

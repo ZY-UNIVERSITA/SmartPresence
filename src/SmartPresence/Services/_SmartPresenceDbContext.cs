@@ -31,11 +31,10 @@ namespace SmartPresence.Services
         public DbSet<Area> Areas { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<ContractType> ContractTypes { get; set; }
-
         public DbSet<WorkEvent> WorkEvents { get; set; }
         public DbSet<WorkEventType> WorkEventTypes { get; set; }
         public DbSet<WorkEventStatus> WorkEventTypeStatus { get; set; }
-
         public DbSet<EmployeeTimeOff> EmployeeTimeOffs { get; set; }
+        public DbSet<RemoteDay> RemoteDays { get; set; }
     }
 }
