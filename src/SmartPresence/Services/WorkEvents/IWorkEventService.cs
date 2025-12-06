@@ -11,5 +11,6 @@ namespace SmartPresence.Services.WorkEvents
         public Task<bool> ValidateNewWorkEvent(ValidateNewWorkEventResponse workEvent);
         public Task<EmployeePendingWorkEventsResponse> GetEmployeeWorkEventsPending(EmployeePendingWorkEventsRequest request);
         public Task HandleAllWorkEventsDecisions(HandleAllWorkEventsDecisionsCommand command);
+        public Task HandleRemoteDays(UpdateRemoteDaysCommand command);
     }
 }

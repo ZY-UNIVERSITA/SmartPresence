@@ -6,6 +6,7 @@ using SmartPresence.Services.Shared;
 using SmartPresence.Services.WorkEvents.Command;
 using SmartPresence.Services.WorkEvents.Model;
 using SmartPresence.Services.WorkEvents.Queries;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -179,19 +180,24 @@ namespace SmartPresence.Services.WorkEvents
             {
                 foreach (var singleEvent in employee.WorkEvents)
                 {
+                    // Aggiorna lo status
                     singleEvent.IdWorkEventStatus = workEventStatus.Id;
 
+                    // Trova le date di inizio e fine
                     var startDate = singleEvent.StartDate;
                     var endDate = singleEvent.EndDate;
 
+                    // Trova la tabella del timeoff dell'anno della richiesta
                     var timeOff = employee.EmployeeTimeOffs.Where(x => x.Year.Equals(startDate.Year)).FirstOrDefault();
 
+                    // Se non esiste una per l'anno della richiesta, ne crea una e lo aggiunge al db
                     if (timeOff is null)
                     {
                         timeOff = new EmployeeTimeOff(employee.ContractType, singleEvent.IdEmployee, startDate.Year);
-                        _context.EmployeeTimeOffs.Add(timeOff);
+                        await _context.EmployeeTimeOffs.AddAsync(timeOff);
                     }
 
+                    // Riduce le ore/giorni disponibili
                     if (singleEvent.WorkEventType.Name.Equals(WorkEventTypeName.HOLIDAY))
                     {
                         var days = DateTimeHelper.GetDaysBetweenTwoDates(startDate, endDate);
@@ -215,5 +221,28 @@ namespace SmartPresence.Services.WorkEvents
             public List<EmployeeTimeOff> EmployeeTimeOffs { get; set; }
             public List<WorkEvent> WorkEvents { get; set; }
         }
+
+        // Update remote day 
+        public async Task HandleRemoteDays(UpdateRemoteDaysCommand command)
+        {
+            var remoteDays = await _context.RemoteDays.Where(x => x.IdEmployee.Equals(command.IdEmployee)).FirstOrDefaultAsync();
+
+            if (remoteDays is null)
+            {
+                remoteDays = new RemoteDay()
+                {
+                    IdEmployee = command.IdEmployee,
+                };
+
+                await _context.RemoteDays.AddAsync(remoteDays);
+            }
+
+            remoteDays.Days = command.Days;
+            remoteDays.Repeat = command.Repeat;
+
+            await _context.SaveChangesAsync();
+        }
+
+        // Get remote day
     }
 }
