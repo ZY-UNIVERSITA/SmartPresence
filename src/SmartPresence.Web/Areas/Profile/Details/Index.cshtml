@@ -1,38 +1,117 @@
 ﻿@using SmartPresence.Services.Employees.Queries
-
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-
 @model EmployeePersonalWorkEventResponse
 
 @{
+    ViewData["Title"] = "Profile - " + Model.FullName;
 }
 
 @section styles {
-    <style>
-        main {
-            background-color: lightgrey;
-        }
-    </style>
+    
 }
 
 <main>
-    <p>Profile</p>
-    <ul>
-        @foreach (var item in Model.WorkEvents)
-        {
-            <li>
-                <p>@item.StartDate</p>
-                <p>@item.EndDate</p>
-                <p>@item.WorkEventType.Name</p>
-                <p>@item.WorkEventStatus.Name</p>
-            </li>
-        }
-    </ul>
+    <div class="profile-container">
+        <div class="row g-4">
+            <!-- Left Panel - Employee Profile -->
+            <div class="col-lg-6">
+                <div class="profile-card">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <h1 class="employee-name">@Model.FullName</h1>
+                        <div class="avatar-section">
+                            <img src="~/images/profile.svg" alt="Profile photo" class="avatar-img" />
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <div class="info-label">Contract Type</div>
+                        <div class="info-value">@Model.ContractType?.Name</div>
+                    </div>
+                    <div class="info-section">
+                        <div class="info-label">Role</div>
+                        <div class="info-value">@Model.Role?.Name</div>
+                    </div>
+                    <div class="two-column-info">
+                        <div class="info-section">
+                            <div class="info-label">Team</div>
+                            <div class="info-value">@Model.Team?.Name</div>
+                        </div>
+                        <div class="info-section">
+                            <div class="info-label">Area</div>
+                            <div class="info-value">@Model.Area?.Name</div>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
 
+                    <!-- Balance Table -->
+                    @if (Model.TimeOff != null)
+                    {
+                        <div class="balance-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Balance</th>
+                                        <th>Used</th>
+                                        <th>Accrued</th>
+                                        <th>Available</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Leave</td>
+                                        <td>@Model.TimeOff.LeaveUsed.ToString("0.##")</td>
+                                        <td>@Model.TimeOff.LeaveAccrued.ToString("0.##")</td>
+                                        <td>@((Model.TimeOff.LeaveAccrued - Model.TimeOff.LeaveUsed).ToString("0.##"))</td>
+                                        <td><strong>@Model.TimeOff.LeaveTotal.ToString("0.##")</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Holiday</td>
+                                        <td>@Model.TimeOff.HolidayUsed</td>
+                                        <td>@Model.TimeOff.HolidayAccrued</td>
+                                        <td>@(Model.TimeOff.HolidayAccrued - Model.TimeOff.HolidayUsed)</td>
+                                        <td><strong>@Model.TimeOff.HolidayTotal</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Right Panel - History -->
+            <div class="col-lg-6">
+                <div class="history-card">
+                    <h2 class="history-header">History</h2>
+
+                    @if (Model.WorkEvents != null && Model.WorkEvents.Any())
+                    {
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Begin Date</th>
+                                    <th>End Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.WorkEvents)
+                                {
+                                    <tr>
+                                        <td><strong>@item.WorkEventType.Name</strong></td>
+                                        <td>@item.StartDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>@item.EndDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>@item.WorkEventStatus.Name</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Nessuno storico disponibile.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
-
-@section scripts {
-    <script></script>
-}
