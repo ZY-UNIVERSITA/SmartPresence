@@ -11,6 +11,11 @@ namespace SmartPresence.Services.Employees.Queries
     public class EmployeePersonalWorkEventResponse
     {
         public int Id { get; set; }
+
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string FullName => $"{Name} {Surname}";
+
         public ContractType ContractType { get; set; }
         public Role Role { get; set; }
         public Team Team { get; set; }
@@ -20,6 +25,8 @@ namespace SmartPresence.Services.Employees.Queries
 
         public EmployeePersonalWorkEventResponse(Employee employee) {
             Id = employee.Id;
+            Name = employee.Name;
+            Surname = employee.Surname;
             ContractType = employee.ContractType;
             Role = employee.Role;
             Team = employee.Team;
