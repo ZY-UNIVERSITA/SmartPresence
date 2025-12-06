@@ -1,4 +1,5 @@
 ﻿using SmartPresence.Services.Shared;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartPresence.Services.Employees.Model
 {
@@ -6,6 +7,12 @@ namespace SmartPresence.Services.Employees.Model
     {
         public int Id { get; set; }
         public int Year { get; set; }
+
+        public int IdEmployee { get; set; }
+
+        [ForeignKey(nameof(IdEmployee))]
+        public Employee Employee { get; set; }
+
         public int HolidayAccrued { get; set; }
         public int HolidayUsed { get; set; }
         public int HolidayTotal { get; set; }
@@ -19,7 +26,7 @@ namespace SmartPresence.Services.Employees.Model
 
         public EmployeeTimeOff(ContractType contract, int idEmployee, int year)
         {
-            Id = idEmployee;
+            IdEmployee = idEmployee;
             Year = year;
             HolidayUsed = 0;
             HolidayAccrued = 0;
