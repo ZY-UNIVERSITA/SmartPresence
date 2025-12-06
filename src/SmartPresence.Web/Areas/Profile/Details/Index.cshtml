@@ -2,11 +2,159 @@
 @model EmployeePersonalWorkEventResponse
 
 @{
-    ViewData["Title"] = "Profile - " + Model.FullName;
 }
 
 @section styles {
-    
+    <style>
+
+        .profile-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+
+        .profile-card, .history-card {
+            background: white;
+            border: 2px solid #333;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 2rem;
+            height: 100%;
+        }
+
+
+        .avatar-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+
+        .employee-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: black;
+            margin-bottom: 2rem;
+        }
+
+
+        .info-section {
+            margin-bottom: 1.5rem;
+        }
+
+
+        .info-label {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: black;
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+        }
+
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: black;
+        }
+
+
+        .balance-table {
+            margin-top: 2rem;
+        }
+
+
+            .balance-table table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+            }
+
+
+            .balance-table th {
+                font-weight: 600;
+                color: black;
+                padding: 0.75rem;
+                text-align: center;
+                font-size: 0.9rem;
+            }
+
+
+                .balance-table th:first-child {
+                    text-align: left;
+                }
+
+
+            .balance-table td {
+                padding: 0.75rem;
+                text-align: center;
+                border-top: 1px solid black;
+                font-size: 1rem;
+            }
+
+
+                .balance-table td:first-child {
+                    text-align: left;
+                }
+
+
+        .history-header {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: black;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #333;
+        }
+
+
+        .history-table {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+
+            .history-table th {
+                font-weight: 600;
+                color: black;
+                padding: 1rem;
+                text-align: left;
+                border-bottom: 2px solid black;
+            }
+
+
+            .history-table td {
+                padding: 0.9rem 1rem;
+                border-bottom: 1px solid #e0e0e0;
+                color: black;
+            }
+
+
+            .history-table tbody tr:hover {
+                background: #f8f9fa;
+            }
+
+
+        .divider {
+            height: 2px;
+            background: #white;
+            margin: 2rem 0;
+        }
+
+
+        .two-column-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+    </style>
 }
 
 <main>
