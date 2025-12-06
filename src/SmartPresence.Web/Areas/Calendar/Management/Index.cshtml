@@ -33,19 +33,24 @@
                 @* <p>@item.Status</p> *@
                 <p>@item.Type</p>
             </li>
-            <form asp-controller="Management" asp-action="Post" method="post">
+            <form asp-controller="Management" asp-action="AcceptAllRequests" method="post">
                 <select name="status">
                     @foreach(var item1 in Enum.GetValues<WorkEventStatusName>())
                     {
                         <option value="@item1">@item1.ToString()</option>
                     }
                 </select>
-                @Html.Hidden("id", item.IdEvent)
+                @Html.Hidden("listId", item.IdEvent)
                 <button type="submit">Send</button>
             </form>
         }
     </ul>
     
+    <form asp-controller="Management" asp-action="AcceptAllRequests" method="post">
+        @Html.Hidden("listId", string.Join("-", Model.ListEvents.Select(x => x.IdEvent)))
+        <button type="submit" name="status" value="@WorkEventStatusName.APPROVED">Accept all</button>
+        <button type="submit" name="status" value="@WorkEventStatusName.REFUSED">Reject all</button>
+    </form>
 </main>
 
 @section scripts {

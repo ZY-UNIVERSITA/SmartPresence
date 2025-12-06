@@ -10,8 +10,8 @@
 
 <header class="d-flex justify-content-center align-items-center">
     <form asp-controller="Home" asp-action="Index" method="get">
-        <input type="hidden" name="BeginDateString" value="@Model.BeginDate.AddDays(-DateTimeHelper.GetDaysBetweenTwoDates(Model.BeginDate, Model.EndDate)).ToString("yyyy-MM-dd")" />
-        <input type="hidden" name="EndDateString" value="@Model.BeginDate.AddDays(-1).ToString("yyyy-MM-dd")" />
+        <input type="hidden" name="BeginDateString" value="@Model.PreviousDate.BeginDate" />
+        <input type="hidden" name="EndDateString" value="@Model.PreviousDate.EndDate" />
         <input type="hidden" name="CalendarView" value="@Model.CalendarViewFilter" />
 
         <button type="submit" class="btn">
@@ -22,8 +22,8 @@
     <h2 class="text-center">@Model.CalendarViewFilterName</h2>
 
     <form asp-controller="Home" asp-action="Index" method="get">
-        <input type="hidden" name="BeginDateString" value="@Model.EndDate.AddDays(1).ToString("yyyy-MM-dd")" />
-        <input type="hidden" name="EndDateString" value="@Model.EndDate.AddDays(DateTimeHelper.GetDaysBetweenTwoDates(Model.BeginDate, Model.EndDate)).ToString("yyyy-MM-dd")" />
+        <input type="hidden" name="BeginDateString" value="@Model.NextDate.BeginDate" />
+        <input type="hidden" name="EndDateString" value="@Model.NextDate.EndDate" />
         <input type="hidden" name="CalendarView" value="@Model.CalendarViewFilter" />
 
         <button type="submit" class="btn">

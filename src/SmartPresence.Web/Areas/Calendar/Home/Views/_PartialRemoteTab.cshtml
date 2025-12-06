@@ -1,0 +1,44 @@
+﻿@using SmartPresence.Services.Shared
+@using SmartPresence.Web.Areas.Calendar.Home.ViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model HomeIndexViewModel
+
+@{
+}
+
+<table class="table table-bordered text-center align-middle w-100 remote-tab-table">
+    <thead class="table-dark">
+        <tr>
+            @foreach (var item in Enumerable.Range(0, 7).Select(x => DateTimeHelper.GetMonday(Model.Today).AddDays(x)))
+            {
+                <th scope="col" class="@item.ToString("yyyy-MM-dd")">
+                    @item.ToString("ddd", System.Globalization.CultureInfo.InvariantCulture)[0].ToString().ToUpper()
+                </th>
+            }
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            @foreach (var item in Enumerable.Range(0, 7).Select(x => DateTimeHelper.GetMonday(Model.Today).AddDays(x)))
+            {
+                <td scope="col" id="@($"remote_{item.ToString("yyyy-MM-dd")}")" v-on:click="selectRemoteDay($event)" class="fw-bold @item.ToString("yyyy-MM-dd")">
+                    <p></p>
+                </td>
+            }
+        </tr>
+    </tbody>
+</table>
+
+
+<form method="post" class="mt-3" aria-labelledby="saveFormTitle">
+    <h2 id="saveFormTitle" class="visually-hidden">Save form</h2>
+
+    <button type="submit" class="btn btn-primary">
+        Save
+    </button>
+</form>
+
+

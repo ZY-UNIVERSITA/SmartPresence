@@ -23,6 +23,8 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
         private int DaysBetweenBeginAndEndDate { get; set; }
         public DateTime Today { get; private set; } = DateTime.Now;
         public EmployeeTimeOff EmployeeTimeOffs { get; set; }
+        internal PairDate PreviousDate { get; set; }
+        internal PairDate NextDate { get; set; }
 
         // Prepara l'header della tabella
         public void PrepareCalendarHeader()
@@ -31,21 +33,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
             DaysBetweenBeginAndEndDate = DateTimeHelper.GetDaysBetweenTwoDates(BeginDate, EndDate, CalendarViewFilter);
 
             // Crea una lista che contenga i giorni con la rispettiva settimana da visualizzare
-            Calendar = Enumerable.Range(0, DaysBetweenBeginAndEndDate)
-                .Select(x => new CalendarDay()
-                {
-                    // Giorno della settimana: nome completo del giorno se il numero di giorni da visualizare è 7 o inferiore
-                    // altrimenti visualizza solo la prima lettera
-                    DayOfWeek = DaysBetweenBeginAndEndDate <= DateTimeHelper.GetNumbersOfDaysInWeek()
-                        ? BeginDate.AddDays(x).ToString("ddd", CultureInfo.InvariantCulture).ToUpper()
-                        : BeginDate.AddDays(x).ToString("ddd", CultureInfo.InvariantCulture).Substring(0, 1).ToUpper(),
-
-                    // Numero del mese 
-                    NumberOfDay = BeginDate.AddDays(x).Day.ToString(),
-
-                    // Data completa in formato anno-mese-giorno
-                    Date = BeginDate.AddDays(x).Date.ToString("yyyy-MM-dd")
-                }).ToList();
+            Calendar = DateTimeHelper.GetDaysWithHolidaysBetweenDates(BeginDate, EndDate);
         }
 
         // Prepara la lista di dati da visualizzare
@@ -88,6 +76,44 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
                 LeaveUsed = responseTimeOff.LeaveUsed,
                 LeaveTotal = responseTimeOff.LeaveTotal,
             };
+
+            PreviousDate = CreatePairDate();
+            NextDate = CreatePairDate(false);
+        }
+
+        // Metodo per creare le date precedente e successive
+        private PairDate CreatePairDate(bool previousDate = true)
+        {
+            DateTime beginDate;
+            DateTime endDate; 
+
+            if (previousDate)
+            {
+                endDate = BeginDate.AddDays(-1);
+
+                if (!CalendarViewFilter.Equals(CalendarViewName.MONTH))
+                {
+                    beginDate = BeginDate.AddDays(-DateTimeHelper.GetDaysBetweenTwoDates(BeginDate, EndDate));
+                } else
+                {
+                    beginDate = new DateTime(endDate.Year, endDate.Month, 1);
+                }
+
+            } else
+            {
+                beginDate = EndDate.AddDays(1);
+
+                if (!CalendarViewFilter.Equals(CalendarViewName.MONTH))
+                {
+                    endDate = beginDate.AddDays(DateTimeHelper.GetDaysBetweenTwoDates(BeginDate, EndDate) - 1);
+                } else
+                {
+                    endDate = new DateTime(beginDate.Year, beginDate.Month, DateTime.DaysInMonth(beginDate.Year, beginDate.Month));
+                }
+            }
+
+            return new PairDate(beginDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd"));
+
         }
 
         private string CreateSubheader()
@@ -210,12 +236,12 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
             return everyDaysEvents;
         }
 
-        public class CalendarDay
-        {
-            public string DayOfWeek { get; set; }
-            public string NumberOfDay { get; set; }
-            public string Date { get; set; }
-        }
+        //public class CalendarDay
+        //{
+        //    public string DayOfWeek { get; set; }
+        //    public string NumberOfDay { get; set; }
+        //    public string Date { get; set; }
+        //}
 
         public class EmployeeIdNameAndEvents
         {
@@ -248,9 +274,11 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
             public int HolidayAccrued { get; set; }
             public int HolidayUsed { get; set; }
             public int HolidayTotal { get; set; }
-            public int LeaveAccrued { get; set; }
-            public int LeaveUsed { get; set; }
-            public int LeaveTotal { get; set; }
+            public double LeaveAccrued { get; set; }
+            public double LeaveUsed { get; set; }
+            public double LeaveTotal { get; set; }
         }
+
+        internal record PairDate(string BeginDate, string EndDate);
     }
 }

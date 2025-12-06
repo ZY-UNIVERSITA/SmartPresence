@@ -11,7 +11,6 @@ namespace SmartPresence.Services.Employees.Model
         public DateTime BeginDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Notes { get; set; }
-        //public WorkEventStatusName Status { get; set; }
         public WorkEventTypeName Type { get; set; }
 
         public SingleWorkEvent(Employee employee, WorkEvent workEvent)
@@ -22,7 +21,6 @@ namespace SmartPresence.Services.Employees.Model
             BeginDate = workEvent.StartDate;
             EndDate = workEvent.EndDate;
             Notes = workEvent.Notes;
-            //Status = workEvent.WorkEventStatus.Name;
             Type = workEvent.WorkEventType.Name;
         }
     }

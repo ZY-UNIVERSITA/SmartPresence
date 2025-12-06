@@ -12,6 +12,7 @@
                 selectedDate: null,
                 selectedDatetime: null,
                 newRequestOption: "HOLIDAY",
+                remoteDaysSelection: []
             }
         },
         computed: {
@@ -162,9 +163,9 @@
                      // In caso di leave, viene creato un badge con background rosso 
                     } else if (event.Type.startsWith("L")) {
                         if (event.Status.includes("PENDING")) {
-                            return `badge text-dark pendingRequest fs-6`
+                            return `badge text-dark pendingRequest`
                         }
-                        return 'badge text-bg-danger fs-6'
+                        return 'badge text-bg-danger'
                     }
                 }
 
@@ -198,6 +199,10 @@
             },
             // Metodo per aprire l'offcanvas con le date corrette
             openOffCanvas(event) {
+                if (event.target.classList.contains("holiday")) {
+                    return;
+                }
+
                 let splitDate = event.target.id.split("/");
                 this.selectedDate = `${splitDate[2]}-${splitDate[1]}-${splitDate[0]}`;
                 this.selectedDatetime = `${splitDate[2]}-${splitDate[1]}-${splitDate[0]}T09:00`;
@@ -206,27 +211,85 @@
                 const offcanvas = new bootstrap.Offcanvas(offcanvasEl);
                 offcanvas.show();
             },
-            //compareData(date1, date2) {
-            //    date1 = new Date(date1);
-            //    date2 = new Date(date2);
-            //    var newDate1 = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
-            //    var newDate2 = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
-
-            //    return newDate1 >= newDate2;
-            //},
             // Metodo usato per resettare tutti i filtri
             resetFilters() {
                 this.filterTeam = "None";
                 this.filterEventType = "None";
                 this.accumulateDays = this.getEmptyDays(modelData.Employees, this.employeeInfo.IdEmployee)
+            },
+            // Metodo usato per selezionare i giorni da remoto
+            selectRemoteDay(event) {
+                const day = event.target.id.split("_")[1];
+                const index = this.remoteDaysSelection.findIndex(x => x === day);
+
+                if (index !== -1) {
+                    this.remoteDaysSelection.splice(index, 1);
+                } else {
+                    this.remoteDaysSelection.push(day)
+                }
+
+                event.target.classList.toggle("selected-remote-day");
+
+                console.log(this.remoteDaysSelection);
+            },
+            holidayBackground(tableId) {
+                // Si ottiene una lista degli headers
+                const table = document.querySelector(tableId);
+                const headers = table.querySelectorAll(`thead th`);
+
+                // Per ogni th del theader, si ottiene il suo id che rappresenta la data associata alla colonna
+                headers.forEach((th, colIndex) => {
+
+                    // Controlla che la cella sia di holiday
+                    if (th.classList.contains("holiday")) {
+                        // A questo punto, per ogni th, fa una ricerca di tutto il tbody riga per riga
+                        table.querySelectorAll(`tbody tr`).forEach(row => {
+                            // Inizia dalla prima cella
+                            let currentIndex = 0;
+
+                            // Per ogni riga, cerca cella per cella
+                            for (const cell of row.querySelectorAll("td, th")) {
+                                // per ogni cella, trova il suo colspan
+                                const colspan = cell.getAttribute("colspan");
+
+                                // Se il colspan esiste allora non può essere sabato e domenica in quanto hanno sempre colspan uguale a 1
+                                if (colspan !== null) {
+                                    // Trasforma la stringa in intero e aggiungilo all'indice, creando la posizione della prossima cella
+                                    currentIndex += parseInt(colspan);
+                                    continue;
+                                }
+
+                                // Se l'indice della cella corrisponde all'indice dell'intestazione allora quella cella è un giorno di festa
+                                if (currentIndex === colIndex) {
+                                    cell.classList.add("holiday");
+                                    break;
+                                }
+
+                                currentIndex += 1;
+                            }
+                        })
+                    }
+                })
+            },
+            calculateBackground() {
+                this.holidayBackground(".mainTable")
+                this.holidayBackground(".remote-tab-table")
             }
         },
         // Metodo di bootstrap per caricare i tooltip
         mounted() {
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-        }
+            this.$nextTick(() => {
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
+                this.calculateBackground();
+            });
+        },
+        updated() {
+            this.$nextTick(() => {
+                this.calculateBackground();
+            });
+        }
     })
 
     app.mount('#app')
