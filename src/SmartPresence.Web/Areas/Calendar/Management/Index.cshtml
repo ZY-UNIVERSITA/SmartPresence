@@ -55,14 +55,21 @@
                                 @(string.IsNullOrEmpty(item.Notes) ? "-" : item.Notes)
                             </td>
                             <td class="actions-cell">
-                                <button class="btn-action btn-approve"
-                                        onclick="approveRequest(@item.IdEvent)">
-                                    Approve
-                                </button>
-                                <button class="btn-action btn-reject"
-                                        onclick="rejectRequest(@item.IdEvent)">
-                                    Reject
-                                </button>
+                                <form asp-action="HandleSingleRequest" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@item.IdEvent" />
+                                    <input type="hidden" name="status" value="@WorkEventStatusName.APPROVED" />
+                                    <button type="submit" class="btn-action btn-approve">
+                                        Approve
+                                    </button>
+                                </form>
+
+                                <form asp-action="HandleSingleRequest" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@item.IdEvent" />
+                                    <input type="hidden" name="status" value="@WorkEventStatusName.REFUSED" />
+                                    <button type="submit" class="btn-action btn-reject">
+                                        Reject
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     }
@@ -72,8 +79,11 @@
 
             <!-- All Actions -->
             <div class="bulk-actions">
-                <form asp-action="HandleBulkRequests" method="post" style="display: inline;">
-                    <input type="hidden" name="listId" value="@string.Join("-", Model.ListEvents.Select(x => x.IdEvent))" />
+                <form asp-action="AcceptAllRequests" method="post" style="display: inline;">
+                    <input type="hidden"
+                           name="listId"
+                           value="@string.Join("-", Model.ListEvents.Select(x => x.IdEvent))" />
+
                     <button type="submit"
                             name="status"
                             value="@WorkEventStatusName.APPROVED"
@@ -81,6 +91,7 @@
                             onclick="return confirm('Are you sure you want to approve ALL requests?')">
                         Approve All
                     </button>
+
                     <button type="submit"
                             name="status"
                             value="@WorkEventStatusName.REFUSED"
@@ -90,6 +101,7 @@
                     </button>
                 </form>
             </div>
+
         }
         else
         {
