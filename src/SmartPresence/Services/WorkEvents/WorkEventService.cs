@@ -214,6 +214,16 @@ namespace SmartPresence.Services.WorkEvents
             await _context.SaveChangesAsync();
         }
 
+        public async Task HandleSingleWorkEventDecision(HandleSingleWorkEventDecisionCommand command)
+        {
+            // Riutilizza la logica esistente ma per un solo ID
+            await HandleAllWorkEventsDecisions(new HandleAllWorkEventsDecisionsCommand
+            {
+                ListId = new List<int> { command.WorkEventId },
+                Status = command.Status
+            });
+        }
+
         private class WorkEventDecisionHelper
         {
             public int EmployeeId { get; set; }
