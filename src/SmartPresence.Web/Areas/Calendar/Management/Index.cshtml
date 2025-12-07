@@ -8,16 +8,38 @@
 
 @section styles {
     <style>
-        
+        .user-cell {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .date-cell {
+            white-space: nowrap;
+            font-size: 0.95rem;
+        }
+
+        .notes-cell {
+            color: #666;
+            font-style: italic;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .actions-cell {
+            text-align: right;
+            white-space: nowrap;
+        }
     </style>
 }
 
-<main>
+<main class="container py-4">
     <!-- Requests Table -->
-    <div class="requests-container">
+    <div class="card shadow-sm">
         @if (Model.ListEvents != null && Model.ListEvents.Any())
         {
-            <table class="requests-table">
+            <table class="table table-hover align-middle">
                 <thead>
                     <tr>
                         <th>User</th>
@@ -43,7 +65,7 @@
                                 <form asp-action="HandleSingleRequest" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="@item.IdEvent" />
                                     <input type="hidden" name="status" value="@WorkEventStatusName.APPROVED" />
-                                    <button type="submit" class="btn-action btn-approve">
+                                    <button type="submit" class="btn btn-primary">
                                         Approve
                                     </button>
                                 </form>
@@ -51,7 +73,7 @@
                                 <form asp-action="HandleSingleRequest" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="@item.IdEvent" />
                                     <input type="hidden" name="status" value="@WorkEventStatusName.REFUSED" />
-                                    <button type="submit" class="btn-action btn-reject">
+                                    <button type="submit" class="btn btn-secondary">
                                         Reject
                                     </button>
                                 </form>
@@ -63,7 +85,7 @@
 
 
             <!-- All Actions -->
-            <div class="bulk-actions">
+            <div class="p-3 text-end border-top">
                 <form asp-action="AcceptAllRequests" method="post" style="display: inline;">
                     <input type="hidden"
                            name="listId"
@@ -72,7 +94,7 @@
                     <button type="submit"
                             name="status"
                             value="@WorkEventStatusName.APPROVED"
-                            class="btn-bulk btn-approve-all"
+                            class="btn btn-primary"
                             onclick="return confirm('Are you sure you want to approve ALL requests?')">
                         Approve All
                     </button>
@@ -80,7 +102,7 @@
                     <button type="submit"
                             name="status"
                             value="@WorkEventStatusName.REFUSED"
-                            class="btn-bulk btn-reject-all"
+                            class="btn btn-secondary"
                             onclick="return confirm('Are you sure you want to reject ALL requests?')">
                         Reject All
                     </button>
@@ -90,8 +112,8 @@
         }
         else
         {
-            <div class="empty-state">
-                <i class="bi bi-inbox"></i>
+            <div class="text-center py-5 text-muted">
+                <i class="bi bi-inbox display-3"></i>
                 <h3>No Pending Requests</h3>
                 <p>There are no requests awaiting approval at this time.</p>
             </div>
