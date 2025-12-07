@@ -2,7 +2,9 @@
 using SmartPresence.Services.Employees.Queries;
 using SmartPresence.Services.Users;
 using SmartPresence.Services.WorkEvents;
+using SmartPresence.Services.WorkEvents.Command;
 using SmartPresence.Services.WorkEvents.Model;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,6 +36,26 @@ namespace SmartPresence.Web.Areas.Calendar.Management
             var query = await _workEventService.GetEmployeeWorkEventsPending(request);
 
             return View(query);
+        }
+
+        [HttpPost]
+        public virtual async Task<IActionResult> HandleSingleRequest(int id, WorkEventStatusName status)
+        {
+            try
+            {
+                await _workEventService.HandleSingleWorkEventDecision(
+                    new HandleSingleWorkEventDecisionCommand
+                    {
+                        WorkEventId = id,
+                        Status = status
+                    }
+                );
+                return Ok(new { success = true, message = $"Request {status.ToString().ToLower()}" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
         }
 
         [HttpPost]
