@@ -21,7 +21,7 @@ namespace SmartPresence.Services
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EmployeeTimeOff>()
-                .HasKey(x => new { x.Id, x.Year });
+                .HasKey(x => new { x.IdEmployee, x.Year });
         }
 
         public DbSet<User> Users { get; set; }

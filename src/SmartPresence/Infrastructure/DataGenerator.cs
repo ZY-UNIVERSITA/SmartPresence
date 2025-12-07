@@ -438,44 +438,90 @@ namespace SmartPresence.Infrastructure
 
         private static void AddWorkEvents(SmartPresenceDbContext context)
         {
-            Random rnd = new Random();
-            var now = DateTime.UtcNow;
-            var employees = context.Employees.ToList();
-            var workEvents = new List<WorkEvent>();
-
-            int eventId = 1;
-
-            foreach (var employee in employees)
+            var workEvents = new List<WorkEvent>
             {
-                // Genera 2-5 eventi casuali per dipendente nell'anno corrente
-                int numEvents = rnd.Next(2, 6);
+                // Employee 1
+                new WorkEvent { Id = 1, IdEmployee = 1, IdWorkEventType = 1, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2025, 12, 2, 9, 0, 0), EndDate = new DateTime(2025, 12, 2, 18, 0, 0), Notes = "Holiday 1 giorno" },
+                new WorkEvent { Id = 2, IdEmployee = 1, IdWorkEventType = 2, IdWorkEventStatus = 3,
+                    StartDate = new DateTime(2025, 12, 10, 9, 0, 0), EndDate = new DateTime(2025, 12, 10, 17, 59, 0), Notes = "Leave" },
+                new WorkEvent { Id = 3, IdEmployee = 1, IdWorkEventType = 3, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2026, 1, 7, 9, 0, 0), EndDate = new DateTime(2026, 1, 7, 18, 0, 0), Notes = "Remote" },
 
-                for (int i = 0; i < numEvents; i++)
-                {
-                    int eventType = rnd.Next(1, 4);
+                // Employee 2
+                new WorkEvent { Id = 4, IdEmployee = 2, IdWorkEventType = 1, IdWorkEventStatus = 2,
+                    StartDate = new DateTime(2025, 12, 3, 9, 0, 0), EndDate = new DateTime(2025, 12, 4, 18, 0, 0), Notes = "Holiday 2 giorni" },
+                new WorkEvent { Id = 5, IdEmployee = 2, IdWorkEventType = 2, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2025, 12, 11, 9, 0, 0), EndDate = new DateTime(2025, 12, 11, 17, 59, 0), Notes = "Leave" },
+                new WorkEvent { Id = 6, IdEmployee = 2, IdWorkEventType = 3, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2026, 1, 8, 9, 0, 0), EndDate = new DateTime(2026, 1, 8, 18, 0, 0), Notes = "Remote" },
 
-                    int eventStatus = rnd.Next(1, 4);
+                // Employee 3
+                new WorkEvent { Id = 7, IdEmployee = 3, IdWorkEventType = 1, IdWorkEventStatus = 3,
+                    StartDate = new DateTime(2025, 12, 5, 9, 0, 0), EndDate = new DateTime(2025, 12, 9, 18, 0, 0), Notes = "Holiday 3 giorni (escluso weekend)" },
+                new WorkEvent { Id = 8, IdEmployee = 3, IdWorkEventType = 2, IdWorkEventStatus = 2,
+                    StartDate = new DateTime(2025, 12, 12, 9, 0, 0), EndDate = new DateTime(2025, 12, 12, 17, 59, 0), Notes = "Leave" },
+                new WorkEvent { Id = 9, IdEmployee = 3, IdWorkEventType = 3, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2026, 1, 9, 9, 0, 0), EndDate = new DateTime(2026, 1, 9, 18, 0, 0), Notes = "Remote" },
 
-                    // Data casuale nell'anno corrente
-                    int daysAgo = rnd.Next(1, 300); // Ultimi 300 giorni
-                    var startDate = now.AddDays(-daysAgo);
+                // Employee 4
+                new WorkEvent { Id = 10, IdEmployee = 4, IdWorkEventType = 1, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2025, 12, 15, 9, 0, 0), EndDate = new DateTime(2025, 12, 15, 18, 0, 0), Notes = "Holiday 1 giorno" },
+                new WorkEvent { Id = 11, IdEmployee = 4, IdWorkEventType = 2, IdWorkEventStatus = 3,
+                    StartDate = new DateTime(2025, 12, 16, 9, 0, 0), EndDate = new DateTime(2025, 12, 16, 17, 59, 0), Notes = "Leave" },
+                new WorkEvent { Id = 12, IdEmployee = 4, IdWorkEventType = 3, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2026, 1, 12, 9, 0, 0), EndDate = new DateTime(2026, 1, 12, 18, 0, 0), Notes = "Remote" },
 
-                    // Durata evento (1 giorno per Leave, 5-10 giorni per Holiday)
-                    int duration = eventType == 1 ? rnd.Next(5, 11) : 1;
-                    var endDate = startDate.AddDays(duration);
+                // Employee 5
+                new WorkEvent { Id = 13, IdEmployee = 5, IdWorkEventType = 1, IdWorkEventStatus = 2,
+                    StartDate = new DateTime(2025, 12, 17, 9, 0, 0), EndDate = new DateTime(2025, 12, 18, 18, 0, 0), Notes = "Holiday 2 giorni" },
+                new WorkEvent { Id = 14, IdEmployee = 5, IdWorkEventType = 2, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2025, 12, 19, 9, 0, 0), EndDate = new DateTime(2025, 12, 19, 17, 59, 0), Notes = "Leave" },
+                new WorkEvent { Id = 15, IdEmployee = 5, IdWorkEventType = 3, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2026, 1, 13, 9, 0, 0), EndDate = new DateTime(2026, 1, 13, 18, 0, 0), Notes = "Remote" },
 
-                    workEvents.Add(new WorkEvent
-                    {
-                        Id = eventId++,
-                        StartDate = startDate,
-                        EndDate = endDate,
-                        IdWorkEventStatus = eventStatus,
-                        IdWorkEventType = eventType,
-                        IdEmployee = employee.Id,
-                        Notes = $"Auto-generated event {i + 1}"
-                    });
-                }
-            }
+                // Employee 6
+                new WorkEvent { Id = 16, IdEmployee = 6, IdWorkEventType = 1, IdWorkEventStatus = 3,
+                    StartDate = new DateTime(2025, 12, 22, 9, 0, 0), EndDate = new DateTime(2025, 12, 24, 18, 0, 0), Notes = "Holiday 3 giorni" },
+                new WorkEvent { Id = 17, IdEmployee = 6, IdWorkEventType = 2, IdWorkEventStatus = 2,
+                    StartDate = new DateTime(2025, 12, 29, 9, 0, 0), EndDate = new DateTime(2025, 12, 29, 17, 59, 0), Notes = "Leave" },
+                new WorkEvent { Id = 18, IdEmployee = 6, IdWorkEventType = 3, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2026, 1, 14, 9, 0, 0), EndDate = new DateTime(2026, 1, 14, 18, 0, 0), Notes = "Remote" },
+
+                // Employee 7
+                new WorkEvent { Id = 19, IdEmployee = 7, IdWorkEventType = 1, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2026, 1, 15, 9, 0, 0), EndDate = new DateTime(2026, 1, 15, 18, 0, 0), Notes = "Holiday 1 giorno" },
+                    // Employee 7 (continuazione)
+                new WorkEvent { Id = 20, IdEmployee = 7, IdWorkEventType = 2, IdWorkEventStatus = 3,
+                    StartDate = new DateTime(2026, 1, 16, 9, 0, 0), EndDate = new DateTime(2026, 1, 16, 17, 59, 0), Notes = "Leave" },
+                new WorkEvent { Id = 21, IdEmployee = 7, IdWorkEventType = 3, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2026, 1, 19, 9, 0, 0), EndDate = new DateTime(2026, 1, 19, 18, 0, 0), Notes = "Remote" },
+
+                // Employee 8
+                new WorkEvent { Id = 22, IdEmployee = 8, IdWorkEventType = 1, IdWorkEventStatus = 2,
+                    StartDate = new DateTime(2026, 1, 20, 9, 0, 0), EndDate = new DateTime(2026, 1, 21, 18, 0, 0), Notes = "Holiday 2 giorni" },
+                new WorkEvent { Id = 23, IdEmployee = 8, IdWorkEventType = 2, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2026, 1, 22, 9, 0, 0), EndDate = new DateTime(2026, 1, 22, 17, 59, 0), Notes = "Leave" },
+                new WorkEvent { Id = 24, IdEmployee = 8, IdWorkEventType = 3, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2026, 1, 23, 9, 0, 0), EndDate = new DateTime(2026, 1, 23, 18, 0, 0), Notes = "Remote" },
+
+                // Employee 9
+                new WorkEvent { Id = 25, IdEmployee = 9, IdWorkEventType = 1, IdWorkEventStatus = 3,
+                    StartDate = new DateTime(2026, 1, 26, 9, 0, 0), EndDate = new DateTime(2026, 1, 28, 18, 0, 0), Notes = "Holiday 3 giorni" },
+                new WorkEvent { Id = 26, IdEmployee = 9, IdWorkEventType = 2, IdWorkEventStatus = 2,
+                    StartDate = new DateTime(2026, 1, 29, 9, 0, 0), EndDate = new DateTime(2026, 1, 29, 17, 59, 0), Notes = "Leave" },
+                new WorkEvent { Id = 27, IdEmployee = 9, IdWorkEventType = 3, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2026, 1, 30, 9, 0, 0), EndDate = new DateTime(2026, 1, 30, 18, 0, 0), Notes = "Remote" },
+
+                // Employee 10
+                new WorkEvent { Id = 28, IdEmployee = 10, IdWorkEventType = 1, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2025, 12, 30, 9, 0, 0), EndDate = new DateTime(2025, 12, 30, 18, 0, 0), Notes = "Holiday 1 giorno" },
+                new WorkEvent { Id = 29, IdEmployee = 10, IdWorkEventType = 2, IdWorkEventStatus = 3,
+                    StartDate = new DateTime(2026, 1, 2, 9, 0, 0), EndDate = new DateTime(2026, 1, 2, 17, 59, 0), Notes = "Leave" },
+                new WorkEvent { Id = 30, IdEmployee = 10, IdWorkEventType = 3, IdWorkEventStatus = 1,
+                    StartDate = new DateTime(2026, 1, 5, 9, 0, 0), EndDate = new DateTime(2026, 1, 5, 18, 0, 0), Notes = "Remote" },
+            };
+
 
             context.WorkEvents.AddRange(workEvents);
             context.SaveChanges();
@@ -498,12 +544,12 @@ namespace SmartPresence.Infrastructure
 
                 var timeOff = new EmployeeTimeOff(contract, employee.Id, DateTime.Now.Year)
                 {
-                    Id = timeOffId++,
-                    HolidayAccrued = rnd.Next(0, holidayTotal+1),
-                    HolidayUsed = rnd.Next(0, holidayTotal+1),
+                    IdEmployee = timeOffId++,
+                    HolidayAccrued = rnd.Next(0, holidayTotal + 1),
+                    HolidayUsed = rnd.Next(0, holidayTotal + 1),
                     HolidayTotal = holidayTotal,
-                    LeaveAccrued = rnd.Next(0, leaveTotal+1),
-                    LeaveUsed = rnd.Next(0, leaveTotal+1),
+                    LeaveAccrued = rnd.Next(0, leaveTotal + 1),
+                    LeaveUsed = rnd.Next(0, leaveTotal + 1),
                     LeaveTotal = leaveTotal
                 };
 

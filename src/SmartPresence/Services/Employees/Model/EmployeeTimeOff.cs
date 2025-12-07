@@ -5,13 +5,11 @@ namespace SmartPresence.Services.Employees.Model
 {
     public class EmployeeTimeOff
     {
-        public int Id { get; set; }
-        public int Year { get; set; }
-
         public int IdEmployee { get; set; }
-
-        [ForeignKey(nameof(IdEmployee))]
+        [ForeignKey("IdEmployee")]
         public Employee Employee { get; set; }
+
+        public int Year { get; set; }
 
         public int HolidayAccrued { get; set; }
         public int HolidayUsed { get; set; }
