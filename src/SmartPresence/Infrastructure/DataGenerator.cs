@@ -493,15 +493,18 @@ namespace SmartPresence.Infrastructure
             {
                 var contract = context.ContractTypes.Find(employee.IdContractType);
 
+                var holidayTotal = LeaveHolidaysHours.Days * (contract.DailyHours * contract.WeeklyDays) / LeaveHolidaysHours.StandardWorkingHours;
+                var leaveTotal = LeaveHolidaysHours.Hours * (contract.DailyHours * contract.WeeklyDays) / LeaveHolidaysHours.StandardWorkingHours;
+
                 var timeOff = new EmployeeTimeOff(contract, employee.Id, DateTime.Now.Year)
                 {
                     Id = timeOffId++,
-                    HolidayAccrued = rnd.Next(0, 27),
-                    HolidayUsed = rnd.Next(0, 27),
-                    HolidayTotal = 26,
-                    LeaveAccrued = rnd.Next(0, 15),
-                    LeaveUsed = rnd.Next(0, 15),
-                    LeaveTotal = rnd.Next(4, 15)
+                    HolidayAccrued = rnd.Next(0, holidayTotal+1),
+                    HolidayUsed = rnd.Next(0, holidayTotal+1),
+                    HolidayTotal = holidayTotal,
+                    LeaveAccrued = rnd.Next(0, leaveTotal+1),
+                    LeaveUsed = rnd.Next(0, leaveTotal+1),
+                    LeaveTotal = leaveTotal
                 };
 
                 timeOffs.Add(timeOff);
