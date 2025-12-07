@@ -5,6 +5,7 @@ using SmartPresence.Services.Shared;
 using SmartPresence.Services.WorkEvents.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace SmartPresence.Infrastructure
@@ -522,41 +523,58 @@ namespace SmartPresence.Infrastructure
                     StartDate = new DateTime(2026, 1, 5, 9, 0, 0), EndDate = new DateTime(2026, 1, 5, 18, 0, 0), Notes = "Remote" },
             };
 
-
             context.WorkEvents.AddRange(workEvents);
             context.SaveChanges();
         }
 
         private static void AddEmployeeTimeOff(SmartPresenceDbContext context)
         {
-            Random rnd = new Random();
-            var employees = context.Employees.ToList();
-            var timeOffs = new List<EmployeeTimeOff>();
+            var contract = context.ContractTypes.Find(1);
 
-            int timeOffId = 1;
+            var holidayTotal = LeaveHolidaysHours.Days * (contract.DailyHours * contract.WeeklyDays) / LeaveHolidaysHours.StandardWorkingHours;
+            var leaveTotal = LeaveHolidaysHours.Hours * 60 * (contract.DailyHours * contract.WeeklyDays) / LeaveHolidaysHours.StandardWorkingHours;
 
-            foreach (var employee in employees)
+            var employeeTimeOff = new List<EmployeeTimeOff>
             {
-                var contract = context.ContractTypes.Find(employee.IdContractType);
+                // Employee 1
+                new EmployeeTimeOff { IdEmployee = 1, Year = 2025, HolidayUsed = 2, HolidayTotal = holidayTotal, LeaveUsed = 539, LeaveTotal = leaveTotal, HolidayAccrued = 1, LeaveAccrued = 50 },
+                new EmployeeTimeOff { IdEmployee = 1, Year = 2026, HolidayUsed = 0, HolidayTotal = 0, LeaveUsed = 0, LeaveTotal = 0, HolidayAccrued = 1, LeaveAccrued = 50 },
 
-                var holidayTotal = LeaveHolidaysHours.Days * (contract.DailyHours * contract.WeeklyDays) / LeaveHolidaysHours.StandardWorkingHours;
-                var leaveTotal = LeaveHolidaysHours.Hours * (contract.DailyHours * contract.WeeklyDays) / LeaveHolidaysHours.StandardWorkingHours;
+                // Employee 2
+                new EmployeeTimeOff { IdEmployee = 2, Year = 2025, HolidayUsed = 2, HolidayTotal = holidayTotal, LeaveUsed = 539, LeaveTotal = leaveTotal, HolidayAccrued = 1, LeaveAccrued = 50 },
+                new EmployeeTimeOff { IdEmployee = 2, Year = 2026, HolidayUsed = 0, HolidayTotal = 0, LeaveUsed = 0, LeaveTotal = 0, HolidayAccrued = 1, LeaveAccrued = 50 },
 
-                var timeOff = new EmployeeTimeOff(contract, employee.Id, DateTime.Now.Year)
-                {
-                    IdEmployee = timeOffId++,
-                    HolidayAccrued = rnd.Next(0, holidayTotal + 1),
-                    HolidayUsed = rnd.Next(0, holidayTotal + 1),
-                    HolidayTotal = holidayTotal,
-                    LeaveAccrued = rnd.Next(0, leaveTotal + 1),
-                    LeaveUsed = rnd.Next(0, leaveTotal + 1),
-                    LeaveTotal = leaveTotal
-                };
+                // Employee 3
+                new EmployeeTimeOff { IdEmployee = 3, Year = 2025, HolidayUsed = 3, HolidayTotal = holidayTotal, LeaveUsed = 539, LeaveTotal = leaveTotal, HolidayAccrued = 1, LeaveAccrued = 50 },
+                new EmployeeTimeOff { IdEmployee = 3, Year = 2026, HolidayUsed = 0, HolidayTotal = 0, LeaveUsed = 0, LeaveTotal = 0, HolidayAccrued = 1, LeaveAccrued = 50 },
 
-                timeOffs.Add(timeOff);
-            }
+                // Employee 4
+                new EmployeeTimeOff { IdEmployee = 4, Year = 2025, HolidayUsed = 1, HolidayTotal = holidayTotal, LeaveUsed = 539, LeaveTotal = leaveTotal, HolidayAccrued = 1, LeaveAccrued = 50 },
+                new EmployeeTimeOff { IdEmployee = 4, Year = 2026, HolidayUsed = 0, HolidayTotal = holidayTotal, LeaveUsed = 0, LeaveTotal = leaveTotal, HolidayAccrued = 1, LeaveAccrued = 50 },
 
-            context.EmployeeTimeOffs.AddRange(timeOffs);
+                // Employee 5
+                new EmployeeTimeOff { IdEmployee = 5, Year = 2025, HolidayUsed = 2, HolidayTotal = holidayTotal, LeaveUsed = 539, LeaveTotal = leaveTotal, HolidayAccrued = 1, LeaveAccrued = 50 },
+                new EmployeeTimeOff { IdEmployee = 5, Year = 2026, HolidayUsed = 0, HolidayTotal = holidayTotal, LeaveUsed = 0, LeaveTotal = leaveTotal, HolidayAccrued = 1, LeaveAccrued = 50 },
+
+                // Employee 6
+                new EmployeeTimeOff { IdEmployee = 6, Year = 2025, HolidayUsed = 3, HolidayTotal = holidayTotal, LeaveUsed = 539, LeaveTotal = leaveTotal, HolidayAccrued = 1, LeaveAccrued = 50 },
+                new EmployeeTimeOff { IdEmployee = 6, Year = 2026, HolidayUsed = 0, HolidayTotal = holidayTotal, LeaveUsed = 0, LeaveTotal = leaveTotal, HolidayAccrued = 1, LeaveAccrued = 50 },
+
+                // Employee 7
+                new EmployeeTimeOff { IdEmployee = 7, Year = 2026, HolidayUsed = 1, HolidayTotal = holidayTotal, LeaveUsed = 539, LeaveTotal = leaveTotal, HolidayAccrued = 1, LeaveAccrued = 50 },
+
+                // Employee 8
+                new EmployeeTimeOff { IdEmployee = 8, Year = 2026, HolidayUsed = 2, HolidayTotal = holidayTotal, LeaveUsed = 539, LeaveTotal = leaveTotal, HolidayAccrued = 1, LeaveAccrued = 50 },
+
+                // Employee 9
+                new EmployeeTimeOff { IdEmployee = 9, Year = 2026, HolidayUsed = 3, HolidayTotal = holidayTotal, LeaveUsed = 539, LeaveTotal = leaveTotal, HolidayAccrued = 1, LeaveAccrued = 50 },
+
+                // Employee 10
+                new EmployeeTimeOff { IdEmployee = 10, Year = 2025, HolidayUsed = 1, HolidayTotal = holidayTotal, LeaveUsed = 0, LeaveTotal = leaveTotal, HolidayAccrued = 1, LeaveAccrued = 50 },
+                new EmployeeTimeOff { IdEmployee = 10, Year = 2026, HolidayUsed = 0, HolidayTotal = holidayTotal, LeaveUsed = 539, LeaveTotal = leaveTotal, HolidayAccrued = 1, LeaveAccrued = 50 },
+            };
+
+            context.EmployeeTimeOffs.AddRange(employeeTimeOff);
             context.SaveChanges();
         }
     }

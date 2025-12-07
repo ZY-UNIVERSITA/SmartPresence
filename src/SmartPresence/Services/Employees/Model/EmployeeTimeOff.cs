@@ -31,7 +31,7 @@ namespace SmartPresence.Services.Employees.Model
             HolidayTotal = LeaveHolidaysHours.Days * (contract.DailyHours * contract.WeeklyDays) / LeaveHolidaysHours.StandardWorkingHours;
             LeaveUsed = 0;
             LeaveAccrued = 0;
-            LeaveTotal = LeaveHolidaysHours.Hours * (contract.DailyHours * contract.WeeklyDays) / LeaveHolidaysHours.StandardWorkingHours;
+            LeaveTotal = LeaveHolidaysHours.Hours * 60 * (contract.DailyHours * contract.WeeklyDays) / LeaveHolidaysHours.StandardWorkingHours;
         }
     }
 }
