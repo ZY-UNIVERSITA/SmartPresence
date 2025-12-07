@@ -5,13 +5,11 @@ namespace SmartPresence.Services.Employees.Model
 {
     public class EmployeeTimeOff
     {
-        public int Id { get; set; }
-        public int Year { get; set; }
-
         public int IdEmployee { get; set; }
-
-        [ForeignKey(nameof(IdEmployee))]
+        [ForeignKey("IdEmployee")]
         public Employee Employee { get; set; }
+
+        public int Year { get; set; }
 
         public int HolidayAccrued { get; set; }
         public int HolidayUsed { get; set; }
@@ -33,7 +31,7 @@ namespace SmartPresence.Services.Employees.Model
             HolidayTotal = LeaveHolidaysHours.Days * (contract.DailyHours * contract.WeeklyDays) / LeaveHolidaysHours.StandardWorkingHours;
             LeaveUsed = 0;
             LeaveAccrued = 0;
-            LeaveTotal = LeaveHolidaysHours.Hours * (contract.DailyHours * contract.WeeklyDays) / LeaveHolidaysHours.StandardWorkingHours;
+            LeaveTotal = LeaveHolidaysHours.Hours * 60 * (contract.DailyHours * contract.WeeklyDays) / LeaveHolidaysHours.StandardWorkingHours;
         }
     }
 }
