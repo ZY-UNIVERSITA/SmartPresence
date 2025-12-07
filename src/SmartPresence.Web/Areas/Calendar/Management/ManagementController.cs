@@ -4,6 +4,7 @@ using SmartPresence.Services.Users;
 using SmartPresence.Services.WorkEvents;
 using SmartPresence.Services.WorkEvents.Command;
 using SmartPresence.Services.WorkEvents.Model;
+using SmartPresence.Web.Infrastructure;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -45,17 +46,19 @@ namespace SmartPresence.Web.Areas.Calendar.Management
             {
                 await _workEventService.HandleSingleWorkEventDecision(
                     new HandleSingleWorkEventDecisionCommand
-                    {
+                    { 
                         WorkEventId = id,
                         Status = status
-                    }
-                );
-                return Ok(new { success = true, message = $"Request {status.ToString().ToLower()}" });
+                    });
+
+                Alerts.AddSuccess(this, $"Request {status.ToString().ToLower()} successfully.");
             }
             catch (Exception ex)
             {
-                return BadRequest(new { success = false, message = ex.Message });
+                Alerts.AddError(this, ex.Message);
             }
+
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

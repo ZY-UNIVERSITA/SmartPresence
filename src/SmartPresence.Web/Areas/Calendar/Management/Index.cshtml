@@ -13,21 +13,6 @@
 }
 
 <main>
-    <!-- Success/Error Messages -->
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success">
-            @TempData["Success"]
-        </div>
-    }
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert alert-error">
-            @TempData["Error"]
-        </div>
-    }
-
-
     <!-- Requests Table -->
     <div class="requests-container">
         @if (Model.ListEvents != null && Model.ListEvents.Any())
