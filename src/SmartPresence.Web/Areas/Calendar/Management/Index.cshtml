@@ -1,8 +1,5 @@
 ﻿@using SmartPresence.Services.Employees.Queries
 @using SmartPresence.Services.WorkEvents.Model
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
 
 @model EmployeePendingWorkEventsResponse
 
@@ -11,46 +8,98 @@
 
 @section styles {
     <style>
-        main {
-            background-color: lightgrey;
-        }
+        
     </style>
 }
 
 <main>
-    <p>Management</p>
+    <!-- Success/Error Messages -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-error">
+            @TempData["Error"]
+        </div>
+    }
 
-    <ul>
-        @foreach (var item in Model.ListEvents)
+
+    <!-- Requests Table -->
+    <div class="requests-container">
+        @if (Model.ListEvents != null && Model.ListEvents.Any())
         {
-            <li>
-                <p>@item.IdEvent</p>
-                <p>@item.Surname</p>
-                <p>@item.Name</p>
-                <p>@item.BeginDate</p>
-                <p>@item.EndDate</p>
-                <p>@item.Notes</p>
-                @* <p>@item.Status</p> *@
-                <p>@item.Type</p>
-            </li>
-            <form asp-controller="Management" asp-action="AcceptAllRequests" method="post">
-                <select name="status">
-                    @foreach(var item1 in Enum.GetValues<WorkEventStatusName>())
+            <table class="requests-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Notes</th>
+                        <th style="text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ListEvents)
                     {
-                        <option value="@item1">@item1.ToString()</option>
+                        <tr data-request-id="@item.IdEvent">
+                            <td class="user-cell">@item.Name @item.Surname</td>
+                            <td> @item.Type </td>
+                            <td class="date-cell">
+                                @item.BeginDate.ToString("dd/MM/yyyy HH:mm") - @item.EndDate.ToString("dd/MM/yyyy HH:mm")
+                            </td>
+                            <td class="notes-cell" title="@item.Notes">
+                                @(string.IsNullOrEmpty(item.Notes) ? "-" : item.Notes)
+                            </td>
+                            <td class="actions-cell">
+                                <button class="btn-action btn-approve"
+                                        onclick="approveRequest(@item.IdEvent)">
+                                    Approve
+                                </button>
+                                <button class="btn-action btn-reject"
+                                        onclick="rejectRequest(@item.IdEvent)">
+                                    Reject
+                                </button>
+                            </td>
+                        </tr>
                     }
-                </select>
-                @Html.Hidden("listId", item.IdEvent)
-                <button type="submit">Send</button>
-            </form>
+                </tbody>
+            </table>
+
+
+            <!-- All Actions -->
+            <div class="bulk-actions">
+                <form asp-action="HandleBulkRequests" method="post" style="display: inline;">
+                    <input type="hidden" name="listId" value="@string.Join("-", Model.ListEvents.Select(x => x.IdEvent))" />
+                    <button type="submit"
+                            name="status"
+                            value="@WorkEventStatusName.APPROVED"
+                            class="btn-bulk btn-approve-all"
+                            onclick="return confirm('Are you sure you want to approve ALL requests?')">
+                        Approve All
+                    </button>
+                    <button type="submit"
+                            name="status"
+                            value="@WorkEventStatusName.REFUSED"
+                            class="btn-bulk btn-reject-all"
+                            onclick="return confirm('Are you sure you want to reject ALL requests?')">
+                        Reject All
+                    </button>
+                </form>
+            </div>
         }
-    </ul>
-    
-    <form asp-controller="Management" asp-action="AcceptAllRequests" method="post">
-        @Html.Hidden("listId", string.Join("-", Model.ListEvents.Select(x => x.IdEvent)))
-        <button type="submit" name="status" value="@WorkEventStatusName.APPROVED">Accept all</button>
-        <button type="submit" name="status" value="@WorkEventStatusName.REFUSED">Reject all</button>
-    </form>
+        else
+        {
+            <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <h3>No Pending Requests</h3>
+                <p>There are no requests awaiting approval at this time.</p>
+            </div>
+        }
+    </div>
 </main>
 
 @section scripts {
