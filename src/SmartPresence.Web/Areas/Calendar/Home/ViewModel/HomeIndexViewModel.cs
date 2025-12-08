@@ -21,7 +21,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
         public DateTime BeginDate { get; set; }
         public DateTime EndDate { get; set; }
         private int DaysBetweenBeginAndEndDate { get; set; }
-        public DateTime Today { get; private set; } = DateTime.Now;
+        public DateTime Today { get; private set; } = DateTime.Now.Date;
         public EmployeeTimeOff EmployeeTimeOffs { get; set; }
         internal PairDate PreviousDate { get; set; }
         internal PairDate NextDate { get; set; }
@@ -185,6 +185,11 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
                         newSingleEvent = searchSingleDayEvents;
                         sameDayEvent = !sameDayEvent;
                         newSingleEvent.CanAddRequest = false;
+
+                        if (newSingleEvent.ListEvents is null)
+                        {
+                            newSingleEvent.ListEvents = new List<EventTypeAndStatus>();
+                        }
                     }
                 }
 
@@ -235,13 +240,6 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
 
             return everyDaysEvents;
         }
-
-        //public class CalendarDay
-        //{
-        //    public string DayOfWeek { get; set; }
-        //    public string NumberOfDay { get; set; }
-        //    public string Date { get; set; }
-        //}
 
         public class EmployeeIdNameAndEvents
         {
