@@ -8,6 +8,7 @@ namespace SmartPresence.Services.WorkEvents.Command
     {
         public int IdEmployee { get; set; }
         public List<DateTime> Days { get; set; }
+        public List<DateTime> DaysNextWeek { get; set; }
         public bool Repeat { get; set; }
     }
 }

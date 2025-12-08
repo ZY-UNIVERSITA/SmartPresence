@@ -15,13 +15,17 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
     {
         [Required]
         public int IdEmployee { get; set; }
-
         [Required]
         public CalendarViewName CalendarViewFilter { get; set; }
+        [Required]
         public DateTime BeginDateSearch { get; set; }
+        [Required]
         public DateTime EndDateSearch { get; set; }
+        [Required]
         public DateTime BeginDateRequest { get; set; }
+        [Required]
         public DateTime EndDateRequest { get; set; }
+        [Required]
         public WorkEventTypeName EventType { get; set; }
         public string NotesRequest { get; set; }
 
@@ -38,9 +42,6 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
             }
 
             var holidaysBetweenDates = DateTimeHelper.FindHolidaysBetweenDates(BeginDateRequest, EndDateRequest);
-
-            Console.WriteLine($"{holidaysBetweenDates.Count}");
-
             if (holidaysBetweenDates.Any())
             {
                 yield return new ValidationResult(

@@ -18,7 +18,8 @@ namespace SmartPresence.Services.WorkEvents.Model
         [InverseProperty("RemoteDay")]
         public Employee Employee { get; set; }
 
-        public List<DateTime> Days { get; set; }
+        public List<DateTime> Days { get; set; } = new List<DateTime>();
+        public List<DateTime> NextWeek { get; set; } = new List<DateTime>();
         public bool Repeat { get; set; }
     }
 }

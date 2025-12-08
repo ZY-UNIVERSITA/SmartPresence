@@ -172,8 +172,11 @@ namespace SmartPresence.Services.WorkEvents
                 })
                 .ToListAsync();
 
-            // Ad ogni employee associa inoltre la lista del timeoff
-            employeeEvents.ForEach(x => x.EmployeeTimeOffs = _context.EmployeeTimeOffs.Where(y => y.Id == x.EmployeeId).ToList());
+            if (command.Status.Equals(WorkEventStatusName.APPROVED))
+            {
+                // Ad ogni employee associa inoltre la lista del timeoff
+                employeeEvents.ForEach(x => x.EmployeeTimeOffs = _context.EmployeeTimeOffs.Where(y => y.IdEmployee.Equals(x.EmployeeId)).ToList());
+            }
 
             // Ora per ogni employee e per ogni suo evento, cambia lo status dell'evento e aggiorna la tabella del timeoff
             foreach (var employee in employeeEvents)
@@ -183,30 +186,34 @@ namespace SmartPresence.Services.WorkEvents
                     // Aggiorna lo status
                     singleEvent.IdWorkEventStatus = workEventStatus.Id;
 
-                    // Trova le date di inizio e fine
-                    var startDate = singleEvent.StartDate;
-                    var endDate = singleEvent.EndDate;
 
-                    // Trova la tabella del timeoff dell'anno della richiesta
-                    var timeOff = employee.EmployeeTimeOffs.Where(x => x.Year.Equals(startDate.Year)).FirstOrDefault();
+                    if (command.Status.Equals(WorkEventStatusName.APPROVED))
+                    {
+                        // Trova le date di inizio e fine
+                        var startDate = singleEvent.StartDate;
+                        var endDate = singleEvent.EndDate;
 
-                    // Se non esiste una per l'anno della richiesta, ne crea una e lo aggiunge al db
-                    if (timeOff is null)
-                    {
-                        timeOff = new EmployeeTimeOff(employee.ContractType, singleEvent.IdEmployee, startDate.Year);
-                        await _context.EmployeeTimeOffs.AddAsync(timeOff);
-                    }
+                        // Trova la tabella del timeoff dell'anno della richiesta
+                        var timeOff = employee.EmployeeTimeOffs.Where(x => x.Year.Equals(startDate.Year)).FirstOrDefault();
 
-                    // Riduce le ore/giorni disponibili
-                    if (singleEvent.WorkEventType.Name.Equals(WorkEventTypeName.HOLIDAY))
-                    {
-                        var days = DateTimeHelper.GetDaysBetweenTwoDates(startDate, endDate);
-                        timeOff.HolidayUsed += days;
-                    }
-                    else
-                    {
-                        var hours = (endDate - startDate).TotalHours;
-                        timeOff.LeaveUsed += hours;
+                        // Se non esiste una per l'anno della richiesta, ne crea una e lo aggiunge al db
+                        if (timeOff is null)
+                        {
+                            timeOff = new EmployeeTimeOff(employee.ContractType, singleEvent.IdEmployee, startDate.Year);
+                            await _context.EmployeeTimeOffs.AddAsync(timeOff);
+                        }
+
+                        // Riduce le ore/giorni disponibili
+                        if (singleEvent.WorkEventType.Name.Equals(WorkEventTypeName.HOLIDAY))
+                        {
+                            var days = DateTimeHelper.GetDaysBetweenTwoDates(startDate, endDate);
+                            timeOff.HolidayUsed += days;
+                        }
+                        else
+                        {
+                            var minutes = (endDate - startDate).TotalMinutes;
+                            timeOff.LeaveUsed += minutes;
+                        }
                     }
                 }
             }
@@ -248,6 +255,7 @@ namespace SmartPresence.Services.WorkEvents
             }
 
             remoteDays.Days = command.Days;
+            remoteDays.NextWeek = command.DaysNextWeek;
             remoteDays.Repeat = command.Repeat;
 
             await _context.SaveChangesAsync();
