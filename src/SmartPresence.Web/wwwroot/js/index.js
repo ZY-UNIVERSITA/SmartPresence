@@ -247,6 +247,9 @@ function initVue(modelData) {
                     arrayToModify.push(day)
                 }
 
+                console.log(this.remoteDaysSelection)
+                console.log(this.remoteNextWeekDaysSelection)
+
                 event.target.classList.toggle("bg-primary");
             },
             holidayBackground(tableId) {

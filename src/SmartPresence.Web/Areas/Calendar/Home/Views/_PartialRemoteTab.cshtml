@@ -38,7 +38,11 @@
                                 <td scope="col" 
                                     id="@($"remoteRepeat_{item}")" 
                                     v-on:click="selectRemoteDay($event)" 
-                                    class="fw-bold @(item) @(Model.RemoteDays.First().Days.Contains(item) ? "bg-primary" : null)">
+                                    :class="{ 
+                                        'fw-bold': true, 
+                                        '@item': true, 
+                                        'bg-primary': remoteDaysSelection.includes('@item') 
+                                    }">
                                     <p></p>
                                 </td>
                             }
@@ -72,7 +76,11 @@
                                     <td scope="col"
                                         id="@($"{week.Prefix}{item}")"
                                         v-on:click="selectRemoteDay($event)"
-                                        class="fw-bold @item @(week.Days.Contains(item) ? "bg-primary" : null)">
+                                        :class="{
+                                        'fw-bold': true,
+                                        '@item': true,
+                                        'bg-primary': (@week.OffSet == 0) ? remoteDaysSelection.includes('@item') : remoteNextWeekDaysSelection.includes('@item')
+                                        }">
                                         <p></p>
                                     </td>
                                 }
