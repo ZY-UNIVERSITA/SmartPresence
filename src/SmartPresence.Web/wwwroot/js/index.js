@@ -12,7 +12,9 @@ function initVue(modelData) {
                 selectedDate: null,
                 selectedDatetime: null,
                 newRequestOption: "HOLIDAY",
-                remoteDaysSelection: []
+                remoteDaysSelection: modelData.RemoteDays[0].Days,
+                remoteNextWeekDaysSelection: modelData.RemoteDays[1].Days,
+                doesRemoteRepeat: modelData.RemoteDays[0].Repeat
             }
         },
         computed: {
@@ -130,7 +132,7 @@ function initVue(modelData) {
                 let splitDay = splitDate[2].split("T");
 
                 return `${splitDate[0]}-${splitDate[1]}-${splitDay[0]}T18:00`;
-            },
+            }
         },
         methods: {
             // Crea in modo dinamico il background degli eventi (usato solo per holiday in quanto è l'unico che colora la cella completamente):
@@ -195,6 +197,8 @@ function initVue(modelData) {
                 // Estrea dalla lista degli eventi, solo le date e poi le formatta
                 let dateArray = eventsPerGivenId.map(x => x.Date).map(this.formatDate);
 
+                console.log(dateArray);
+
                 return dateArray;
             },
             // Metodo per aprire l'offcanvas con le date corrette
@@ -219,62 +223,78 @@ function initVue(modelData) {
             },
             // Metodo usato per selezionare i giorni da remoto
             selectRemoteDay(event) {
-                const day = event.target.id.split("_")[1];
-                const index = this.remoteDaysSelection.findIndex(x => x === day);
+                const dayHoliday = event.target.classList.contains("holiday");
 
-                if (index !== -1) {
-                    this.remoteDaysSelection.splice(index, 1);
-                } else {
-                    this.remoteDaysSelection.push(day)
+                if (dayHoliday) {
+                    return;
                 }
 
-                event.target.classList.toggle("selected-remote-day");
+                const daySplit = event.target.id.split("_");
+                const dayName = daySplit[0]
+                const day = daySplit[1];
 
-                console.log(this.remoteDaysSelection);
+                let arrayToModify = this.remoteDaysSelection; 
+
+                if (dayName.includes("NextWeek")) {
+                    arrayToModify = this.remoteNextWeekDaysSelection;
+                }
+
+                const index = arrayToModify.findIndex(x => x === day);
+
+                if (index !== -1) {
+                    arrayToModify.splice(index, 1);
+                } else {
+                    arrayToModify.push(day)
+                }
+
+                event.target.classList.toggle("bg-primary");
             },
             holidayBackground(tableId) {
                 // Si ottiene una lista degli headers
-                const table = document.querySelector(tableId);
-                const headers = table.querySelectorAll(`thead th`);
+                const table = document.querySelectorAll(tableId);
 
-                // Per ogni th del theader, si ottiene il suo id che rappresenta la data associata alla colonna
-                headers.forEach((th, colIndex) => {
+                table.forEach(el => {
+                    const headers = el.querySelectorAll(`thead th`);
 
-                    // Controlla che la cella sia di holiday
-                    if (th.classList.contains("holiday")) {
-                        // A questo punto, per ogni th, fa una ricerca di tutto il tbody riga per riga
-                        table.querySelectorAll(`tbody tr`).forEach(row => {
-                            // Inizia dalla prima cella
-                            let currentIndex = 0;
+                    // Per ogni th del theader, si ottiene il suo id che rappresenta la data associata alla colonna
+                    headers.forEach((th, colIndex) => {
 
-                            // Per ogni riga, cerca cella per cella
-                            for (const cell of row.querySelectorAll("td, th")) {
-                                // per ogni cella, trova il suo colspan
-                                const colspan = cell.getAttribute("colspan");
+                        // Controlla che la cella sia di holiday
+                        if (th.classList.contains("holiday")) {
+                            // A questo punto, per ogni th, fa una ricerca di tutto il tbody riga per riga
+                            el.querySelectorAll(`tbody tr`).forEach(row => {
+                                // Inizia dalla prima cella
+                                let currentIndex = 0;
 
-                                // Se il colspan esiste allora non può essere sabato e domenica in quanto hanno sempre colspan uguale a 1
-                                if (colspan !== null) {
-                                    // Trasforma la stringa in intero e aggiungilo all'indice, creando la posizione della prossima cella
-                                    currentIndex += parseInt(colspan);
-                                    continue;
+                                // Per ogni riga, cerca cella per cella
+                                for (const cell of row.querySelectorAll("td, th")) {
+                                    // per ogni cella, trova il suo colspan
+                                    const colspan = cell.getAttribute("colspan");
+
+                                    // Se il colspan esiste allora non può essere sabato e domenica in quanto hanno sempre colspan uguale a 1
+                                    if (colspan !== null) {
+                                        // Trasforma la stringa in intero e aggiungilo all'indice, creando la posizione della prossima cella
+                                        currentIndex += parseInt(colspan);
+                                        continue;
+                                    }
+
+                                    // Se l'indice della cella corrisponde all'indice dell'intestazione allora quella cella è un giorno di festa
+                                    if (currentIndex === colIndex) {
+                                        cell.classList.add("holiday");
+                                        break;
+                                    }
+
+                                    currentIndex += 1;
                                 }
-
-                                // Se l'indice della cella corrisponde all'indice dell'intestazione allora quella cella è un giorno di festa
-                                if (currentIndex === colIndex) {
-                                    cell.classList.add("holiday");
-                                    break;
-                                }
-
-                                currentIndex += 1;
-                            }
-                        })
-                    }
+                            })
+                        }
+                    })
                 })
             },
             calculateBackground() {
                 this.holidayBackground(".mainTable")
                 this.holidayBackground(".remote-tab-table")
-            }
+            },
         },
         // Metodo di bootstrap per caricare i tooltip
         mounted() {

@@ -122,7 +122,6 @@ namespace SmartPresence.Services.Employees
             // Create a list of employee with their work events as response dto classd
             var queryResult = await baseQuery.Select(x => new EmployeeWorkEventsResponse(x)).ToListAsync();
 
-
             // PROVE
             var today = DateTime.Now.Date;
             var tomorrow = today.AddDays(1);
@@ -159,11 +158,6 @@ namespace SmartPresence.Services.Employees
                             Predicate<DateTime> condition = x => x.Date >= tomorrow.Date && x.Date >= request.BeginDate.Date;
                             var daysListIndex = daysList.FindIndex(condition);
 
-                            Console.WriteLine($"Day: {remoteDay.NextWeek.First()}");
-                            Console.WriteLine($"Tomorrow: {tomorrow}");
-                            Console.WriteLine($"Begin date: {request.BeginDate.Date}");
-                            Console.WriteLine(daysListIndex);
-
                             if (daysListIndex != -1)
                             {
                                 for (var i = daysListIndex; i < daysList.Count && daysList[i].Date <= request.EndDate.Date; i++)
@@ -171,8 +165,10 @@ namespace SmartPresence.Services.Employees
                                     var day = daysList[i].Date;
                                     bool isAnHoliday = !DateTimeHelper.IsAnHoliday(day);
                                     var containsAnHolidayWorkEvent = employee.WorkEventsList
-                                        .Where(x => x.WorkEventType.Equals(WorkEventTypeName.HOLIDAY) && x.StartDate <= day && x.EndDate >= day)
+                                        .Where(x => x.WorkEventType.Name.Equals(WorkEventTypeName.HOLIDAY) && x.StartDate.Date <= day && x.EndDate.Date >= day)
                                         .FirstOrDefault();
+
+                                    Console.Write($"Date: {day} - Contain a holiday event: {containsAnHolidayWorkEvent}");
 
                                     if (isAnHoliday && containsAnHolidayWorkEvent is null)
                                     {
@@ -264,8 +260,22 @@ namespace SmartPresence.Services.Employees
                                 var day = lastUsedDay.AddDays(addDays[i]);
                                 bool isAnHoliday = !DateTimeHelper.IsAnHoliday(day);
                                 var containsAnHolidayWorkEvent = employee.WorkEventsList
-                                    .Where(x => x.WorkEventType.Equals(WorkEventTypeName.HOLIDAY) && x.StartDate <= day && x.EndDate >= day)
+                                    .Where(x => x.WorkEventType.Name.Equals(WorkEventTypeName.HOLIDAY) && x.StartDate.Date <= day && x.EndDate.Date >= day)
                                     .FirstOrDefault();
+
+                                if (day == new DateTime(2025, 12, 09))
+                                {
+                                    Console.Write($"Date: {day} - Contain a holiday event: {containsAnHolidayWorkEvent is not null}{Environment.NewLine}");
+
+                                    var prova = employee.WorkEventsList;
+
+                                    foreach (var item in prova)
+                                    {
+                                        Console.WriteLine($"evento: {item.WorkEventType.Name} - {item.StartDate.Date} - {item.EndDate.Date}");
+                                        Console.WriteLine($"evento: {item.WorkEventType.Name} - {item.StartDate.Date} - {item.EndDate.Date}");
+                                    }
+                                }
+
 
                                 if (isAnHoliday && containsAnHolidayWorkEvent is null)
                                 {
