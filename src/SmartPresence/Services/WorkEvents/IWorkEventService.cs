@@ -13,7 +13,8 @@ namespace SmartPresence.Services.WorkEvents
         public Task<EmployeePendingWorkEventsResponse> GetEmployeeWorkEventsPending(EmployeePendingWorkEventsRequest request);
         public Task HandleAllWorkEventsDecisions(HandleAllWorkEventsDecisionsCommand command);
         public Task HandleRemoteDays(UpdateRemoteDaysCommand command);
-
         public Task HandleSingleWorkEventDecision(HandleSingleWorkEventDecisionCommand command);
+        public Task<RemoteDaysResponse> GetEmployeeRemoteDays(RemoteDaysRequest request);
+
     }
 }

@@ -175,7 +175,7 @@ namespace SmartPresence.Services.WorkEvents
             if (command.Status.Equals(WorkEventStatusName.APPROVED))
             {
                 // Ad ogni employee associa inoltre la lista del timeoff
-                employeeEvents.ForEach(x => x.EmployeeTimeOffs = _context.EmployeeTimeOffs.Where(y => y.IdEmployee.Equals(x.EmployeeId)).ToList());
+                employeeEvents.ForEach(async x => x.EmployeeTimeOffs = await  _context.EmployeeTimeOffs.Where(y => y.IdEmployee.Equals(x.EmployeeId)).ToListAsync());
             }
 
             // Ora per ogni employee e per ogni suo evento, cambia lo status dell'evento e aggiorna la tabella del timeoff
@@ -262,5 +262,16 @@ namespace SmartPresence.Services.WorkEvents
         }
 
         // Get remote day
+        public async Task<RemoteDaysResponse> GetEmployeeRemoteDays(RemoteDaysRequest request)
+        {
+            var queryResult = await _context.RemoteDays
+                .Where(x => x.IdEmployee.Equals(request.IdEmployees))
+                .Select(y => new RemoteDaysResponse(y))
+                .FirstOrDefaultAsync();
+
+            queryResult ??= new RemoteDaysResponse();
+
+            return queryResult;
+        }
     }
 }
