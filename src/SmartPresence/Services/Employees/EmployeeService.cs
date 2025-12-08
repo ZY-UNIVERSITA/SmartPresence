@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SmartPresence.Services.Employees.Model;
 using SmartPresence.Services.Employees.Queries;
 using SmartPresence.Services.Shared;
 using SmartPresence.Services.WorkEvents.Model;
+using SmartPresence.Services.WorkEvents.Queries;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -109,13 +112,187 @@ namespace SmartPresence.Services.Employees
                 .Include(a => a.WorkEvents)
                 .ThenInclude(b => b.WorkEventType)
 
+                // Include i giorni da remoto
+                .Include(c => c.RemoteDay)
+
                 // Order employee list events putting given employee id on the top, then by team id
-                .OrderBy(c => c.Id.Equals(idEmployee) ? 0 : 1)
-                    .ThenBy(d => d.IdTeam);
+                .OrderBy(d => d.Id.Equals(idEmployee) ? 0 : 1)
+                    .ThenBy(e => e.IdTeam);
 
             // Create a list of employee with their work events as response dto classd
             var queryResult = await baseQuery.Select(x => new EmployeeWorkEventsResponse(x)).ToListAsync();
 
+
+            // PROVE
+            var today = DateTime.Now.Date;
+            var tomorrow = today.AddDays(1);
+            var monday = DateTimeHelper.GetMonday(today);
+            var sunday = monday.AddDays(6).Date;
+
+            if (request.EndDate.Date >= tomorrow)
+            {
+                var workEventStatus = await _context.WorkEventTypeStatus.Where(x => x.Name.Equals(WorkEventStatusName.APPROVED)).FirstOrDefaultAsync();
+                var workEventType = await _context.WorkEventTypes.Where(x => x.Name.Equals(WorkEventTypeName.REMOTE)).FirstOrDefaultAsync();
+
+                foreach (var employee in queryResult)
+                {
+                    var remoteDay = employee.RemoteDay;
+
+                    //if (remoteDay is not null)
+                    //{
+
+                    //    Console.WriteLine($"count days {remoteDay.Days.Count}");
+                    //    Console.WriteLine($"count days next week: {remoteDay.NextWeek.Count}");
+                    //}
+
+                    if (remoteDay is not null && (remoteDay.Days.Count > 0 || remoteDay.NextWeek.Count > 0))
+                    {
+                        var days = remoteDay.Days;
+                        var nextWeekDays = remoteDay.NextWeek;
+
+                        if (remoteDay.NextWeek.Count > 0)
+                        {
+                            var daysList = new List<DateTime>();
+                            daysList.AddRange(remoteDay.Days);
+                            daysList.AddRange(remoteDay.NextWeek);
+
+                            Predicate<DateTime> condition = x => x.Date >= tomorrow.Date && x.Date >= request.BeginDate.Date;
+                            var daysListIndex = daysList.FindIndex(condition);
+
+                            Console.WriteLine($"Day: {remoteDay.NextWeek.First()}");
+                            Console.WriteLine($"Tomorrow: {tomorrow}");
+                            Console.WriteLine($"Begin date: {request.BeginDate.Date}");
+                            Console.WriteLine(daysListIndex);
+
+                            if (daysListIndex != -1)
+                            {
+                                for (var i = daysListIndex; i < daysList.Count && daysList[i].Date <= request.EndDate.Date; i++)
+                                {
+                                    var day = daysList[i].Date;
+                                    bool isAnHoliday = !DateTimeHelper.IsAnHoliday(day);
+                                    var containsAnHolidayWorkEvent = employee.WorkEventsList
+                                        .Where(x => x.WorkEventType.Equals(WorkEventTypeName.HOLIDAY) && x.StartDate <= day && x.EndDate >= day)
+                                        .FirstOrDefault();
+
+                                    if (isAnHoliday && containsAnHolidayWorkEvent is null)
+                                    {
+                                        var workEvent = new WorkEvent()
+                                        {
+                                            Id = -1,
+                                            IdEmployee = employee.Id,
+                                            StartDate = day.AddHours(9),
+                                            EndDate = day.AddHours(18),
+                                            WorkEventStatus = workEventStatus,
+                                            WorkEventType = workEventType
+                                        };
+
+                                        employee.WorkEventsList.Add(new WorkEventResponse(workEvent));
+                                    }
+                                }
+                            }
+                        
+                            continue;
+                        }
+
+                        DateTime lastUsedDay = today;
+
+                        var addDays = new List<int>();
+                        foreach (var day in days)
+                        {
+                            var dayOfWeek = day.DayOfWeek;
+                            if (dayOfWeek.Equals(DayOfWeek.Sunday))
+                            {
+                                addDays.Add(6);
+                            }
+                            else
+                            {
+                                addDays.Add(Convert.ToInt32(dayOfWeek) - 1);
+                            }
+                        }
+
+                        int index;
+
+                        if (request.BeginDate.Date <= sunday)
+                        {
+                            index = days.FindIndex(x => (x.Date >= tomorrow) && (x.Date >= request.BeginDate.Date));
+
+                            if (index.Equals(-1))
+                            {
+                                if (remoteDay.Repeat)
+                                {
+                                    index = 0;
+                                    lastUsedDay = sunday.AddDays(1);
+                                }
+                            }
+                            else
+                            {
+                                lastUsedDay = monday;
+                            }
+
+                        }
+                        else
+                        {
+                            if (!remoteDay.Repeat)
+                            {
+                                index = -1;
+                            }
+                            else
+                            {
+                                var beginDateDayOfWeek = request.BeginDate.DayOfWeek.Equals(DayOfWeek.Sunday) ? 6 : Convert.ToInt32(request.BeginDate.DayOfWeek) - 1;
+
+                                Predicate<int> condition = day => day >= beginDateDayOfWeek;
+                                index = addDays.FindIndex(condition);
+
+                                if (index.Equals(-1))
+                                {
+                                    index = 0;
+                                    lastUsedDay = DateTimeHelper.GetMonday(request.BeginDate.Date).AddDays(7);
+                                }
+                                else
+                                {
+                                    lastUsedDay = DateTimeHelper.GetMonday(request.BeginDate.Date);
+                                }
+                            }
+                        }
+
+                        var repeat = true;
+
+                        while (!index.Equals(-1) && repeat && lastUsedDay <= request.EndDate.Date)
+                        {
+                            for (var i = index; i < addDays.Count && lastUsedDay.AddDays(addDays[i]).Date <= request.EndDate.Date; i++)
+                            {
+                                var day = lastUsedDay.AddDays(addDays[i]);
+                                bool isAnHoliday = !DateTimeHelper.IsAnHoliday(day);
+                                var containsAnHolidayWorkEvent = employee.WorkEventsList
+                                    .Where(x => x.WorkEventType.Equals(WorkEventTypeName.HOLIDAY) && x.StartDate <= day && x.EndDate >= day)
+                                    .FirstOrDefault();
+
+                                if (isAnHoliday && containsAnHolidayWorkEvent is null)
+                                {
+                                    var workEvent = new WorkEvent()
+                                    {
+                                        Id = -1,
+                                        IdEmployee = employee.Id,
+                                        StartDate = day.AddHours(9),
+                                        EndDate = day.AddHours(18),
+                                        WorkEventStatus = workEventStatus,
+                                        WorkEventType = workEventType
+                                    };
+
+                                    employee.WorkEventsList.Add(new WorkEventResponse(workEvent));
+                                }
+                            }
+
+                            repeat = employee.RemoteDay.Repeat;
+
+                            lastUsedDay = lastUsedDay.AddDays(7);
+
+                            index = 0;
+                        }
+                    }
+
+                }
+            }
             return queryResult;
         }
 
@@ -148,7 +325,7 @@ namespace SmartPresence.Services.Employees
                     .ThenInclude(c => c.WorkEventType)
                 .Include(d => d.ContractType)
                 .Include(e => e.EmployeeTimeOffs
-                    .Where(f => f.Year == request.Year));
+                    .Where(f => f.Year.Equals(request.Year)));
 
             // Ottieni i risultati e ordina la lista in ordine decrescente per data di inizio
             var queryResult = await baseQuery.Select(x => new EmployeePersonalWorkEventResponse(x)).FirstOrDefaultAsync();
@@ -161,7 +338,7 @@ namespace SmartPresence.Services.Employees
         public async Task<EmployeeTimeOffByIdAndYearResponse> GetEmployeeTimeOff(EmployeeTimeOffByIdAndYearRequest request)
         {
             var queryResult = await _context.EmployeeTimeOffs
-                .Where(x => x.Id.Equals(request.Id) && x.Year.Equals(request.Year))
+                .Where(x => x.IdEmployee.Equals(request.Id) && x.Year.Equals(request.Year))
                 .Select(y => new EmployeeTimeOffByIdAndYearResponse(y))
                 .FirstOrDefaultAsync();
 
