@@ -8,6 +8,7 @@ using SmartPresence.Web.Infrastructure;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SmartPresence.Web.Areas.Calendar.Home
 {
@@ -111,5 +112,27 @@ namespace SmartPresence.Web.Areas.Calendar.Home
             return RedirectToAction("Index", searchModel);
         }
 
+        [HttpPost]
+        public virtual async Task<IActionResult> UpdateRemoteDays(RemoteRequestModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(x => x.Errors).Select(y => y.ErrorMessage).Distinct().ToList();
+
+                foreach (var item in errors)
+                {
+                    Console.WriteLine(item);
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                var command = model.ToCommand();
+                await _workEventService.HandleRemoteDays(command);
+            }
+
+            var searchModel = model.ToSearchModel();
+            return RedirectToAction("Index", searchModel);
+        }
     }
 }

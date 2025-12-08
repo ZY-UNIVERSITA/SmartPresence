@@ -12,7 +12,9 @@
                 selectedDate: null,
                 selectedDatetime: null,
                 newRequestOption: "HOLIDAY",
-                remoteDaysSelection: []
+                remoteDaysSelection: [],
+                remoteNextWeekDaysSelection: [],
+                remoteButtonVisibility: true
             }
         },
         computed: {
@@ -219,61 +221,85 @@
             },
             // Metodo usato per selezionare i giorni da remoto
             selectRemoteDay(event) {
-                const day = event.target.id.split("_")[1];
-                const index = this.remoteDaysSelection.findIndex(x => x === day);
+                const dayHoliday = event.target.classList.contains("holiday");
+
+                if (dayHoliday) {
+                    return;
+                }
+
+                const daySplit = event.target.id.split("_");
+                const dayName = daySplit[0]
+                const day = daySplit[1];
+
+                let arrayToModify = this.remoteDaysSelection; 
+
+                if (dayName.includes("NextWeek")) {
+                    arrayToModify = this.remoteNextWeekDaysSelection;
+                }
+
+                const index = arrayToModify.findIndex(x => x === day);
 
                 if (index !== -1) {
-                    this.remoteDaysSelection.splice(index, 1);
+                    arrayToModify.splice(index, 1);
                 } else {
-                    this.remoteDaysSelection.push(day)
+                    arrayToModify.push(day)
                 }
 
                 event.target.classList.toggle("selected-remote-day");
-
-                console.log(this.remoteDaysSelection);
             },
             holidayBackground(tableId) {
                 // Si ottiene una lista degli headers
-                const table = document.querySelector(tableId);
-                const headers = table.querySelectorAll(`thead th`);
+                const table = document.querySelectorAll(tableId);
 
-                // Per ogni th del theader, si ottiene il suo id che rappresenta la data associata alla colonna
-                headers.forEach((th, colIndex) => {
+                table.forEach(el => {
+                    const headers = el.querySelectorAll(`thead th`);
 
-                    // Controlla che la cella sia di holiday
-                    if (th.classList.contains("holiday")) {
-                        // A questo punto, per ogni th, fa una ricerca di tutto il tbody riga per riga
-                        table.querySelectorAll(`tbody tr`).forEach(row => {
-                            // Inizia dalla prima cella
-                            let currentIndex = 0;
+                    // Per ogni th del theader, si ottiene il suo id che rappresenta la data associata alla colonna
+                    headers.forEach((th, colIndex) => {
 
-                            // Per ogni riga, cerca cella per cella
-                            for (const cell of row.querySelectorAll("td, th")) {
-                                // per ogni cella, trova il suo colspan
-                                const colspan = cell.getAttribute("colspan");
+                        // Controlla che la cella sia di holiday
+                        if (th.classList.contains("holiday")) {
+                            // A questo punto, per ogni th, fa una ricerca di tutto il tbody riga per riga
+                            el.querySelectorAll(`tbody tr`).forEach(row => {
+                                // Inizia dalla prima cella
+                                let currentIndex = 0;
 
-                                // Se il colspan esiste allora non può essere sabato e domenica in quanto hanno sempre colspan uguale a 1
-                                if (colspan !== null) {
-                                    // Trasforma la stringa in intero e aggiungilo all'indice, creando la posizione della prossima cella
-                                    currentIndex += parseInt(colspan);
-                                    continue;
+                                // Per ogni riga, cerca cella per cella
+                                for (const cell of row.querySelectorAll("td, th")) {
+                                    // per ogni cella, trova il suo colspan
+                                    const colspan = cell.getAttribute("colspan");
+
+                                    // Se il colspan esiste allora non può essere sabato e domenica in quanto hanno sempre colspan uguale a 1
+                                    if (colspan !== null) {
+                                        // Trasforma la stringa in intero e aggiungilo all'indice, creando la posizione della prossima cella
+                                        currentIndex += parseInt(colspan);
+                                        continue;
+                                    }
+
+                                    // Se l'indice della cella corrisponde all'indice dell'intestazione allora quella cella è un giorno di festa
+                                    if (currentIndex === colIndex) {
+                                        cell.classList.add("holiday");
+                                        break;
+                                    }
+
+                                    currentIndex += 1;
                                 }
-
-                                // Se l'indice della cella corrisponde all'indice dell'intestazione allora quella cella è un giorno di festa
-                                if (currentIndex === colIndex) {
-                                    cell.classList.add("holiday");
-                                    break;
-                                }
-
-                                currentIndex += 1;
-                            }
-                        })
-                    }
+                            })
+                        }
+                    })
                 })
             },
             calculateBackground() {
                 this.holidayBackground(".mainTable")
                 this.holidayBackground(".remote-tab-table")
+            },
+            checkRepeatRemote() {
+                const myCarousel = document.querySelector('#carouselRemoteWeek');
+                const carousel = new bootstrap.Carousel(myCarousel);
+
+                carousel.to(0);
+
+                this.remoteButtonVisibility = !this.remoteButtonVisibility;
             }
         },
         // Metodo di bootstrap per caricare i tooltip

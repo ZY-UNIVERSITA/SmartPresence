@@ -1,5 +1,7 @@
 ﻿@using SmartPresence.Services.Shared
 @using SmartPresence.Web.Areas.Calendar.Home.ViewModel
+@* @using SmartPresence.Services.Shared
+@using SmartPresence.Web.Areas.Calendar.Home.ViewModel
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -8,37 +10,120 @@
 @{
 }
 
-<table class="table table-bordered text-center align-middle w-100 remote-tab-table">
-    <thead class="table-dark">
-        <tr>
-            @foreach (var item in Enumerable.Range(0, 7).Select(x => DateTimeHelper.GetMonday(Model.Today).AddDays(x)))
-            {
-                <th scope="col" class="@item.ToString("yyyy-MM-dd")">
-                    @item.ToString("ddd", System.Globalization.CultureInfo.InvariantCulture)[0].ToString().ToUpper()
-                </th>
-            }
-        </tr>
-    </thead>
+@*Carousel di bootstrap
+    https://getbootstrap.com/docs/5.3/components/carousel/
+*@
+<section id="carouselRemoteWeek" class="carousel slide">
+    <section class="carousel-inner">
+        <template v-if="!remoteButtonVisibility">
+            <article id="singleWeek" class="carousel-item active">
+                <table class="table table-bordered text-center align-middle w-100 remote-tab-table">
+                    <caption>Every week remote</caption>
+                    <thead class="table-dark">
+                        <tr>
+                            @foreach (var item in Enumerable.Range(0, 7).Select(x => DateTimeHelper.GetMonday(Model.Today).AddDays(x).Date))
+                            {
+                                <th scope="col" class="@(item.ToString("yyyy-MM-dd")) @(DateTimeHelper.IsWeekDay(item) ? "holiday" : null)">
+                                    @item.ToString("ddd", System.Globalization.CultureInfo.InvariantCulture)[0].ToString().ToUpper()
+                                </th>
+                            }
+                        </tr>
+                    </thead>
 
-    <tbody>
-        <tr>
-            @foreach (var item in Enumerable.Range(0, 7).Select(x => DateTimeHelper.GetMonday(Model.Today).AddDays(x)))
-            {
-                <td scope="col" id="@($"remote_{item.ToString("yyyy-MM-dd")}")" v-on:click="selectRemoteDay($event)" class="fw-bold @item.ToString("yyyy-MM-dd")">
-                    <p></p>
-                </td>
-            }
-        </tr>
-    </tbody>
-</table>
+                    <tbody>
+                        <tr>
+                            @foreach (var item in Enumerable.Range(0, 7).Select(x => DateTimeHelper.GetMonday(Model.Today).AddDays(x).Date))
+                            {
+                                <td scope="col" id="@($"remote_{item.ToString("yyyy-MM-dd")}")" v-on:click="selectRemoteDay($event)" class="fw-bold @(item.ToString("yyyy-MM-dd"))">
+                                    <p></p>
+                                </td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+        </template>
+        <template v-else>
+            <article id="firstWeek" class="carousel-item active">
+                <table class="table table-bordered text-center align-middle w-100 remote-tab-table">
+                    <caption>This week remote</caption>
+                    <thead class="table-dark">
+                        <tr>
+                            @foreach (var item in Enumerable.Range(0, 7).Select(x => DateTimeHelper.GetMonday(Model.Today).AddDays(x).Date))
+                            {
+                                <th scope="col" class="@(item.ToString("yyyy-MM-dd")) @(DateTimeHelper.IsAnHoliday(item) ? "holiday" : null)">
+                                    @item.ToString("ddd", System.Globalization.CultureInfo.InvariantCulture)[0].ToString().ToUpper()
+                                </th>
+                            }
+                        </tr>
+                    </thead>
 
+                    <tbody>
+                        <tr>
+                            @foreach (var item in Enumerable.Range(0, 7).Select(x => DateTimeHelper.GetMonday(Model.Today).AddDays(x).Date))
+                            {
+                                <td scope="col" id="@($"remote_{item.ToString("yyyy-MM-dd")}")" v-on:click="selectRemoteDay($event)" class="fw-bold @(item.ToString("yyyy-MM-dd"))">
+                                    <p></p>
+                                </td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+            <article id="secondWeek" class="carousel-item">
+                <table class="table table-bordered text-center align-middle w-100 remote-tab-table">
+                    <caption>Next week remote</caption>
+                    <thead class="table-dark">
+                        <tr>
+                            @foreach (var item in Enumerable.Range(0, 7).Select(x => DateTimeHelper.GetMonday(Model.Today).AddDays(DateTimeHelper.GetNumbersOfDaysInWeek()).AddDays(x).Date))
+                            {
+                                <th scope="col" class="@(item.ToString("yyyy-MM-dd")) @(DateTimeHelper.IsAnHoliday(item) ? "holiday" : null)">
+                                    @item.ToString("ddd", System.Globalization.CultureInfo.InvariantCulture)[0].ToString().ToUpper()
+                                </th>
+                            }
+                        </tr>
+                    </thead>
 
-<form method="post" class="mt-3" aria-labelledby="saveFormTitle">
+                    <tbody>
+                        <tr>
+                            @foreach (var item in Enumerable.Range(0, 7).Select(x => DateTimeHelper.GetMonday(Model.Today).AddDays(DateTimeHelper.GetNumbersOfDaysInWeek()).AddDays(x).Date))
+                            {
+                                <td scope="col" id="@($"remoteNextWeek_{item.ToString("yyyy-MM-dd")}")" v-on:click="selectRemoteDay($event)" class="fw-bold @item.ToString("yyyy-MM-dd")">
+                                    <p></p>
+                                </td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+        </template>
+    </section>
+    <template v-if="remoteButtonVisibility">
+        <section class="d-flex justify-content-center mt-2" id="carouselController">
+            <button class="btn btn-primary me-2" type="button" data-bs-target="#carouselRemoteWeek" data-bs-slide="prev">
+                Prev
+            </button>
+            <button class="btn btn-primary" type="button" data-bs-target="#carouselRemoteWeek" data-bs-slide="next">
+                Next
+            </button>
+        </section>
+    </template>
+</section>
+
+<form asp-area="Calendar" asp-controller="Home" asp-action="UpdateRemoteDays" method="post" class="mt-3" aria-labelledby="saveFormTitle">
     <h2 id="saveFormTitle" class="visually-hidden">Save form</h2>
-
+    <input type="hidden" name="Days" :value="remoteDaysSelection" />
+    <input type="hidden" name="DaysNextWeek" :value="remoteNextWeekDaysSelection" />
+    <input type="hidden" name="IdEmployee" :value="employeeInfo.IdEmployee" />
+    <section class="form-check form-switch pb-3">
+        <label class="form-check-label" for="switchRepeatRemote">Repeat remote</label>
+        <input class="form-check-input" type="checkbox" role="switch" id="switchRepeatRemote" name="RepeatRemote" v-on:click="checkRepeatRemote" />
+    </section>
+    @Html.HiddenFor(x => x.CalendarViewFilter)
+    @Html.Hidden("BeginDateSearch", Model.BeginDate)
+    @Html.Hidden("EndDateSearch", Model.EndDate)
+    @Html.HiddenFor(x => x.IdEmployee)
     <button type="submit" class="btn btn-primary">
         Save
     </button>
 </form>
-
-
