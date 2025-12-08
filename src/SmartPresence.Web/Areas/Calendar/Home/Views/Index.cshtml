@@ -9,6 +9,8 @@
 @model SmartPresence.Web.Areas.Calendar.Home.ViewModel.HomeIndexViewModel
 
 @{
+    ViewData["title"] = "Calendar";
+
 }
 
 @section styles {
@@ -69,6 +71,10 @@
 
         .selected-remote-day {
             background-color: gainsboro !important;
+        }
+
+        .remote-tab-table {
+            table-layout: fixed;
         }
     </style>
 }
