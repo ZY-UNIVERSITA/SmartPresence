@@ -25,6 +25,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
         public EmployeeTimeOff EmployeeTimeOffs { get; set; }
         internal PairDate PreviousDate { get; set; }
         internal PairDate NextDate { get; set; }
+        public List<RemoteDaysView> RemoteDays { get; set; }
 
         // Prepara l'header della tabella
         public void PrepareCalendarHeader()
@@ -37,7 +38,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
         }
 
         // Prepara la lista di dati da visualizzare
-        public void PrepareViewData(List<EmployeeWorkEventsResponse> response, EmployeeTimeOffByIdAndYearResponse responseTimeOff)
+        public void PrepareViewData(List<EmployeeWorkEventsResponse> response, EmployeeTimeOffByIdAndYearResponse responseTimeOff, RemoteDaysResponse remoteDaysResponse)
         {
             CalendarViewFilterName = this.CreateSubheader();
 
@@ -77,8 +78,36 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
                 LeaveTotal = responseTimeOff.LeaveTotal,
             };
 
+            RemoteDays = CreateRemoteDaysView(remoteDaysResponse);
+
             PreviousDate = CreatePairDate();
             NextDate = CreatePairDate(false);
+        }
+
+        private List<RemoteDaysView> CreateRemoteDaysView(RemoteDaysResponse response)
+        {
+            var list = new List<RemoteDaysView>();
+
+            list.Add(new RemoteDaysView()
+            {
+                Id = "firstWeek",
+                Caption = "This week remote",
+                OffSet = 0,
+                Prefix = "remote_",
+                Days = response.Days.Select(x => x.ToString("yyyy-MM-dd")).ToList(),
+                Repeat = response.Repeat
+            });
+
+            list.Add(new RemoteDaysView()
+            {
+                Id = "secondWeek",
+                Caption = "Next week remote",
+                OffSet = DateTimeHelper.GetNumbersOfDaysInWeek(),
+                Prefix = "remoteNextWeek_",
+                Days = response.DaysNextWeek.Select(x => x.ToString("yyyy-MM-dd")).ToList()
+            });
+
+            return list;
         }
 
         // Metodo per creare le date precedente e successive
@@ -184,7 +213,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
                     {
                         newSingleEvent = searchSingleDayEvents;
                         sameDayEvent = !sameDayEvent;
-                        newSingleEvent.CanAddRequest = false;
+                        newSingleEvent.CanAddRequest = true;
 
                         if (newSingleEvent.ListEvents is null)
                         {
@@ -201,7 +230,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
                         Date = minDate,
                         Days = dayBetweenMinAndMaxDate,
                         ListEvents = new List<EventTypeAndStatus>(),
-                        CanAddRequest = false
+                        CanAddRequest = singleEvent.WorkEventType.Name.Equals(WorkEventTypeName.HOLIDAY) ? false : true
                     };
                 }
 
@@ -275,6 +304,16 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
             public double LeaveAccrued { get; set; }
             public double LeaveUsed { get; set; }
             public double LeaveTotal { get; set; }
+        }
+
+        public class RemoteDaysView
+        {
+            public string Id { get; set; }
+            public string Caption { get; set; }
+            public int OffSet { get; set; }
+            public string Prefix { get; set; }
+            public List<string> Days { get; set; }
+            public bool Repeat { get; set; }
         }
 
         internal record PairDate(string BeginDate, string EndDate);
