@@ -1,4 +1,5 @@
-﻿using SmartPresence.Services.WorkEvents.Queries;
+﻿using SmartPresence.Services.WorkEvents.Model;
+using SmartPresence.Services.WorkEvents.Queries;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,6 +12,7 @@ namespace SmartPresence.Services.Employees.Queries
         public string Surname { get; set; }
         public string Team { get; set; }
         public List<WorkEventResponse> WorkEventsList { get; set; }
+        internal RemoteDay RemoteDay { get; set; }
 
         public EmployeeWorkEventsResponse(Employee employee)
         {
@@ -19,6 +21,7 @@ namespace SmartPresence.Services.Employees.Queries
             Surname = employee.Surname;
             Team = employee.Team.Name;
             WorkEventsList = employee.WorkEvents.Select(x => new WorkEventResponse(x)).OrderBy(y => y.StartDate).ToList();
+            RemoteDay = employee.RemoteDay;
         }
     }
 }
