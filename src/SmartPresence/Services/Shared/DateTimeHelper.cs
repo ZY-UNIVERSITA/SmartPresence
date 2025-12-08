@@ -151,6 +151,19 @@ namespace SmartPresence.Services.Shared
 
             return listDates;
         }
+
+        public static bool IsAnHoliday(DateTime date)
+        {
+            var holidaysList = Holidays.GetAllHolidaysByYear(date.Year);
+
+            return holidaysList.Contains(date) || date.DayOfWeek.Equals(DayOfWeek.Saturday) || date.DayOfWeek.Equals(DayOfWeek.Sunday);
+        }
+        public static bool IsWeekDay(DateTime date)
+        {
+            var holidaysList = Holidays.GetAllHolidaysByYear(date.Year);
+
+            return date.DayOfWeek.Equals(DayOfWeek.Saturday) || date.DayOfWeek.Equals(DayOfWeek.Sunday);
+        }
     }
 
     public static class Holidays
