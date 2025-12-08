@@ -63,6 +63,13 @@ namespace SmartPresence.Web.Areas.Calendar.Home
             };
             var queryResultTimeOff = await _employeeService.GetEmployeeTimeOff(employeeTimeOffRequest);
 
+            // Fai una terza query per ottenere i dati riguardanti i giorni da remoto
+            var remoteDays = await _workEventService.GetEmployeeRemoteDays(new Services.WorkEvents.Queries.RemoteDaysRequest()
+            {
+                IdEmployees = userId
+            });
+
+
             // Passa i dati alla Index View Model che prepara i dati ottenuti dalla query per la view
             var viewModel = new HomeIndexViewModel()
             {
@@ -72,7 +79,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
                 CalendarViewFilter = searchModel.CalendarView
             };
             viewModel.PrepareCalendarHeader();
-            viewModel.PrepareViewData(queryResult, queryResultTimeOff);
+            viewModel.PrepareViewData(queryResult, queryResultTimeOff, remoteDays);
 
             // Restituisci la pagina all'utente
             return View(viewModel);

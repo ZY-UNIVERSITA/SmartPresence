@@ -69,10 +69,6 @@
             background-color: lightgrey !important;
         }
 
-        .selected-remote-day {
-            background-color: gainsboro !important;
-        }
-
         .remote-tab-table {
             table-layout: fixed;
         }
@@ -238,7 +234,7 @@
             <tbody>
                 <tr v-for="employee in filteredList" :key="employee.Id">
                     @* Prima colonna dei dipendenti, gestito come thead *@
-                    <th scope="row" :id="employeeInfo.Id === employee.Id ? 'userId-' + employee.Id : null" class="align-middle">
+                    <th scope="row" :id="employeeInfo.IdEmployee === employee.Id ? 'userId-' + employee.Id : null" class="align-middle">
                         <img src="~/images/profile.svg"
                              alt="Profile photo"
                              class="rounded-circle me-3 profile-picture" />
@@ -251,8 +247,9 @@
 
                         @* Ogni evento, viene identificato da una data di inizio, se per quello specifico giorno ci sono eventi da visualizzare allora li visualizza *@
                         <template v-if="Array.isArray(dayEvents.ListEvents) && dayEvents.ListEvents.length > 0">
-                            <td :id="employeeInfo.Id === employee.Id ? accumulateDays[index] : null" :colspan="dayEvents.Days"
-                                :class="[ 'text-center', 'align-middle', getBackgroundColor(dayEvents.ListEvents) ]">
+                            <td :id="employeeInfo.IdEmployee === employee.Id ? accumulateDays[index] : null" :colspan="dayEvents.Days"
+                                :class="[ 'text-center', 'align-middle', getBackgroundColor(dayEvents.ListEvents) ]"
+                                v-on:click="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? openOffCanvas($event) : null"> 
 
                                 @* Ogni evento quindi ogni giorno, potrebbe avere più eventi che accadono per quel giorno, es. leave e remote insieme *@
                                 @* Cicla sui singoli eventi del giorno *@

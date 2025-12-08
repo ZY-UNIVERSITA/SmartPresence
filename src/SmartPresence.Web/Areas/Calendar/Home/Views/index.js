@@ -12,9 +12,9 @@
                 selectedDate: null,
                 selectedDatetime: null,
                 newRequestOption: "HOLIDAY",
-                remoteDaysSelection: [],
-                remoteNextWeekDaysSelection: [],
-                remoteButtonVisibility: true
+                remoteDaysSelection: modelData.RemoteDays[0].Days,
+                remoteNextWeekDaysSelection: modelData.RemoteDays[1].Days,
+                doesRemoteRepeat: modelData.RemoteDays[0].Repeat
             }
         },
         computed: {
@@ -132,7 +132,7 @@
                 let splitDay = splitDate[2].split("T");
 
                 return `${splitDate[0]}-${splitDate[1]}-${splitDay[0]}T18:00`;
-            },
+            }
         },
         methods: {
             // Crea in modo dinamico il background degli eventi (usato solo per holiday in quanto è l'unico che colora la cella completamente):
@@ -197,6 +197,8 @@
                 // Estrea dalla lista degli eventi, solo le date e poi le formatta
                 let dateArray = eventsPerGivenId.map(x => x.Date).map(this.formatDate);
 
+                console.log(dateArray);
+
                 return dateArray;
             },
             // Metodo per aprire l'offcanvas con le date corrette
@@ -245,7 +247,7 @@
                     arrayToModify.push(day)
                 }
 
-                event.target.classList.toggle("selected-remote-day");
+                event.target.classList.toggle("bg-primary");
             },
             holidayBackground(tableId) {
                 // Si ottiene una lista degli headers
@@ -293,14 +295,6 @@
                 this.holidayBackground(".mainTable")
                 this.holidayBackground(".remote-tab-table")
             },
-            checkRepeatRemote() {
-                const myCarousel = document.querySelector('#carouselRemoteWeek');
-                const carousel = new bootstrap.Carousel(myCarousel);
-
-                carousel.to(0);
-
-                this.remoteButtonVisibility = !this.remoteButtonVisibility;
-            }
         },
         // Metodo di bootstrap per caricare i tooltip
         mounted() {
