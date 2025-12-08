@@ -85,8 +85,8 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
                 CalendarView = CalendarView.Equals(CalendarViewName.CUSTOM) ? CalendarViewName.WEEK : CalendarView;
 
                 // Crea delle nuove date di inizio e fine valide
-                BeginDate = DateTimeHelper.GetFirstDateByCalendarView(CalendarView, DateTime.UtcNow);
-                EndDate = DateTimeHelper.GetLastDayByCalendarView(CalendarView, DateTime.UtcNow);
+                BeginDate = DateTimeHelper.GetFirstDateByCalendarView(CalendarView, DateTime.Now.Date);
+                EndDate = DateTimeHelper.GetLastDayByCalendarView(CalendarView, DateTime.Now.Date);
             }
 
             employeeWorkEventRequest.BeginDate = BeginDate.Value;
