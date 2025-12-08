@@ -8,103 +8,38 @@
 @section styles {
     <style>
 
-        .profile-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-
-        .profile-card, .history-card {
-            background: white;
-            border: 2px solid #333;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 2rem;
-            height: 100%;
-        }
-
-
         .avatar-img {
             width: 150px;
             height: 150px;
             object-fit: cover;
             border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            font-weight: bold;
         }
-
-
-        .employee-name {
-            font-size: 2rem;
-            font-weight: 700;
-            color: black;
-            margin-bottom: 2rem;
-        }
-
-
-        .info-section {
-            margin-bottom: 1.5rem;
-        }
-
-
-        .info-label {
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: black;
-            text-transform: uppercase;
-            margin-bottom: 0.3rem;
-        }
-
-
-        .info-value {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: black;
-        }
-
 
         .balance-table {
-            margin-top: 2rem;
+            width: 100%;
         }
 
-
-            .balance-table table {
-                width: 100%;
-                border-collapse: separate;
-                border-spacing: 0;
-            }
-
-
             .balance-table th {
+                border-bottom: 2px solid #000;
+                padding: .75rem;
                 font-weight: 600;
-                color: black;
-                padding: 0.75rem;
                 text-align: center;
-                font-size: 0.9rem;
             }
-
-
-                .balance-table th:first-child {
-                    text-align: left;
-                }
-
 
             .balance-table td {
-                padding: 0.75rem;
+                padding: .75rem;
                 text-align: center;
-                border-top: 1px solid black;
                 font-size: 1rem;
             }
 
-
+                .balance-table th:first-child,
                 .balance-table td:first-child {
                     text-align: left;
                 }
 
+        .card.h-100 {
+            min-height: 550px;
+        }
 
         .history-header {
             font-size: 1.8rem;
@@ -115,12 +50,10 @@
             border-bottom: 3px solid #333;
         }
 
-
         .history-table {
             width: 100%;
             margin-top: 1rem;
         }
-
 
             .history-table th {
                 font-weight: 600;
@@ -130,105 +63,90 @@
                 border-bottom: 2px solid black;
             }
 
-
             .history-table td {
                 padding: 0.9rem 1rem;
                 border-bottom: 1px solid #e0e0e0;
                 color: black;
             }
 
-
             .history-table tbody tr:hover {
                 background: #f8f9fa;
             }
-
-
-        .divider {
-            height: 2px;
-            background: #white;
-            margin: 2rem 0;
-        }
-
-
-        .two-column-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
     </style>
 }
 
 <main>
-    <div class="profile-container">
+    <div class="container-xl py-4">
         <div class="row g-4">
+
             <!-- Left Panel - Employee Profile -->
             <div class="col-lg-6">
-                <div class="profile-card">
-                    <div class="d-flex justify-content-between align-items-start mb-4">
-                        <h1 class="employee-name">@Model.FullName</h1>
+                <div class="card h-100 shadow-sm border-dark rounded-3 p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h1 class="h2 fw-bold mb-3">@Model.FullName</h1>
+                            <div class="mb-2">
+                                <div class="small text-uppercase fw-bold mb-1">Contract Type</div>
+                                <div class="fw-medium">@Model.ContractType?.Name</div>
+                            </div>
+                            <div class="mb-2">
+                                <div class="small text-uppercase fw-bold mb-1">Role</div>
+                                <div class="fw-medium">@Model.Role?.Name</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col">
+                                    <div class="small text-uppercase fw-bold mb-1">Team</div>
+                                    <div class="fw-medium">@Model.Team?.Name</div>
+                                </div>
+                                <div class="col">
+                                    <div class="small text-uppercase fw-bold mb-1">Area</div>
+                                    <div class="fw-medium">@Model.Area?.Name</div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="avatar-section">
                             <img src="~/images/profile.svg" alt="Profile photo" class="avatar-img" />
                         </div>
                     </div>
-                    <div class="info-section">
-                        <div class="info-label">Contract Type</div>
-                        <div class="info-value">@Model.ContractType?.Name</div>
-                    </div>
-                    <div class="info-section">
-                        <div class="info-label">Role</div>
-                        <div class="info-value">@Model.Role?.Name</div>
-                    </div>
-                    <div class="two-column-info">
-                        <div class="info-section">
-                            <div class="info-label">Team</div>
-                            <div class="info-value">@Model.Team?.Name</div>
-                        </div>
-                        <div class="info-section">
-                            <div class="info-label">Area</div>
-                            <div class="info-value">@Model.Area?.Name</div>
-                        </div>
-                    </div>
-                    <div class="divider"></div>
+                    <hr class="my-3">
 
                     <!-- Balance Table -->
                     @if (Model.TimeOff != null)
                     {
-                        <div class="balance-table">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Balance</th>
-                                        <th>Used</th>
-                                        <th>Accrued</th>
-                                        <th>Available</th>
-                                        <th>Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Leave</td>
-                                        <td>@Model.TimeOff.LeaveUsed.ToString("0.##")</td>
-                                        <td>@Model.TimeOff.LeaveAccrued.ToString("0.##")</td>
-                                        <td>@((Model.TimeOff.LeaveAccrued - Model.TimeOff.LeaveUsed).ToString("0.##"))</td>
-                                        <td><strong>@Model.TimeOff.LeaveTotal.ToString("0.##")</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Holiday</td>
-                                        <td>@Model.TimeOff.HolidayUsed</td>
-                                        <td>@Model.TimeOff.HolidayAccrued</td>
-                                        <td>@(Model.TimeOff.HolidayAccrued - Model.TimeOff.HolidayUsed)</td>
-                                        <td><strong>@Model.TimeOff.HolidayTotal</strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <table class="balance-table">
+                            <thead>
+                                <tr>
+                                    <th>Balance</th>
+                                    <th>Used</th>
+                                    <th>Accrued</th>
+                                    <th>Available</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Leave</td>
+                                    <td>@Model.TimeOff.LeaveUsed.ToString("0.##")</td>
+                                    <td>@Model.TimeOff.LeaveAccrued.ToString("0.##")</td>
+                                    <td>@((Model.TimeOff.LeaveAccrued - Model.TimeOff.LeaveUsed).ToString("0.##"))</td>
+                                    <td><strong>@Model.TimeOff.LeaveTotal.ToString("0.##")</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Holiday</td>
+                                    <td>@Model.TimeOff.HolidayUsed</td>
+                                    <td>@Model.TimeOff.HolidayAccrued</td>
+                                    <td>@(Model.TimeOff.HolidayAccrued - Model.TimeOff.HolidayUsed)</td>
+                                    <td><strong>@Model.TimeOff.HolidayTotal</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     }
                 </div>
             </div>
 
             <!-- Right Panel - History -->
             <div class="col-lg-6">
-                <div class="history-card">
+                <div class="card h-100 shadow-sm border-dark rounded-3 p-4">
                     <h2 class="history-header">History</h2>
 
                     @if (Model.WorkEvents != null && Model.WorkEvents.Any())
