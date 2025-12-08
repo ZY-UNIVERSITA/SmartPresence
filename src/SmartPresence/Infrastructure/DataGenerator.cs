@@ -459,7 +459,7 @@ namespace SmartPresence.Infrastructure
 
                 // Employee 3
                 new WorkEvent { Id = 7, IdEmployee = 3, IdWorkEventType = 1, IdWorkEventStatus = 3,
-                    StartDate = new DateTime(2025, 12, 5, 9, 0, 0), EndDate = new DateTime(2025, 12, 9, 18, 0, 0), Notes = "Holiday 3 giorni (escluso weekend)" },
+                    StartDate = new DateTime(2025, 12, 1, 9, 0, 0), EndDate = new DateTime(2025, 12, 5, 18, 0, 0), Notes = "Holiday 3 giorni (escluso weekend)" },
                 new WorkEvent { Id = 8, IdEmployee = 3, IdWorkEventType = 2, IdWorkEventStatus = 2,
                     StartDate = new DateTime(2025, 12, 12, 9, 0, 0), EndDate = new DateTime(2025, 12, 12, 17, 59, 0), Notes = "Leave" },
                 new WorkEvent { Id = 9, IdEmployee = 3, IdWorkEventType = 3, IdWorkEventStatus = 1,
