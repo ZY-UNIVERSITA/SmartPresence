@@ -19,8 +19,6 @@ namespace SmartPresence.Services.Users
         {
             if (!string.IsNullOrEmpty(user.Email))
             {
-                Console.WriteLine(user.Email);
-                
                 var lowerEmail = user.Email.ToLower();
 
                 return _context.Users
