@@ -29,8 +29,13 @@
             color: #0249dd;
         }
 
+        .calendar-section {
+            overflow: auto;
+        }
+
         .mainTable {
-            min-width: 1000px;
+            min-width: 100%;
+            width: max-content;
             table-layout: fixed;
             border-collapse: collapse;
         }
@@ -43,19 +48,50 @@
 
             .mainTable th:first-child,
             .mainTable td:first-child {
-                /* position: sticky; */
+                position: sticky;
                 left: 0;
                 background: #fff;
-                z-index: 12;
-                width: 25%;
-                min-width: 100px;
+                z-index: 3;
             }
 
             .mainTable thead th {
                 position: sticky;
                 top: 0;
-                z-index: 2;
+                z-index: 3;
+                background: #fff;
             }
+
+                .mainTable tbody th[scope="row"],
+                .mainTable thead th:first-child {
+                    position: sticky;
+                    left: 0;
+                    z-index: 2;
+                    background: #fff;
+                }
+
+                .mainTable thead th:first-child {
+                    z-index: 4;
+                }
+
+            .mainTable th:not(:first-child),
+            .mainTable td:not(:first-child) {
+                white-space: nowrap;
+            }
+
+        .col-fixed {
+            width: 25%;
+            min-width: 450px;
+        }
+
+        .col-hour-wide {
+            width: 150px; 
+            min-width: 150px; 
+        }
+
+        .col-hour-thin {
+            width: 50px; 
+            min-width: 50px;
+        }
 
         .main-section-1 {
             margin-top: 0 !important;
@@ -75,7 +111,7 @@
     </style>
 }
 
-<main id="app" class="container-fluid p-3 bg-light">
+<main id="app" class="container-fluid d-flex flex-column vh-100 p-3 bg-light">
 
     @* Camio del periodo *@
     <partial name="_PartialPeriod" model="Model"></partial>
@@ -214,82 +250,91 @@
     </section>
 
     @* Calendario principale *@
-    <section class="px-5 py-3 table-responsive calendar-section main-section-2">
-        <table class="mainTable table table-bordered table-hover shadow">
-            <thead class="">
-                <tr class="text-center align-middle">
-                    <th>
-                        <input class="form-control" type="search" id="names" name="Names" aria-label="Search by surname and/or name"
-                               v-model="filter" placeholder="Search by surname and/or name..." />
-                    </th>
-                    @foreach (var day in Model.Calendar)
-                    {
-                        <th id="@day.Date" scope="col" class="@day.Holiday.ToString().ToLower()">
-                            <p class="m-0 fw-normal">@day.DayOfWeek</p>
-                            <p class="m-0">@day.NumberOfDay</p>
+    @*px-5 py-3*@
+    <section class="px-5 py-3 flex-grow-1 d-flex flex-column vh-100">
+        <section class="table-responsive calendar-section flex-grow-1 overflow-auto">
+            <table class="mainTable table table-bordered table-hover shadow">
+                <colgroup>
+                    <col class="col-fixed">
+                    <col :class="@Model.Calendar.Count > 7 ? 'col-hour-thin' : 'col-hour-wide'" span="@Model.Calendar.Count">
+                </colgroup>
+
+                <thead class="">
+                    <tr class="text-center align-middle">
+                        <th>
+                            <input class="form-control" type="search" id="names" name="Names" aria-label="Search by surname and/or name"
+                                   v-model="filter" placeholder="Search by surname and/or name..." />
                         </th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="employee in filteredList" :key="employee.Id">
-                    @* Prima colonna dei dipendenti, gestito come thead *@
-                    <th scope="row" :id="employeeInfo.IdEmployee === employee.Id ? 'actualUser' : null" class="align-middle">
-                        <img src="~/images/profile.svg"
-                             alt="Profile photo"
-                             class="rounded-circle me-3 profile-picture" />
-                        <span>{{ `${employee.Surname} ${employee.Name}` }}</span>
-                    </th>
+                        @foreach (var day in Model.Calendar)
+                        {
+                            <th id="@day.Date" scope="col" class="@day.Holiday.ToString().ToLower()">
+                                <p class="m-0 fw-normal">@day.DayOfWeek</p>
+                                <p class="m-0">@day.NumberOfDay</p>
+                            </th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="employee in filteredList" :key="employee.Id">
+                        @* Prima colonna dei dipendenti, gestito come thead *@
+                        <th scope="row" :id="employeeInfo.IdEmployee === employee.Id ? 'actualUser' : null" class="align-middle">
+                            <img src="~/images/profile.svg"
+                                 alt="Profile photo"
+                                 class="rounded-circle me-3 profile-picture" />
+                            <span>{{ `${employee.Surname} ${employee.Name}` }}</span>
+                        </th>
 
-                    @* Tutte le altre celle rappresentano invece potenziali eventi *@
-                    @* Cicla sulla lista degli eventi *@
-                    <template v-for="(dayEvents, index) in employee.Events" :key="`${employee.Id}-${dayEvents.Date}`">
+                        @* Tutte le altre celle rappresentano invece potenziali eventi *@
+                        @* Cicla sulla lista degli eventi *@
+                        <template v-for="(dayEvents, index) in employee.Events" :key="`${employee.Id}-${dayEvents.Date}`">
 
-                        @* Ogni evento, viene identificato da una data di inizio, se per quello specifico giorno ci sono eventi da visualizzare allora li visualizza *@
-                        <template v-if="Array.isArray(dayEvents.ListEvents) && dayEvents.ListEvents.length > 0">
-                            <td :id="employeeInfo.IdEmployee === employee.Id ? accumulateDays[index] : null" :colspan="dayEvents.Days"
-                                :class="[ 'text-center', 'align-middle', getBackgroundColor(dayEvents.ListEvents) ]"
-                                v-on:click="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? openOffCanvas($event) : null"> 
+                            @* Ogni evento, viene identificato da una data di inizio, se per quello specifico giorno ci sono eventi da visualizzare allora li visualizza *@
+                            <template v-if="Array.isArray(dayEvents.ListEvents) && dayEvents.ListEvents.length > 0">
+                                <td :id="employeeInfo.IdEmployee === employee.Id ? accumulateDays[index] : null" :colspan="dayEvents.Days"
+                                    :class="[ 'text-center', 'align-middle', getBackgroundColor(dayEvents.ListEvents) ]"
+                                    v-on:click="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? openOffCanvas($event) : null">
 
-                                @* Ogni evento quindi ogni giorno, potrebbe avere più eventi che accadono per quel giorno, es. leave e remote insieme *@
-                                @* Cicla sui singoli eventi del giorno *@
-                                <template v-for="singleEvent in dayEvents.ListEvents" :key=`${employee.Id}-${dayEvents.Date}-${singleEvent.Id}`>
+                                    @* Ogni evento quindi ogni giorno, potrebbe avere più eventi che accadono per quel giorno, es. leave e remote insieme *@
+                                    @* Cicla sui singoli eventi del giorno *@
+                                    <template v-for="singleEvent in dayEvents.ListEvents" :key=`${employee.Id}-${dayEvents.Date}-${singleEvent.Id}`>
 
-                                    @* Se è un holiday o un remote oppure è un leave da visualizzare come singola lettera, mostra il nome o la sigla dell'evento*@
-                                    <template v-if="singleEvent.Type !== 'LEAVE' && singleEvent.Type !== 'L'">
-                                        <p :class="[ 'm-0', 'fw-bold', getTextColor(singleEvent) ]">{{ singleEvent.Type }}</p>
+                                        @* Se è un holiday o un remote oppure è un leave da visualizzare come singola lettera, mostra il nome o la sigla dell'evento*@
+                                        <template v-if="singleEvent.Type !== 'LEAVE' && singleEvent.Type !== 'L'">
+                                            <p :class="[ 'm-0', 'fw-bold', getTextColor(singleEvent) ]">{{ singleEvent.Type }}</p>
+                                        </template>
+
+                                        @* Se è un holiday o un remote oppure è un leave da visualizzare come singola lettera, mostra il nome o la sigla dell'evento*@
+                                        @* Viene aggiunto un tooltip per visualizzare l'orario del permesso quando lo spazio in lunghezza non è sufficiente *@
+                                        <template v-else-if="singleEvent.Type.length === 1">
+                                            <p :class="[ 'm-0', 'fw-bold', getTextColor(singleEvent) ]"
+                                               data-bs-toggle="tooltip"
+                                               data-bs-placement="right"
+                                               :title="singleEvent.DateRange">
+                                                {{ singleEvent.Type }}
+                                            </p>
+                                        </template>
+
+                                        @* Se invece è un leave e non c'è da visualizzare in singola lettera, visualizza l'orario *@
+                                        <template v-else>
+                                            <p :class="[ 'm-0', 'fw-bold', getTextColor(singleEvent) ]">{{ singleEvent.DateRange }}</p>
+                                        </template>
                                     </template>
+                                </td>
+                            </template>
 
-                                    @* Se è un holiday o un remote oppure è un leave da visualizzare come singola lettera, mostra il nome o la sigla dell'evento*@
-                                    @* Viene aggiunto un tooltip per visualizzare l'orario del permesso quando lo spazio in lunghezza non è sufficiente *@
-                                    <template v-else-if="singleEvent.Type.length === 1">
-                                        <p :class="[ 'm-0', 'fw-bold', getTextColor(singleEvent) ]"
-                                           data-bs-toggle="tooltip"
-                                           data-bs-placement="right"
-                                           :title="singleEvent.DateRange">
-                                            {{ singleEvent.Type }}
-                                        </p>
-                                    </template>
-
-                                    @* Se invece è un leave e non c'è da visualizzare in singola lettera, visualizza l'orario *@
-                                    <template v-else>
-                                        <p :class="[ 'm-0', 'fw-bold', getTextColor(singleEvent) ]">{{ singleEvent.DateRange }}</p>
-                                    </template>
-                                </template>
-                            </td>
+                            @* Se non ci sono eventi da visualizzare, crea una cella e passa alla prossima *@
+                            <template v-else>
+                                <td :id="employeeInfo.IdEmployee === employee.Id ? accumulateDays[index] : null"
+                                    v-on:click="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? openOffCanvas($event) : null">
+                                </td>
+                            </template>
                         </template>
-
-                        @* Se non ci sono eventi da visualizzare, crea una cella e passa alla prossima *@
-                        <template v-else>
-                            <td :id="employeeInfo.IdEmployee === employee.Id ? accumulateDays[index] : null"
-                                v-on:click="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? openOffCanvas($event) : null">
-                            </td>
-                        </template>
-                    </template>
-                </tr>
-            </tbody>
-        </table>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
     </section>
+    
 
 
     @* Off canvas di Bootstrap per nuova richiesta
