@@ -7,6 +7,10 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using SmartPresence.Web.Infrastructure;
+using SmartPresence.Services.Users;
+using SmartPresence.Services.Users.Queries;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SmartPresence.Web.Areas
 {
@@ -16,6 +20,8 @@ namespace SmartPresence.Web.Areas
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public partial class AuthenticatedBaseController : Controller
     {
+        private IUserService _userService => HttpContext.RequestServices.GetService<IUserService>();
+
         public AuthenticatedBaseController() { }
 
         protected IdentitaViewModel Identita
@@ -30,12 +36,17 @@ namespace SmartPresence.Web.Areas
         {
             try
             {
-                if (context.HttpContext != null && context.HttpContext.User != null && context.HttpContext.User.Identity.IsAuthenticated)
+                if (context.HttpContext != null && context.HttpContext.User != null && context.HttpContext.User.Identity.IsAuthenticated && _userService is not null)
                 {
+                    var email = context.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Email).First().Value;
+                    var surnameName = _userService.GetSurnameName(new UserIdentificationRequest(email));
+
                     ViewData[IdentitaViewModel.VIEWDATA_IDENTITACORRENTE_KEY] = new IdentitaViewModel
                     {
-                        EmailUtenteCorrente = context.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Email).First().Value
+                        EmailUtenteCorrente = email,
+                        SurnameName = surnameName
                     };
+
                 }
                 else
                 {
