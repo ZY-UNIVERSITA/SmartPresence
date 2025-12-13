@@ -234,7 +234,7 @@
             <tbody>
                 <tr v-for="employee in filteredList" :key="employee.Id">
                     @* Prima colonna dei dipendenti, gestito come thead *@
-                    <th scope="row" :id="employeeInfo.IdEmployee === employee.Id ? 'userId-' + employee.Id : null" class="align-middle">
+                    <th scope="row" :id="employeeInfo.IdEmployee === employee.Id ? 'actualUser' : null" class="align-middle">
                         <img src="~/images/profile.svg"
                              alt="Profile photo"
                              class="rounded-circle me-3 profile-picture" />

@@ -50,7 +50,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
                     Name = x.Name,
                     Surname = x.Surname,
                     Team = x.Team,
-                    Events = CreateEmployeeSingleDayEvents(x.WorkEventsList, x)
+                    Events = CreateEmployeeSingleDayEvents(x.WorkEventsList)
                 }).ToList();
 
             // Prepara la lista dei dati sui team che verranno usati come filtro
@@ -157,7 +157,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
         }
 
         // Crea la lista degli eventi per ogni singolo dipendente
-        private List<SingleDayEvents> CreateEmployeeSingleDayEvents(List<WorkEventResponse> response, EmployeeWorkEventsResponse x)
+        private List<SingleDayEvents> CreateEmployeeSingleDayEvents(List<WorkEventResponse> response)
         {
             // Crea una lista degli eventi
             var everyDaysEvents = new List<SingleDayEvents>();
@@ -230,7 +230,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
                         Date = minDate,
                         Days = dayBetweenMinAndMaxDate,
                         ListEvents = new List<EventTypeAndStatus>(),
-                        CanAddRequest = singleEvent.WorkEventType.Name.Equals(WorkEventTypeName.HOLIDAY) ? false : true
+                        CanAddRequest = singleEvent.WorkEventType.Name.Equals(WorkEventTypeName.HOLIDAY) || minDate.Date < Today.Date ? false : true
                     };
                 }
 
