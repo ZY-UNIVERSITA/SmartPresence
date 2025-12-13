@@ -26,7 +26,7 @@
     </style>
 }
 
-<div id="pageId" class="onit-page">
+<div id="pageId" class="onit-page min-vh-100">
     <div class="onit-page-sticky-top" id="onit-page-sticky-top">
         <nav class="navbar navbar-expand-lg navbar-light bg-white onit-page-menu ">
             <div class="container-fluid">
@@ -52,7 +52,8 @@
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-black" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img class="user-profile-picture" src="@identitaCorrente.GravatarUrl" alt="User profile picture"/>&nbsp;@identitaCorrente.SurnameName
+                                    <img class="user-profile-picture" src="~/images/profile.svg" alt="User profile picture"/>&nbsp;
+                                    <span class="fs-4">@identitaCorrente.SurnameName</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" role="menu">
                                     <a class="dropdown-item" asp-area="Profile" asp-controller="Details" asp-action="Index">Profile</a>
