@@ -36,10 +36,14 @@ namespace SmartPresence.Web.Areas
         {
             try
             {
-                if (context.HttpContext != null && context.HttpContext.User != null && context.HttpContext.User.Identity.IsAuthenticated && _userService is not null)
+                if (context.HttpContext != null && context.HttpContext.User != null && context.HttpContext.User.Identity.IsAuthenticated)
                 {
                     var email = context.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Email).First().Value;
                     var surnameName = _userService.GetSurnameName(new UserIdentificationRequest(email));
+
+                    Console.WriteLine($"useraervice is present? {_userService is not null}");
+                    Console.WriteLine($"email: {email}");
+                    Console.WriteLine($"name {surnameName}");
 
                     ViewData[IdentitaViewModel.VIEWDATA_IDENTITACORRENTE_KEY] = new IdentitaViewModel
                     {

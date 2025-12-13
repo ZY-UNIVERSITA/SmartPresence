@@ -17,8 +17,10 @@ namespace SmartPresence.Services.Users
 
         public int GetId(UserIdentificationRequest user)
         {
-            if (string.IsNullOrEmpty(user.Email))
+            if (!string.IsNullOrEmpty(user.Email))
             {
+                Console.WriteLine(user.Email);
+                
                 var lowerEmail = user.Email.ToLower();
 
                 return _context.Users
@@ -32,13 +34,13 @@ namespace SmartPresence.Services.Users
 
         public string GetSurnameName(UserIdentificationRequest user)
         {
-            if (string.IsNullOrEmpty(user.Email))
+            if (!string.IsNullOrEmpty(user.Email))
             {
                 var userId = GetId(user);
 
                 return _context.Employees
                     .Where(x => x.Id.Equals(userId))
-                    .Select(y => string.Concat(y.Surname, y.Name))
+                    .Select(y => string.Concat(y.Surname, " ", y.Name))
                     .FirstOrDefault();
             }
 
