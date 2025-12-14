@@ -230,7 +230,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
                         Date = minDate,
                         Days = dayBetweenMinAndMaxDate,
                         ListEvents = new List<EventTypeAndStatus>(),
-                        CanAddRequest = singleEvent.WorkEventType.Name.Equals(WorkEventTypeName.HOLIDAY) || minDate.Date < Today.Date ? false : true
+                        CanAddRequest = !(singleEvent.WorkEventType.Name.Equals(WorkEventTypeName.HOLIDAY) || minDate.Date < Today.Date)
                     };
                 }
 
