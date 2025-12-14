@@ -14,6 +14,8 @@ Valutare la facilità d’uso del prototipo e identificare eventuali criticità 
 
 **Modalità:** Ai partecipanti è stato inviato il link al prototipo insieme alla descrizione dei task da svolgere.
 
+[Figma Prototype Link](https://www.figma.com/proto/bGbBeWRetPjWAkDQHjXhZz/SmartPresence?node-id=1-2&p=f&t=0wgesoqVJgCgTFet-1&scaling=contain&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A2&show-proto-sidebar=1)
+
 ## Task richiesti:
 
 **1.** Visualizzare le presenze nella vista settimanale.
