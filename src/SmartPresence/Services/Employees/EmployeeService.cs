@@ -168,7 +168,7 @@ namespace SmartPresence.Services.Employees
                                         .Where(x => x.WorkEventType.Name.Equals(WorkEventTypeName.HOLIDAY) && x.StartDate.Date <= day && x.EndDate.Date >= day)
                                         .FirstOrDefault();
 
-                                    Console.Write($"Date: {day} - Contain a holiday event: {containsAnHolidayWorkEvent}");
+                                    //Console.Write($"Date: {day} - Contain a holiday event: {containsAnHolidayWorkEvent}");
 
                                     if (isAnHoliday && containsAnHolidayWorkEvent is null)
                                     {
@@ -262,20 +262,6 @@ namespace SmartPresence.Services.Employees
                                 var containsAnHolidayWorkEvent = employee.WorkEventsList
                                     .Where(x => x.WorkEventType.Name.Equals(WorkEventTypeName.HOLIDAY) && x.StartDate.Date <= day && x.EndDate.Date >= day)
                                     .FirstOrDefault();
-
-                                if (day == new DateTime(2025, 12, 09))
-                                {
-                                    Console.Write($"Date: {day} - Contain a holiday event: {containsAnHolidayWorkEvent is not null}{Environment.NewLine}");
-
-                                    var prova = employee.WorkEventsList;
-
-                                    foreach (var item in prova)
-                                    {
-                                        Console.WriteLine($"evento: {item.WorkEventType.Name} - {item.StartDate.Date} - {item.EndDate.Date}");
-                                        Console.WriteLine($"evento: {item.WorkEventType.Name} - {item.StartDate.Date} - {item.EndDate.Date}");
-                                    }
-                                }
-
 
                                 if (isAnHoliday && containsAnHolidayWorkEvent is null)
                                 {

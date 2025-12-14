@@ -7,6 +7,7 @@ namespace SmartPresence.Web.Areas
         public static string VIEWDATA_IDENTITACORRENTE_KEY = "IdentitaUtenteCorrente";
 
         public string EmailUtenteCorrente { get; set; }
+        public string SurnameName { get; set; }
 
         public string GravatarUrl
         {

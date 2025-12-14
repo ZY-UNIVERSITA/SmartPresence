@@ -128,7 +128,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
 
                 foreach (var item in errors)
                 {
-                    Console.WriteLine(item);
+                    Alerts.AddError(this, item);
                 }
             }
 
