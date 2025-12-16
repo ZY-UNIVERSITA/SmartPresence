@@ -10,6 +10,7 @@
 
 @{
     ViewData["title"] = "Calendar";
+    ViewData["FullscreenClass"] = "onit-html-fullscreen-lg";
 
 }
 
@@ -314,7 +315,7 @@
                                     v-on:click="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? openOffCanvas($event) : null"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
-                                    :title="dayEvents.CanAddRequest ? 'Can add a request' : null"
+                                    :title="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? 'Can add a request' : null"
                                     >
 
                                     @* Ogni evento quindi ogni giorno, potrebbe avere più eventi che accadono per quel giorno, es. leave e remote insieme *@
@@ -352,7 +353,7 @@
                                     v-on:click="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? openOffCanvas($event) : null"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
-                                    :title="dayEvents.CanAddRequest ? 'Can add a request' : null">
+                                        :title="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? 'Can add a request' : null">
                                 </td>
                             </template>
                         </template>
