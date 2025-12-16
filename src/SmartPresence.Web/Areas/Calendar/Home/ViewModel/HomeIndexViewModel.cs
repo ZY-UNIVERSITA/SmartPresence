@@ -189,7 +189,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
                     {
                         Date = BeginDate.AddDays(dayUsed).Date,
                         Days = 1,
-                        CanAddRequest = BeginDate.AddDays(dayUsed).Date >= Today.Date
+                        CanAddRequest = BeginDate.AddDays(dayUsed).Date >= Today.Date && !DateTimeHelper.IsAnHoliday(BeginDate.AddDays(dayUsed).Date)
                     });
 
                     dayUsed++;
@@ -261,7 +261,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
                 {
                     Date = BeginDate.AddDays(dayUsed).Date,
                     Days = 1,
-                    CanAddRequest = BeginDate.AddDays(dayUsed).Date >= Today.Date
+                    CanAddRequest = BeginDate.AddDays(dayUsed).Date >= Today.Date && !DateTimeHelper.IsAnHoliday(BeginDate.AddDays(dayUsed).Date)
                 });
 
                 dayUsed++;

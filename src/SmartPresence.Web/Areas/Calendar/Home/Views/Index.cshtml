@@ -122,10 +122,14 @@
         .remote-tab-table {
             table-layout: fixed;
         }
+
+        [v-cloak] {
+            display: none;
+        }
     </style>
 }
 
-<main id="app" class="container-fluid d-flex flex-column vh-100 p-3 bg-light">
+<main id="app" class="container-fluid d-flex flex-column vh-100 p-3 bg-light" v-cloak>
 
     @* Camio del periodo *@
     <partial name="_PartialPeriod" model="Model"></partial>
@@ -289,7 +293,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="employee in filteredList" :key="employee.Id">
+                    <template v-for="employee in filteredList" :key="employee.Id">
+                        <tr >
                         @* Prima colonna dei dipendenti, gestito come thead *@
                         <th scope="row" :id="employeeInfo.IdEmployee === employee.Id ? 'actualUser' : null" class="align-middle">
                             <img src="~/images/profile.svg"
@@ -305,8 +310,12 @@
                             @* Ogni evento, viene identificato da una data di inizio, se per quello specifico giorno ci sono eventi da visualizzare allora li visualizza *@
                             <template v-if="Array.isArray(dayEvents.ListEvents) && dayEvents.ListEvents.length > 0">
                                 <td :id="employeeInfo.IdEmployee === employee.Id ? accumulateDays[index] : null" :colspan="dayEvents.Days"
-                                    :class="[ 'text-center', 'align-middle', setClickableCell(dayEvents.CanAddRequest, employeeInfo.IdEmployee === employee.Id), getBackgroundColor(dayEvents.ListEvents) ]"
-                                    v-on:click="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? openOffCanvas($event) : null">
+                                    :class="[ 'text-center', 'align-middle', setClickableCell(dayEvents.CanAddRequest,  employeeInfo.IdEmployee === employee.Id), getBackgroundColor(dayEvents.ListEvents) ]"
+                                    v-on:click="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? openOffCanvas($event) : null"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    :title="dayEvents.CanAddRequest ? 'Can add a request' : null"
+                                    >
 
                                     @* Ogni evento quindi ogni giorno, potrebbe avere più eventi che accadono per quel giorno, es. leave e remote insieme *@
                                     @* Cicla sui singoli eventi del giorno *@
@@ -340,11 +349,15 @@
                             <template v-else>
                                 <td :id="employeeInfo.IdEmployee === employee.Id ? accumulateDays[index] : null"
                                     :class="[ setClickableCell(dayEvents.CanAddRequest, employeeInfo.IdEmployee === employee.Id) ]"
-                                    v-on:click="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? openOffCanvas($event) : null">
+                                    v-on:click="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? openOffCanvas($event) : null"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    :title="dayEvents.CanAddRequest ? 'Can add a request' : null">
                                 </td>
                             </template>
                         </template>
                     </tr>
+                    </template>
                 </tbody>
             </table>
         </section>
