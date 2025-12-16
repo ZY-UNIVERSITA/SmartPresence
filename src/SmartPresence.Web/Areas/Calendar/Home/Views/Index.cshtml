@@ -84,6 +84,14 @@
                 white-space: nowrap;
             }
 
+            .mainTable td.clickable {
+                cursor: pointer;
+            }
+
+            .mainTable td.clickable:hover {
+                background-color: lightgrey !important;
+            }
+
         .col-fixed {
             width: 25%;
             min-width: 450px;
@@ -297,7 +305,7 @@
                             @* Ogni evento, viene identificato da una data di inizio, se per quello specifico giorno ci sono eventi da visualizzare allora li visualizza *@
                             <template v-if="Array.isArray(dayEvents.ListEvents) && dayEvents.ListEvents.length > 0">
                                 <td :id="employeeInfo.IdEmployee === employee.Id ? accumulateDays[index] : null" :colspan="dayEvents.Days"
-                                    :class="[ 'text-center', 'align-middle', getBackgroundColor(dayEvents.ListEvents) ]"
+                                    :class="[ 'text-center', 'align-middle', setClickableCell(dayEvents.CanAddRequest, employeeInfo.IdEmployee === employee.Id), getBackgroundColor(dayEvents.ListEvents) ]"
                                     v-on:click="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? openOffCanvas($event) : null">
 
                                     @* Ogni evento quindi ogni giorno, potrebbe avere più eventi che accadono per quel giorno, es. leave e remote insieme *@
@@ -331,6 +339,7 @@
                             @* Se non ci sono eventi da visualizzare, crea una cella e passa alla prossima *@
                             <template v-else>
                                 <td :id="employeeInfo.IdEmployee === employee.Id ? accumulateDays[index] : null"
+                                    :class="[ setClickableCell(dayEvents.CanAddRequest, employeeInfo.IdEmployee === employee.Id) ]"
                                     v-on:click="employeeInfo.IdEmployee === employee.Id && dayEvents.CanAddRequest ? openOffCanvas($event) : null">
                                 </td>
                             </template>

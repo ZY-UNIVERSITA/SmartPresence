@@ -294,6 +294,12 @@ function initVue(modelData) {
                     })
                 })
             },
+            setClickableCell(canAddRequest, isUser) {
+                if (canAddRequest && isUser) {
+                    return "clickable";
+                }
+            }
+            ,
             calculateBackground() {
                 this.holidayBackground(".mainTable")
                 this.holidayBackground(".remote-tab-table")
