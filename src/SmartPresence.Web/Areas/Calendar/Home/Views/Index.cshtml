@@ -80,11 +80,6 @@
                     z-index: 4;
                 }
 
-            .mainTable th:not(:first-child),
-            .mainTable td:not(:first-child) {
-                white-space: nowrap;
-            }
-
             .mainTable td.clickable {
                 cursor: pointer;
             }
@@ -127,12 +122,26 @@
         [v-cloak] {
             display: none;
         }
+
+        main {
+            flex: 1 1 auto;
+            min-height: 0; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-table {
+            flex: 1 1 auto;
+            min-height: 0; 
+            overflow: auto; 
+            padding-bottom: 0.75rem; 
+        }
     </style>
 }
 
 <main id="app" class="container-fluid d-flex flex-column vh-100 p-3 bg-light" v-cloak>
 
-    @* Camio del periodo *@
+    @* Cambio del periodo *@
     <partial name="_PartialPeriod" model="Model"></partial>
 
     @* Sezione dei filtri *@
@@ -270,7 +279,7 @@
 
     @* Calendario principale *@
     @*px-5 py-3*@
-    <section class="px-5 py-3 flex-grow-1 d-flex flex-column vh-100">
+    <section class="px-5 py-3 d-flex flex-column flex-grow-1 section-table">
         <section class="table-responsive calendar-section flex-grow-1 overflow-auto">
             <table class="mainTable table table-bordered table-hover shadow">
                 <colgroup>
