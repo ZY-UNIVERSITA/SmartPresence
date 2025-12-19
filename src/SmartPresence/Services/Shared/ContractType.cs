@@ -1,4 +1,5 @@
 ﻿using SmartPresence.Services.Employees;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,9 +12,12 @@ namespace SmartPresence.Services.Shared
         public string Name { get; set; }
         public int DailyHours { get; set; }
         public int WeeklyDays { get; set; }
+        public List<DailyWorkHours> WorkHours { get; set; }
 
         public IEnumerable<Employee> Employees { get; set; }
     }
+
+    public record DailyWorkHours(DayOfWeek Day, TimeOnly Start, TimeOnly End);
 
     public static class LeaveHolidaysHours
     {
