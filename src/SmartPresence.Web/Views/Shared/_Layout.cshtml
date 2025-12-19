@@ -23,6 +23,29 @@
         .onit-page {
             background-color: #F2F2F2;
         }
+
+        .onit-toastify {
+            color: white;
+            font-weight: 500;
+        }
+
+        .onit-toastify-info {
+            background: #0dcaf0 !important;
+        }
+
+        .onit-toastify-success {
+            background: #198754 !important;
+        }
+
+        .onit-toastify-warning {
+            background: #ffc107 !important;
+            color: black !important;
+        }
+
+        .onit-toastify-error {
+            background: #dc3545 !important;
+        }
+
     </style>
 }
 
@@ -56,8 +79,8 @@
                                     <span class="fs-4">@identitaCorrente.SurnameName</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" role="menu">
-                                    <a class="dropdown-item" asp-area="Profile" asp-controller="Details" asp-action="Index">Profile</a>
-                                    <a class="dropdown-item" href="javascript:void(0)" onclick="javascript: document.getElementById('POST_LogOut').submit()" title="@SharedLocalizer["Chiudi sessione di lavoro"]">
+                                    <a class="dropdown-item" role="menuitem" asp-area="Profile" asp-controller="Details" asp-action="Index">Profile</a>
+                                    <a class="dropdown-item" role="menuitem" href="javascript:void(0)" onclick="javascript: document.getElementById('POST_LogOut').submit()" title="@SharedLocalizer["Chiudi sessione di lavoro"]">
                                         <i class="fa-solid fa-right-from-bracket"></i>&nbsp;@SharedLocalizer["Esci"]
                                     </a>
                                     <form autocomplete="off" method="post" action="@Url.Action(MVC.Login.Logout())" id="POST_LogOut" display="none"></form>

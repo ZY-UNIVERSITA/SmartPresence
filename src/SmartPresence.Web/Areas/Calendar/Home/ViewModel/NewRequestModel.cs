@@ -52,10 +52,11 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
         }
 
         // Esegue una seconda validazione prima di provare ad eseguire qualsiasi inserimento
-        public async Task<List<string>> AsyncValidation(IWorkEventService workEventService)
+        public async Task<List<string>> AsyncValidation(IValidationWorkEventService validationWorkEventService)
         {
             var validationResult = new List<string>();
 
+            /// DA PORTARE NEL METODO DI VALIDAZIONE
             // Aggiunge gli orari di inizio e fine delle ferie che corrispondono all'inizio dell'orario e alla fine dell'orario lavorativo
             if (EventType.Equals(WorkEventTypeName.HOLIDAY))
             {
@@ -75,13 +76,11 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
                 };
 
                 // Cerca se sono presenti uno o più eventi già presenti che si sovrappongono a quello da inserire
-                var areThereAnyOtherEvents = await workEventService.ValidateNewWorkEvent(validationRequest);
+                var validationProblems = await validationWorkEventService.ValidateNewWorkEvent(validationRequest);
 
                 // Se ci sono altri eventi, allora aggiungi il messaggio di errore
-                if (areThereAnyOtherEvents)
-                {
-                    validationResult.Add("Cannot add an event where there is another which will be overlapping.");
-                }
+                Action<string> addToValidationResult = x => validationResult.Add(x);
+                validationProblems.ForEach(addToValidationResult);
             }
 
             return validationResult;
@@ -92,9 +91,9 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
         {
             var searchModel = new SearchModel()
             {
-                CalendarView = CalendarViewFilter,
-                BeginDateString = BeginDateSearch.Date.ToString("yyyy-MM-dd"),
-                EndDateString = EndDateSearch.Date.ToString("yyyy-MM-dd"),
+                CalendarView = CalendarViewName.CUSTOM,
+                BeginDateString = BeginDateRequest.Date.AddDays(-1).ToString("yyyy-MM-dd"),
+                EndDateString = EndDateRequest.Date.AddDays(1).ToString("yyyy-MM-dd"),
             };
 
             return searchModel;

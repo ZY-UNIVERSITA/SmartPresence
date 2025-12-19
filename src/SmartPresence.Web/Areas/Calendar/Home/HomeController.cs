@@ -8,7 +8,6 @@ using SmartPresence.Web.Infrastructure;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SmartPresence.Web.Areas.Calendar.Home
 {
@@ -18,12 +17,14 @@ namespace SmartPresence.Web.Areas.Calendar.Home
         private readonly IEmployeeService _employeeService;
         private readonly IUserService _userService;
         private readonly IWorkEventService _workEventService;
+        private readonly IValidationWorkEventService _validationWorkEventService;
 
-        public HomeController(IEmployeeService employeeService, IUserService userService, IWorkEventService workEventService)
+        public HomeController(IEmployeeService employeeService, IUserService userService, IWorkEventService workEventService, IValidationWorkEventService validationWorkEventService)
         {
             _employeeService = employeeService;
             _userService = userService;
             _workEventService = workEventService;
+            _validationWorkEventService = validationWorkEventService;
         }
 
         [HttpGet]
@@ -90,7 +91,7 @@ namespace SmartPresence.Web.Areas.Calendar.Home
         {
             // Crea un search model che rifletta la view dell'utente in quel momento
             var searchModel = model.ToSearchmodel();
-            var validationResponse = await model.AsyncValidation(_workEventService);
+            var validationResponse = await model.AsyncValidation(_validationWorkEventService);
 
             if (ModelState.IsValid && validationResponse.Count.Equals(0))
             {
@@ -99,6 +100,8 @@ namespace SmartPresence.Web.Areas.Calendar.Home
 
                 // Aggiungi il nuovo work event
                 await _workEventService.HandleNewWorkEvent(command);
+
+                Alerts.AddSuccess(this, "New request has been added");
             }
             else
             {

@@ -21,6 +21,7 @@ namespace SmartPresence.Web
             container.AddScoped<IEmployeeService, EmployeeService>();
             container.AddScoped<IUserService, UserService>();
             container.AddScoped<IWorkEventService, WorkEventService>();
+            container.AddScoped<IValidationWorkEventService, WorkEventService>();
 
         }
     }
