@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SmartPresence.Services.WorkEvents
 {
-    public class WorkEventService : IWorkEventService
+    public class WorkEventService : IWorkEventService, IValidationWorkEventService
     {
         private readonly SmartPresenceDbContext _context;
         private readonly IEmployeeService _employeeService;
@@ -64,7 +64,20 @@ namespace SmartPresence.Services.WorkEvents
         }
 
         // Validazione della richiesta
-        public async Task<bool> ValidateNewWorkEvent(ValidateNewWorkEventResponse workEvent)
+        public async Task<List<string>> ValidateNewWorkEvent(ValidateNewWorkEventResponse workEvent)
+        {
+            var problemsList = new List<string>();
+
+            await this.ValidateDateToAvoidMultipleEventsInSameDays(workEvent, problemsList);
+
+            await this.ValidateWorkingDate(workEvent, problemsList);
+
+            this.ValidateLunchHours(workEvent, problemsList);
+
+            return problemsList;
+        }
+
+        private async Task ValidateDateToAvoidMultipleEventsInSameDays(ValidateNewWorkEventResponse workEvent, List<string> problemsList)
         {
             var baseQuery = _context.WorkEvents.AsQueryable();
 
@@ -85,7 +98,66 @@ namespace SmartPresence.Services.WorkEvents
                 workEvent.BeginDate < y.EndDate &&
                 workEvent.EndDate > y.StartDate);
 
-            return await baseQuery.AnyAsync();
+            if (await baseQuery.AnyAsync())
+            {
+                problemsList.Add("Cannot add an event where there is another which will be overlapping");
+
+            }
+        }
+
+        private async Task ValidateWorkingDate(ValidateNewWorkEventResponse workEvent, List<string> problemsList)
+        {
+            var baseQuery = _context.ContractTypes.AsQueryable();
+            var employeeContract = _context.Employees.AsQueryable();
+
+            var employee = await employeeContract.FirstAsync(x => x.Id.Equals(workEvent.IdEmployee));
+
+            var employeeContractResult = await baseQuery.Where(x => x.Id.Equals(employee.IdContractType)).FirstOrDefaultAsync();
+
+            if (employeeContractResult is not null)
+            {
+                var eventsDays = Enumerable.Range(0, DateTimeHelper.GetDaysBetweenTwoDates(workEvent.BeginDate, workEvent.EndDate))
+                    .Select(x =>
+                        new KeyValuePair<DayOfWeek, TimeOnly[]>(
+                            workEvent.BeginDate.AddDays(x).DayOfWeek,
+                            new[]
+                            {
+                                new TimeOnly(workEvent.BeginDate.Hour, workEvent.BeginDate.Minute),
+                                new TimeOnly(workEvent.EndDate.Hour, workEvent.EndDate.Minute)
+                            }
+                        )
+                    )
+                    .ToDictionary(x => x.Key, y => y.Value);
+
+                if (eventsDays.Any(x =>
+                {
+                    var workHours = employeeContractResult.WorkHours
+                        .FirstOrDefault(y => y.Day == x.Key);
+
+                    return workHours != null &&
+                        (x.Value[0] < workHours.Start ||
+                        x.Value[1] > workHours.End);
+                }))
+                {
+                    problemsList.Add("Cannot add an event where the start or end date is outside the working hours");
+                }
+
+            }
+        }
+
+        private void ValidateLunchHours(ValidateNewWorkEventResponse workEvent, List<string> problemsList)
+        {
+            var lunchStart = new TimeOnly(13, 0);
+            var lunchEnd = new TimeOnly(14, 0);
+
+            var eventStart = new TimeOnly(workEvent.BeginDate.Hour, workEvent.BeginDate.Minute);
+            var eventEnd = new TimeOnly(workEvent.EndDate.Hour, workEvent.EndDate.Minute);
+
+            if (eventStart >= lunchStart && eventEnd <= lunchEnd)
+            {
+                problemsList.Add("Cannot add an event where the start and end date is during the lunch hours");
+            }
+
         }
 
         // Restituisce le richieste create dai dipendenti che devono ancora essere approvate dal manager
@@ -175,7 +247,7 @@ namespace SmartPresence.Services.WorkEvents
             if (command.Status.Equals(WorkEventStatusName.APPROVED))
             {
                 // Ad ogni employee associa inoltre la lista del timeoff
-                employeeEvents.ForEach(async x => x.EmployeeTimeOffs = await  _context.EmployeeTimeOffs.Where(y => y.IdEmployee.Equals(x.EmployeeId)).ToListAsync());
+                employeeEvents.ForEach(async x => x.EmployeeTimeOffs = await _context.EmployeeTimeOffs.Where(y => y.IdEmployee.Equals(x.EmployeeId)).ToListAsync());
             }
 
             // Ora per ogni employee e per ogni suo evento, cambia lo status dell'evento e aggiorna la tabella del timeoff
@@ -212,7 +284,22 @@ namespace SmartPresence.Services.WorkEvents
                         else
                         {
                             var minutes = (endDate - startDate).TotalMinutes;
-                            timeOff.LeaveUsed += minutes;
+
+                            var lunchStart = startDate.Date.AddHours(13);
+                            var lunchEnd = startDate.Date.AddHours(14);
+
+                            var overlapStart = startDate > lunchStart ? startDate : lunchStart;
+                            var overlapEnd = endDate < lunchEnd ? endDate : lunchEnd;
+
+                            double lunchMinutes = 0;
+
+                            if (overlapEnd > overlapStart)
+                            {
+                                lunchMinutes = (overlapEnd - overlapStart).TotalMinutes;
+                            }
+
+                            timeOff.LeaveUsed += (minutes - lunchMinutes);
+
                         }
                     }
                 }
