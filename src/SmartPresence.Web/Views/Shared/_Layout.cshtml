@@ -5,11 +5,13 @@
     var version = System.Reflection.Assembly.GetAssembly(typeof(Startup)).GetName().Version;
 
     var identitaCorrente = (SmartPresence.Web.Areas.IdentitaViewModel)ViewData[SmartPresence.Web.Areas.IdentitaViewModel.VIEWDATA_IDENTITACORRENTE_KEY];
+
+    var email = identitaCorrente.EmailUtenteCorrente;
 }
-@section metas{
+@section metas {
     @RenderSection("metas", false)
 }
-@section styles{
+@section styles {
     @RenderSection("styles", false)
     <style>
         .user-profile-picture {
@@ -54,14 +56,20 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-white onit-page-menu ">
             <div class="container-fluid">
                 <a class="navbar-brand d-flex align-items-center" href="/">
-                    <img class="onit-suites-logo" src="~/images/app-logo.png" alt="Application logo"/>
+                    <img class="onit-suites-logo" src="~/images/app-logo.png" alt="Application logo" />
                     <h1 class="m-0 ps-2 text-black text-center">Smart Presence</h1>
                 </a>
-            
+
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active text-black m-0 mx-5 fs-4" aria-current="page" asp-area="Calendar" asp-controller="Management" asp-action="Index">Request management</a>
+                        <li id="requestManagementItem" class="nav-item">
+                            <a class="nav-link active text-black m-0 mx-5 fs-4 " aria-current="page" asp-area="Calendar" asp-controller="Management" asp-action="Index">
+                                Request management
+                                <span id="pendingRequests" class="badge bg-primary">                                    
+                                    <span class="visually-hidden">pending requests</span>
+                                </span>
+                                
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -75,7 +83,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-black" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img class="user-profile-picture" src="~/images/profile.svg" alt="User profile picture"/>&nbsp;
+                                    <img class="user-profile-picture" src="~/images/profile.svg" alt="User profile picture" />&nbsp;
                                     <span class="fs-4">@identitaCorrente.SurnameName</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" role="menu">
@@ -96,7 +104,7 @@
     @RenderSection("pageSubtitle", false)
     @RenderBody()
 </div>
-@section googlehead{
+@section googlehead {
     @*<script async src="https://www.googletagmanager.com/gtag/js?id=UA-"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
@@ -104,10 +112,35 @@
     gtag('js', new Date());
     gtag('config', 'UA-', { 'anonymize_ip': true });    // Ricordarsi di anonimizzare per fare ricadere il cookie tra quelli tecnici ed evitare l'obbligo del banner
     </script>*@
-    }
-@section scripts{
+}
+@section scripts {
     <script type="text/javascript">
         @this.RenderAlertsWithToastify()
+
+        const email = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(email))
+
+        async function getPendingCount(email) {
+            const response = await fetch(`https://localhost:7132/api/api/events_count?email=${email}`);
+
+            if (!response.ok) {
+                throw new Error("Errore nella chiamata API");
+            }
+
+            const count = await response.json();
+            return count;
+        }
+
+        getPendingCount(email)
+            .then(requestManagement => {
+                if (requestManagement.isManager) {
+                    document.querySelector("#pendingRequests").textContent = requestManagement.count;
+
+                } else {
+                    document.querySelector("#requestManagementItem").remove();
+                }
+            })
+            .catch(err => {
+            });
     </script>
 
     @RenderSection("scripts", false)

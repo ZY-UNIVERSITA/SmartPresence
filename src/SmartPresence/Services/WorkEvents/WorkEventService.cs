@@ -77,6 +77,7 @@ namespace SmartPresence.Services.WorkEvents
             return problemsList;
         }
 
+        // Validazione per evitare sovrapposizioni di eventi
         private async Task ValidateDateToAvoidMultipleEventsInSameDays(ValidateNewWorkEventResponse workEvent, List<string> problemsList)
         {
             var baseQuery = _context.WorkEvents.AsQueryable();
@@ -105,6 +106,7 @@ namespace SmartPresence.Services.WorkEvents
             }
         }
 
+        // Validazione per evitare di inserire giorni o ore non lavorative
         private async Task ValidateWorkingDate(ValidateNewWorkEventResponse workEvent, List<string> problemsList)
         {
             var baseQuery = _context.ContractTypes.AsQueryable();
@@ -145,6 +147,7 @@ namespace SmartPresence.Services.WorkEvents
             }
         }
 
+        // Validazione per evitare di inserire eventi che comprendano solo l'ora di pranzo
         private void ValidateLunchHours(ValidateNewWorkEventResponse workEvent, List<string> problemsList)
         {
             var lunchStart = new TimeOnly(13, 0);
@@ -157,6 +160,27 @@ namespace SmartPresence.Services.WorkEvents
             {
                 problemsList.Add("Cannot add an event where the start and end date is during the lunch hours");
             }
+        }
+
+        public async Task ValidatePermissionAsLeave(ValidateNewWorkEventResponse workEvent)
+        {
+            var baseQuery = _context.ContractTypes.AsQueryable();
+            var employeeContract = _context.Employees.AsQueryable();
+
+            var employee = await employeeContract.FirstAsync(x => x.Id.Equals(workEvent.IdEmployee));
+
+            var employeeContractResult = await baseQuery.Where(x => x.Id.Equals(employee.IdContractType)).FirstOrDefaultAsync();
+
+            var day = employeeContractResult.WorkHours.Where(x => x.Day.Equals(workEvent.BeginDate.DayOfWeek)).FirstOrDefault();
+
+            if (day is not null)
+            {
+                if (day.Start.Equals(new TimeOnly(workEvent.BeginDate.Hour, 0)) && day.End.Equals(new TimeOnly(workEvent.EndDate.Hour, 0)))
+                {
+                    workEvent.WorkEventTypeName = WorkEventTypeName.HOLIDAY;
+                }
+            }
+
 
         }
 
@@ -359,6 +383,50 @@ namespace SmartPresence.Services.WorkEvents
             queryResult ??= new RemoteDaysResponse();
 
             return queryResult;
+        }
+
+        public async Task<WorkEventsCountResponse> GetEmployeeWorkEventPendingTotal(WorkEventsCountRequest request)
+        {
+            var userId = request.userId;
+
+            var userOrganizationInfo = await _employeeService.GetEmployeeOrganizationInfo(new EmployeeOrganizationInfoByIdRequest(userId));
+
+            // Create base query
+            var baseQuery = _context.Employees.AsQueryable();
+
+            // Pending request is available only to Manager level (TEAM, AREA or being an EXECUTIVE)
+            var organizationLevelFilter = userOrganizationInfo.Role.Name.Equals(RoleName.EMPLOYEE)
+                ? OrganizationLevelFilter.PERSONAL
+                : _employeeService.GetEmployeeOrganizationLevelFilter(userOrganizationInfo.Role.Name);
+
+            switch (organizationLevelFilter)
+            {
+                case OrganizationLevelFilter.TEAM:
+                    baseQuery = baseQuery.Where(x => x.IdTeam.Equals(userOrganizationInfo.Team.Id));
+                    break;
+
+                case OrganizationLevelFilter.AREA:
+                    baseQuery = baseQuery.Where(x => x.Team.Area.Id.Equals(userOrganizationInfo.Area.Id));
+                    break;
+
+                case OrganizationLevelFilter.ALL:
+                    break;
+
+                default:
+                    return new WorkEventsCountResponse() { IsManager = false };
+            }
+
+            var employeeIdList = await baseQuery.Select(x => x.Id).ToHashSetAsync();
+
+            var workEventBaseQueryResult = await _context.WorkEvents
+                .Where(x => x.WorkEventStatus.Name.Equals(WorkEventStatusName.PENDING) && employeeIdList.Contains(x.Id))
+                .CountAsync();
+
+            return new WorkEventsCountResponse()
+            {
+                IsManager = true,
+                Count = workEventBaseQueryResult
+            };
         }
     }
 }
