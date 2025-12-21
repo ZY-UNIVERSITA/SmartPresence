@@ -6,7 +6,7 @@
 
     var identitaCorrente = (SmartPresence.Web.Areas.IdentitaViewModel)ViewData[SmartPresence.Web.Areas.IdentitaViewModel.VIEWDATA_IDENTITACORRENTE_KEY];
 
-    var email = identitaCorrente.EmailUtenteCorrente;
+    var email = identitaCorrente is not null ? identitaCorrente.EmailUtenteCorrente : null;
 }
 @section metas {
     @RenderSection("metas", false)
@@ -130,7 +130,8 @@
             return count;
         }
 
-        getPendingCount(email)
+        if (email !== null) {
+            getPendingCount(email)
             .then(requestManagement => {
                 if (requestManagement.isManager) {
                     document.querySelector("#pendingRequests").textContent = requestManagement.count;
@@ -141,6 +142,9 @@
             })
             .catch(err => {
             });
+        } else {
+            document.querySelector("#requestManagementItem").remove();
+        }
     </script>
 
     @RenderSection("scripts", false)
