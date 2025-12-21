@@ -197,8 +197,6 @@ function initVue(modelData) {
                 // Estrea dalla lista degli eventi, solo le date e poi le formatta
                 let dateArray = eventsPerGivenId.map(x => x.Date).map(this.formatDate);
 
-                console.log(dateArray);
-
                 return dateArray;
             },
             // Metodo per aprire l'offcanvas con le date corrette
@@ -304,6 +302,13 @@ function initVue(modelData) {
                 this.holidayBackground(".mainTable")
                 this.holidayBackground(".remote-tab-table")
             },
+        },
+        watch: {
+            doesRemoteRepeat(newValue, oldValue) {
+                if (newValue) {
+                    this.remoteNextWeekDaysSelection = [];
+                }
+            }
         },
         // Metodo di bootstrap per caricare i tooltip
         mounted() {
