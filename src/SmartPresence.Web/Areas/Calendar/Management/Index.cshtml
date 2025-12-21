@@ -84,32 +84,90 @@
                 </tbody>
             </table>
 
-
             <!-- All Actions -->
             <div class="p-3 text-end border-top">
-                <form asp-action="AcceptAllRequests" method="post" style="display: inline;">
-                    <input type="hidden"
-                           name="listId"
-                           value="@string.Join("-", Model.ListEvents.Select(x => x.IdEvent))" />
+                <button type="button"
+                        class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#approveAllModal">
+                    Approve All
+                </button>
 
-                    <button type="submit"
-                            name="status"
-                            value="@WorkEventStatusName.APPROVED"
-                            class="btn btn-primary"
-                            onclick="return confirm('Are you sure you want to approve ALL requests?')">
-                        Approve All
-                    </button>
-
-                    <button type="submit"
-                            name="status"
-                            value="@WorkEventStatusName.REFUSED"
-                            class="btn btn-secondary"
-                            onclick="return confirm('Are you sure you want to reject ALL requests?')">
-                        Reject All
-                    </button>
-                </form>
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#rejectAllModal">
+                    Reject All
+                </button>
             </div>
+            <!-- Approve All Modal -->
+            <div class="modal fade" id="approveAllModal" tabindex="-1" aria-labelledby="approveAllModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form asp-action="AcceptAllRequests" method="post">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="approveAllModalLabel">Confirm approval</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
 
+                            <div class="modal-body">
+                                Are you sure you want to approve
+                                <strong>@Model.ListEvents.Count()</strong>
+                                requests?
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    Cancel
+                                </button>
+                                <input type="hidden"
+                                       name="listId"
+                                       value="@string.Join("-", Model.ListEvents.Select(x => x.IdEvent))" />
+                                <button type="submit"
+                                        name="status"
+                                        value="@WorkEventStatusName.APPROVED"
+                                        class="btn btn-primary">
+                                    Confirm
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Reject All Modal -->
+            <div class="modal fade" id="rejectAllModal" tabindex="-1" aria-labelledby="rejectAllModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form asp-action="AcceptAllRequests" method="post">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="rejectAllModalLabel">Confirm rejection</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                Are you sure you want to reject
+                                <strong>@Model.ListEvents.Count()</strong>
+                                requests?
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    Cancel
+                                </button>
+                                <input type="hidden"
+                                       name="listId"
+                                       value="@string.Join("-", Model.ListEvents.Select(x => x.IdEvent))" />
+                                <button type="submit"
+                                        name="status"
+                                        value="@WorkEventStatusName.REFUSED"
+                                        class="btn btn-primary">
+                                    Confirm
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         }
         else
         {
@@ -121,7 +179,3 @@
         }
     </div>
 </main>
-
-@section scripts {
-    <script></script>
-}
