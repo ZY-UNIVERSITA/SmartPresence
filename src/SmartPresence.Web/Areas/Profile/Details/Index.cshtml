@@ -1,4 +1,5 @@
 ﻿@using SmartPresence.Services.Employees.Queries
+@using SmartPresence.Services.Shared
 @model EmployeePersonalWorkEventResponse
 
 @{
@@ -87,7 +88,7 @@
                             </div>
                             <div class="mb-2">
                                 <div class="small text-uppercase fw-bold mb-1">Role</div>
-                                <div class="fw-medium">@Model.Role?.Name</div>
+                                <div class="fw-medium">@Model.Role?.Name.GetDisplayName()</div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col">
@@ -124,14 +125,14 @@
                                     <td>Leave</td>
                                     <td>@Model.TimeOff.LeaveUsed.ToString("0.##")</td>
                                     <td>@Model.TimeOff.LeaveAccrued.ToString("0.##")</td>
-                                    <td>@((Model.TimeOff.LeaveAccrued - Model.TimeOff.LeaveUsed).ToString("0.##"))</td>
+                                    <td>@((Model.TimeOff.LeaveTotal - Model.TimeOff.LeaveUsed).ToString("0.##"))</td>
                                     <td><strong>@Model.TimeOff.LeaveTotal.ToString("0.##")</strong></td>
                                 </tr>
                                 <tr>
                                     <td>Holiday</td>
                                     <td>@Model.TimeOff.HolidayUsed</td>
                                     <td>@Model.TimeOff.HolidayAccrued</td>
-                                    <td>@(Model.TimeOff.HolidayAccrued - Model.TimeOff.HolidayUsed)</td>
+                                    <td>@(Model.TimeOff.HolidayTotal - Model.TimeOff.HolidayUsed)</td>
                                     <td><strong>@Model.TimeOff.HolidayTotal</strong></td>
                                 </tr>
                             </tbody>

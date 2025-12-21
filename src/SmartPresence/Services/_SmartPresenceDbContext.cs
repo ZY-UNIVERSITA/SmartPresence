@@ -22,6 +22,18 @@ namespace SmartPresence.Services
         {
             modelBuilder.Entity<EmployeeTimeOff>()
                 .HasKey(x => new { x.IdEmployee, x.Year });
+
+            modelBuilder.Entity<ContractType>()
+                .OwnsMany(c => c.WorkHours);
+
+            modelBuilder.Entity<ContractType>()
+                .OwnsMany(c => c.WorkHours, b =>
+                {
+                    b.WithOwner().HasForeignKey("ContractTypeId");
+                    b.Property<int>("Id");
+                    b.HasKey("Id");
+                });
+
         }
 
         public DbSet<User> Users { get; set; }

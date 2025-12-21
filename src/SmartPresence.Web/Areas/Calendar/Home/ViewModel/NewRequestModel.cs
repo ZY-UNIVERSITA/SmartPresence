@@ -18,10 +18,6 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
         [Required]
         public CalendarViewName CalendarViewFilter { get; set; }
         [Required]
-        public DateTime BeginDateSearch { get; set; }
-        [Required]
-        public DateTime EndDateSearch { get; set; }
-        [Required]
         public DateTime BeginDateRequest { get; set; }
         [Required]
         public DateTime EndDateRequest { get; set; }
@@ -52,15 +48,31 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
         }
 
         // Esegue una seconda validazione prima di provare ad eseguire qualsiasi inserimento
-        public async Task<List<string>> AsyncValidation(IWorkEventService workEventService)
+        public async Task<List<string>> AsyncValidation(IValidationWorkEventService validationWorkEventService)
         {
             var validationResult = new List<string>();
 
+            if (BeginDateRequest <= EndDateRequest && EventType.Equals(WorkEventTypeName.LEAVE))
+            {
+                var validationRequest = new ValidateNewWorkEventResponse()
+                {
+                    BeginDate = BeginDateRequest,
+                    EndDate = EndDateRequest,
+                    IdEmployee = IdEmployee,
+                    WorkEventTypeName = EventType
+                };
+
+                await validationWorkEventService.ValidatePermissionAsLeave(validationRequest);
+
+                EventType = validationRequest.WorkEventTypeName;
+            }
+
+            /// DA PORTARE NEL METODO DI VALIDAZIONE
             // Aggiunge gli orari di inizio e fine delle ferie che corrispondono all'inizio dell'orario e alla fine dell'orario lavorativo
             if (EventType.Equals(WorkEventTypeName.HOLIDAY))
             {
-                BeginDateRequest = BeginDateRequest.AddHours(9);
-                EndDateRequest = EndDateRequest.AddHours(18);
+                BeginDateRequest = BeginDateRequest.Date.AddHours(9);
+                EndDateRequest = EndDateRequest.Date.AddHours(18);
             }
 
             // Se le date di inizio e fine sono valide, esegue una validazione per il database
@@ -75,13 +87,11 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
                 };
 
                 // Cerca se sono presenti uno o più eventi già presenti che si sovrappongono a quello da inserire
-                var areThereAnyOtherEvents = await workEventService.ValidateNewWorkEvent(validationRequest);
+                var validationProblems = await validationWorkEventService.ValidateNewWorkEvent(validationRequest);
 
                 // Se ci sono altri eventi, allora aggiungi il messaggio di errore
-                if (areThereAnyOtherEvents)
-                {
-                    validationResult.Add("Cannot add an event where there is another which will be overlapping.");
-                }
+                Action<string> addToValidationResult = x => validationResult.Add(x);
+                validationProblems.ForEach(addToValidationResult);
             }
 
             return validationResult;
@@ -92,9 +102,9 @@ namespace SmartPresence.Web.Areas.Calendar.Home.ViewModel
         {
             var searchModel = new SearchModel()
             {
-                CalendarView = CalendarViewFilter,
-                BeginDateString = BeginDateSearch.Date.ToString("yyyy-MM-dd"),
-                EndDateString = EndDateSearch.Date.ToString("yyyy-MM-dd"),
+                CalendarView = CalendarViewName.CUSTOM,
+                BeginDateString = BeginDateRequest.Date.AddDays(-1).ToString("yyyy-MM-dd"),
+                EndDateString = EndDateRequest.Date.AddDays(1).ToString("yyyy-MM-dd"),
             };
 
             return searchModel;

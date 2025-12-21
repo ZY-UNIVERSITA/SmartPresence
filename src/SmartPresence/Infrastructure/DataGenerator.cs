@@ -5,7 +5,6 @@ using SmartPresence.Services.Shared;
 using SmartPresence.Services.WorkEvents.Model;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace SmartPresence.Infrastructure
@@ -74,21 +73,43 @@ namespace SmartPresence.Infrastructure
                     Id = 1,
                     Name = "Full Time",
                     DailyHours = 8,
-                    WeeklyDays = 5
+                    WeeklyDays = 5,
+                    WorkHours = new List<DailyWorkHours>()
+                    {
+                        new DailyWorkHours(DayOfWeek.Monday, new TimeOnly(9, 0, 0), new TimeOnly(18, 0, 0)),
+                        new DailyWorkHours(DayOfWeek.Tuesday, new TimeOnly(9, 0, 0), new TimeOnly(18, 0, 0)),
+                        new DailyWorkHours(DayOfWeek.Wednesday, new TimeOnly(9, 0, 0), new TimeOnly(18, 0, 0)),
+                        new DailyWorkHours(DayOfWeek.Thursday, new TimeOnly(9, 0, 0), new TimeOnly(18, 0, 0)),
+                        new DailyWorkHours(DayOfWeek.Friday, new TimeOnly(9, 0, 0), new TimeOnly(18, 0, 0)),
+                    }
                 },
                 new ContractType
                 {
                     Id = 2,
                     Name = "Part-Time Horizontal",
                     DailyHours = 4,
-                    WeeklyDays = 5
+                    WeeklyDays = 5,
+                    WorkHours = new List<DailyWorkHours>()
+                    {
+                        new DailyWorkHours(DayOfWeek.Monday, new TimeOnly(9, 0, 0), new TimeOnly(13, 0, 0)),
+                        new DailyWorkHours(DayOfWeek.Tuesday, new TimeOnly(9, 0, 0), new TimeOnly(13, 0, 0)),
+                        new DailyWorkHours(DayOfWeek.Wednesday, new TimeOnly(9, 0, 0), new TimeOnly(13, 0, 0)),
+                        new DailyWorkHours(DayOfWeek.Thursday, new TimeOnly(9, 0, 0), new TimeOnly(13, 0, 0)),
+                        new DailyWorkHours(DayOfWeek.Friday, new TimeOnly(9, 0, 0), new TimeOnly(13, 0, 0)),
+                    }
                 },
                 new ContractType
                 {
                     Id = 3,
                     Name = "Part-Time Vertical",
                     DailyHours = 8,
-                    WeeklyDays = 3
+                    WeeklyDays = 3,
+                    WorkHours = new List<DailyWorkHours>()
+                    {
+                        new DailyWorkHours(DayOfWeek.Monday, new TimeOnly(9, 0, 0), new TimeOnly(13, 0, 0)),
+                        new DailyWorkHours(DayOfWeek.Tuesday, new TimeOnly(9, 0, 0), new TimeOnly(13, 0, 0)),
+                        new DailyWorkHours(DayOfWeek.Wednesday, new TimeOnly(9, 0, 0), new TimeOnly(13, 0, 0)),
+                    }
                 }
             );
 

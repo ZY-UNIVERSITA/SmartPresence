@@ -244,6 +244,9 @@
                 https://getbootstrap.com/docs/5.0/components/modal/
             *@
             <section class="modal fade" id="date_form" tabindex="-1" aria-labelledby="dateModalLabel" aria-hidden="true">
+                <header class="visually-hidden">
+                    <h3 id="dateModalLabel">Custom view</h3>
+                </header>
                 <section class="modal-dialog">
                     <section class="modal-content">
                         <form asp-controller="Home" asp-action="Index" method="get" aria-label="Select period between two dates">
@@ -292,6 +295,7 @@
                         <th>
                             <input class="form-control" type="search" id="names" name="Names" aria-label="Search by surname and/or name"
                                    v-model="filter" placeholder="Search by surname and/or name..." />
+                                   <span class="visually-hidden">Search</span>
                         </th>
                         @foreach (var day in Model.Calendar)
                         {
@@ -428,11 +432,13 @@
                                     <template v-if="newRequestOption === 'HOLIDAY'">
                                         <article class="mb-2">
                                             <label for="BeginDateRequestHoliday" class="form-label">Begin date</label>
-                                            <input type="date" id="BeginDateRequestHoliday" name="BeginDateRequest" class="form-control" v-model="selectedDate" min="@Model.Today.ToString("yyyy-MM-dd")">
+                                            <input type="date" id="BeginDateRequestHoliday" name="BeginDateRequest" class="form-control" v-model="selectedDate" 
+                                                min="@Model.Today.ToString("yyyy-MM-dd")">
                                         </article>
                                         <article class="mb-2">
                                             <label for="EndDateRequestHoliday" class="form-label">End date</label>
-                                            <input type="date" id="EndDateRequestHoliday" name="EndDateRequest" class="form-control" :value="selectedDate" min="@Model.Today.ToString("yyyy-MM-dd")">
+                                            <input type="date" id="EndDateRequestHoliday" name="EndDateRequest" class="form-control" :value="selectedDate" 
+                                                min="@Model.Today.ToString("yyyy-MM-dd")">
                                         </article>
                                     </template>
                                     <template v-else>
@@ -444,7 +450,7 @@
                                         <article class="mb-2">
                                             <label for="EndDateRequestLeave" class="form-label">End date</label>
                                             <input type="datetime-local" id="EndDateRequestLeave" name="EndDateRequest" class="form-control" :value="selectedDatetime"
-                                                   min="@Model.Today.ToString("yyyy-MM-ddT09:00")" :max="maxDateLeave">
+                                                   min="@Model.Today.ToString("yyyy-MM-ddT09:00")">
                                         </article>
                                     </template>
 
@@ -454,8 +460,6 @@
                                     </article>
 
                                     @Html.HiddenFor(x => x.CalendarViewFilter)
-                                    @Html.Hidden("BeginDateSearch", Model.BeginDate)
-                                    @Html.Hidden("EndDateSearch", Model.EndDate)
                                     @Html.HiddenFor(x => x.IdEmployee)
 
                                     <footer class="mb-2">
